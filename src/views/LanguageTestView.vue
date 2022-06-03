@@ -98,67 +98,67 @@ export default {
       if (this.test == "ap") {
         this.$router.push({
           name: "Ap",
-          query: { patient: value, test: this.test, type: "language" }
+          query: { patient: value.u_id, test: this.test, type: "language" }
         });
       }
       else if (this.test == "ins") {
         this.$router.push({
           name: "Ins",
-          query: { patient: value, test: this.test, type: "language" }
+          query: { patient: value.u_id, test: this.test, type: "language" }
         });
       }
       else if (this.test == "com") {
         this.$router.push({
           name: "Com",
-          query: { patient: value, test: this.test, type: "language" }
+          query: { patient: value.u_id, test: this.test, type: "language" }
         });
       }
       else if (this.test == "story") {
         this.$router.push({
           name: "Story",
-          query: { patient: value, test: this.test, type: "language" }
+          query: { patient: value.u_id, test: this.test, type: "language" }
         });
       }
       else if (this.test == "image") {
         this.$router.push({
           name: "Image",
-          query: { patient: value, test: this.test, type: "language" }
+          query: { patient: value.u_id, test: this.test, type: "language" }
         });
       }
       else if (this.test == "step") {
         this.$router.push({
           name: "Step",
-          query: { patient: value, test: this.test, type: "language" }
+          query: { patient: value.u_id, test: this.test, type: "language" }
         });
       }
       else if (this.test == "cowat") {
         this.$router.push({
           name: "Cowat",
-          query: { patient: value, test: this.test, type: "language" }
+          query: { patient: value.u_id, test: this.test, type: "language" }
         });
       }
       else if (this.test == "ant") {
         this.$router.push({
           name: "Ant",
-          query: { patient: value, test: this.test, type: "language" }
+          query: { patient: value.u_id, test: this.test, type: "language" }
         });
       }
       else if (this.test == "priming") {
         this.$router.push({
           name: "Priming",
-          query: { patient: value, test: this.test, type: "language" }
+          query: { patient: value.u_id, test: this.test, type: "language" }
         });
       }
       else if (this.test == "completion") {
         this.$router.push({
           name: "Completion",
-          query: { patient: value, test: this.test, type: "language" }
+          query: { patient: value.u_id, test: this.test, type: "language" }
         });
       }
       else if (this.test == "cmpt") {
         this.$router.push({
           name: "Cmpt",
-          query: { patient: value, test: this.test, type: "language" }
+          query: { patient: value.u_id, test: this.test, type: "language" }
         });
       }
     }

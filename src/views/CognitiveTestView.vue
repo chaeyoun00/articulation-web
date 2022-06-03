@@ -95,25 +95,25 @@ export default {
           if (this.test == "cread") {
             this.$router.push({
               name: "Cread",
-              query: { patient: value, test: this.test, type: "cognitive", resId: this.reservation[i].e_id }
+              query: { patient: value.u_id, test: this.test, type: "cognitive", resId: this.reservation[i].e_id }
             });
           }
           else if (this.test == "iadl") {
             this.$router.push({
               name: "Iadl",
-              query: { patient: value, test: this.test, type: "cognitive", resId: this.reservation[i].e_id }
+              query: { patient: value.u_id, test: this.test, type: "cognitive", resId: this.reservation[i].e_id }
             });
           }
           else if (this.test == "geriatric") {
             this.$router.push({
               name: "Geriatric",
-              query: { patient: value, test: this.test, type: "cognitive", resId: this.reservation[i].e_id }
+              query: { patient: value.u_id, test: this.test, type: "cognitive", resId: this.reservation[i].e_id }
             });
           }
           else if (this.test == "global") {
             this.$router.push({
               name: "Global",
-              query: { patient: value, test: this.test, type: "cognitive", resId: this.reservation[i].e_id }
+              query: { patient: value.u_id, test: this.test, type: "cognitive", resId: this.reservation[i].e_id }
             });
           }
         }

@@ -207,7 +207,7 @@ export default {
     Edit(item) {
       this.$router.push({
         name: "Edit",
-        query: { data: item }
+        query: { data: item.u_id }
       })
     }
   }

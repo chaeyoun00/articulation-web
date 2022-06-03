@@ -78,7 +78,7 @@ export default {
         this.$router.push('/questionadd');
     },
     initialize () {
-      axios.get('/api/questions')
+      axios.get('/api/questions/question')
       .then(response => {
         //console.log(JSON.stringify(response.data.data));
         //console.log(response.data.data)

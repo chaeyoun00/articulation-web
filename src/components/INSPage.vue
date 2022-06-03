@@ -21,12 +21,12 @@
               <td>유입</td>
             </tr>
             <tr class="patient-table-body">
-              <td>{{ u_name }}</td>
-              <td>{{ u_sex }}</td>
-              <td>{{ u_birth }}</td>
-              <td>{{ u_telephone }}</td>
-              <td>{{ u_chart_number }}</td>
-              <td>{{ u_enter_path }}</td>
+              <td>{{ user[0].u_name }}</td>
+              <td>{{ user[0].u_sex }}</td>
+              <td>{{ user[0].u_birth }}</td>
+              <td>{{ user[0].u_telephone }}</td>
+              <td>{{ user[0].u_chart_number }}</td>
+              <td>{{ user[0].u_enter_path }}</td>
             </tr>
             <tr class="patient-table-header">
               <td>인지검사일</td>
@@ -37,12 +37,12 @@
               <td>비고</td>
             </tr>
             <tr class="patient-table-body">
-              <td>{{ u_cog_test }}</td>
-              <td>{{ u_kbase_test }}</td>
-              <td>{{ u_listen_test }}</td>
-              <td>{{ u_lang_test }}</td>
-              <td>{{ u_study_year }}</td>
-              <td>{{ u_blank }}</td>
+              <td>{{ user[0].u_cog_test }}</td>
+              <td>{{ user[0].u_kbase_test }}</td>
+              <td>{{ user[0].u_listen_test }}</td>
+              <td>{{ user[0].u_lang_test }}</td>
+              <td>{{ user[0].u_study_year }}</td>
+              <td>{{ user[0].u_blank }}</td>
             </tr>
           </table>
         </v-card-text>
@@ -87,23 +87,13 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data: () => ({
-    u_id: '',
-    u_name: '',
-    u_sex: null,
-    u_birth: '',
-    u_telephone: '',
-    u_chart_number: '',
-    u_enter_path: '',
-    u_cog_test: '',
-    u_kbase_test: null,
-    u_listen_test: '',
-    u_lang_test: '',
-    u_study_year: '',
-    u_blank: '',
-    testitems: ['All', '인지검사', '언어검사 - 이해과제', '언어검사 - 표현과제'],
-    languageitems: ['SCT-AP'],
+    user: [{
+      u_id: '',
+    }],
   }),
   mounted () {
     this.initialize()
@@ -115,19 +105,15 @@ export default {
       this.$router.go(-1)
     },
     initialize () {
-      this.u_id = this.$route.query.patient.u_id
-      this.u_name = this.$route.query.patient.u_name
-      this.u_sex = this.$route.query.patient.u_sex
-      this.u_birth = this.$route.query.patient.u_birth
-      this.u_telephone = this.$route.query.patient.u_telephone
-      this.u_chart_number = this.$route.query.patient.u_chart_number
-      this.u_enter_path = this.$route.query.patient.u_enter_path
-      this.u_cog_test = this.$route.query.patient.u_cog_test
-      this.u_kbase_test = this.$route.query.patient.u_kbase_test
-      this.u_listen_test = this.$route.query.patient.u_listen_test
-      this.u_lang_test = this.$route.query.patient.u_lang_test
-      this.u_study_year = this.$route.query.patient.u_study_year
-      this.u_blank = this.$route.query.patient.u_blank
+      axios.get('/api/examUsers?id=' + this.$route.query.patient)
+      .then(response => {
+        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
+        //console.log(response.data.data)
+        this.user = response.data.data
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
     }
   }
 }

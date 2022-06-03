@@ -25,7 +25,7 @@
                 <p class="require-label">*</p>
               </v-row>
               <v-text-field
-                v-model="u_id"
+                v-model="user[0].u_id"
                 :error-messages="errors"
                 label="아이디"
                 solo
@@ -44,7 +44,7 @@
                 <p class="require-label">*</p>
               </v-row>
               <v-text-field
-                v-model="u_name"
+                v-model="user[0].u_name"
                 :error-messages="errors"
                 label="성명"
                 solo
@@ -63,9 +63,9 @@
                 <p class="require-label">*</p>
               </v-row>
               <br>
-              <input type="radio" id="male" name="sex" value="male" v-model="u_sex" :error-messages="errors" class="patientedit-radio">
+              <input type="radio" id="male" name="sex" value="male" v-model="user[0].u_sex" :error-messages="errors" class="patientedit-radio">
               <label for="male">남성</label>
-              <input type="radio" id="female" name="sex" value="female" v-model="u_sex" :error-messages="errors" class="patientedit-radio"> 
+              <input type="radio" id="female" name="sex" value="female" v-model="user[0].u_sex" :error-messages="errors" class="patientedit-radio"> 
               <label for="female">여성</label>
               <br> 
             </validation-provider>
@@ -79,9 +79,9 @@
                 <p class="require-label">*</p>
               </v-row>
               <v-text-field
-                v-model="u_birth"
+                v-model="user[0].u_birth"
                 :error-messages="errors"
-                label="YYYY-MM-DD"
+                label="YYYYMMDD"
                 solo
                 flat
                 required
@@ -98,7 +98,7 @@
                 <p class="require-label">*</p>
               </v-row>
               <v-text-field
-                v-model="u_telephone"
+                v-model="user[0].u_telephone"
                 :error-messages="errors"
                 label="010-XXXX-XXXX"
                 solo
@@ -112,7 +112,7 @@
               <p>병록번호</p>
             </v-row>
             <v-text-field
-              v-model="u_chart_number"
+              v-model="user[0].u_chart_number"
               label="111111"
               solo
               flat
@@ -124,7 +124,7 @@
               <p>유입</p>
             </v-row>
             <v-text-field
-              v-model="u_enter_path"
+              v-model="user[0].u_enter_path"
               label="유입"
               solo
               flat
@@ -141,7 +141,7 @@
                 <p class="require-label">*</p>
               </v-row>
               <v-text-field
-                v-model="u_cog_test"
+                v-model="user[0].u_cog_test"
                 :error-messages="errors"
                 label="YYYY-MM-DD"
                 solo
@@ -155,9 +155,9 @@
               <p>KBASE2</p>
             </v-row>
             <br>
-            <input type="radio" id="ture" name="kbase" value="ture" v-model="u_kbase_test" class="patientedit-radio"> 
+            <input type="radio" id="ture" name="kbase" value="ture" v-model="user[0].u_kbase_test" class="patientedit-radio"> 
             <label for="ture">동의</label>
-            <input type="radio" id="false" name="kbase" value="false" v-model="u_kbase_test" class="patientedit-radio"> 
+            <input type="radio" id="false" name="kbase" value="false" v-model="user[0].u_kbase_test" class="patientedit-radio"> 
             <label for="false">비동의</label>
             <br> 
 
@@ -170,7 +170,7 @@
                 <p class="require-label">*</p>
               </v-row>
               <v-text-field
-                v-model="u_listen_test"
+                v-model="user[0].u_listen_test"
                 :error-messages="errors"
                 label="YYYY-MM-DD"
                 solo
@@ -189,7 +189,7 @@
                 <p class="require-label">*</p>
               </v-row>
               <v-text-field
-                v-model="u_lang_test"
+                v-model="user[0].u_lang_test"
                 :error-messages="errors"
                 label="YYMMDD"
                 solo
@@ -208,7 +208,7 @@
                 <p class="require-label">*</p>
               </v-row>
               <v-text-field
-                v-model="u_study_year"
+                v-model="user[0].u_study_year"
                 :error-messages="errors"
                 label="1"
                 solo
@@ -222,7 +222,7 @@
               <p>비고</p>
             </v-row>
             <v-text-field
-              v-model="u_blank"
+              v-model="user[0].u_blank"
               label="비고"
               solo
               flat
@@ -263,38 +263,24 @@ export default {
     ValidationProvider
   },
   data: () => ({
-    u_id: '',
-    u_name: '',
-    u_sex: null,
-    u_birth: '',
-    u_telephone: '',
-    u_chart_number: '',
-    u_enter_path: '',
-    u_cog_test: '',
-    u_kbase_test: null,
-    u_listen_test: '',
-    u_lang_test: '',
-    u_study_year: '',
-    u_blank: '',
+    user: [{
+      u_id: '',
+    }],
   }),
   mounted () {
     this.initialize()
   },
   methods: {
     initialize () {
-      this.u_id = this.$route.query.data.u_id
-      this.u_name = this.$route.query.data.u_name
-      this.u_sex = this.$route.query.data.u_sex
-      this.u_birth = this.$route.query.data.u_birth
-      this.u_telephone = this.$route.query.data.u_telephone
-      this.u_chart_number = this.$route.query.data.u_chart_number
-      this.u_enter_path = this.$route.query.data.u_enter_path
-      this.u_cog_test = this.$route.query.data.u_cog_test
-      this.u_kbase_test = this.$route.query.data.u_kbase_test
-      this.u_listen_test = this.$route.query.data.u_listen_test
-      this.u_lang_test = this.$route.query.data.u_lang_test
-      this.u_study_year = this.$route.query.data.u_study_year
-      this.u_blank = this.$route.query.data.u_blank
+      axios.get('/api/examUsers?id=' + this.$route.query.data)
+      .then(response => {
+        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
+        //console.log(response.data.data)
+        this.user = response.data.data
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
     },
     ToMain() {
       Object.assign(this.$data, this.$options.data())
@@ -302,27 +288,27 @@ export default {
       this.$router.go(-1)
     },
     Edit() {
-      var data = {
-        'id': this.u_id,
-        'name': this.u_name,
-        'sex': this.u_sex,
-        'birth': this.u_birth,
-        'telephone': this.u_telephone,
-        'chartNumber': this.u_chart_number,
-        'enterPath': this.u_enter_path,
-        'cogTest': this.u_cog_test,
-        'kbaseTest': this.u_kbase_test,
-        'listenTest': this.u_listen_test,
-        'langTest': this.u_lang_test,
-        'studyYear': this.u_study_year,
-        'blank': this.u_blank,
+      var datas = {
+        'id': this.user[0].u_id,
+        'name': this.user[0].u_name,
+        'sex': this.user[0].u_sex,
+        'birth': this.user[0].u_birth,
+        'telephone': this.user[0].u_telephone,
+        'chartNumber': this.user[0].u_chart_number,
+        'enterPath': this.user[0].u_enter_path,
+        'cogTest': this.user[0].u_cog_test,
+        'kbaseTest': this.user[0].u_kbase_test,
+        'listenTest': this.user[0].u_listen_test,
+        'langTest': this.user[0].u_lang_test,
+        'studyYear': this.user[0].u_study_year,
+        'blank': this.user[0].u_blank,
       }
 
-      if (data.blank == '') {
-        data.blank = '비고없음'
+      if (datas.blank == '') {
+        datas.blank = '비고없음'
       }
       
-      data = qs.stringify(data)
+      datas = qs.stringify(datas)
 
       var config = {
         method: 'put',
@@ -331,7 +317,7 @@ export default {
           'memberId': localStorage.getItem("Id"), 
           //'Content-Type': 'application/x-www-form-urlencoded'
         },
-        data : data
+        data : datas
       };
 
       axios(config)

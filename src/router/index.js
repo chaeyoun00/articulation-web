@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import MenuView from '../components/MenuView.vue'
 import Reservation from '../components/ReservationPage.vue'
 import QuestionAdd from '../components/QuestionAddPage.vue'
-import PaperAdd from '../components/PaperAddPage.vue'
 import Cread from '../components/CreadTestPage.vue'
 import Iadl from '../components/IADLTestPage.vue'
 import Geriatric from '../components/GeriatricTestPage.vue'
@@ -128,14 +127,6 @@ const routes = [
     components: {
       header: MenuView,
       footer: Paper
-    }
-  },
-  {
-    path: '/paperadd',
-    name: 'PaperAdd',
-    components: {
-      header: MenuView,
-      footer: PaperAdd
     }
   },
   {

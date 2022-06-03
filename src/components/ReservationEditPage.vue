@@ -25,7 +25,7 @@
                 <p class="require-label">*</p>
               </v-row>
               <v-text-field
-                v-model="u_name"
+                v-model="reservation[0].e_res_name"
                 :error-messages="errors"               
                 label="성명"
                 solo
@@ -44,7 +44,7 @@
                 <p class="require-label">*</p>
               </v-row>
               <v-text-field
-                v-model="u_telephone"
+                v-model="reservation[0].e_res_phone"
                 :error-messages="errors"
                 label="010-XXXX-XXXX"
                 solo
@@ -63,7 +63,7 @@
                 <p class="require-label">*</p>
               </v-row>
               <v-text-field
-                v-model="u_id"
+                v-model="reservation[0].e_user_id"
                 :error-messages="errors"
                 label="111111"
                 solo
@@ -83,7 +83,7 @@
                 <p class="require-label">*</p>
               </v-row>
               <v-select
-                v-model="u_type"
+                v-model="reservation[0].e_type"
                 label="검사 타입 선택"
                 :error-messages="errors"
                 :items="items"
@@ -102,7 +102,7 @@
                 <p class="require-label">*</p>
               </v-row>
               <v-text-field
-                v-model="u_date"
+                v-model="reservation[0].e_date"
                 :error-messages="errors"
                 label="YYYY-MM-DD"
                 solo
@@ -147,11 +147,9 @@ export default {
   },
   data: () => ({
     items: ['Cognitive', 'Language'],
-    u_name: '',
-    u_telephone: '',
-    u_id: '',
-    u_type: '',
-    u_date: '',
+    reservation: [{
+      e_res_name: '',
+    }],
   }),
   mounted () {
     this.initialize()
@@ -163,19 +161,24 @@ export default {
       this.$router.go(-1)
     },
     initialize () {
-      this.u_name = this.$route.query.data.e_res_name
-      this.u_telephone = this.$route.query.data.e_res_phone
-      this.u_id = this.$route.query.data.e_id
-      this.u_type = this.$route.query.data.e_type
-      this.u_date = this.$route.query.data.e_date
+      axios.get('/api/examReservations?id=' + this.$route.query.data)
+      .then(response => {
+        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
+        console.log(response.data.data)
+        this.reservation = response.data.data
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
     },
     Submit() {
-      const data = {
-        'userId': this.u_id,
-        'resName': this.u_name,
-        'type': this.u_type,
-        'resPhone': this.u_telephone,
-        'date': this.u_date
+      const datas = {
+        'id': this.reservation[0].e_id,
+        'userId': this.reservation[0].e_user_id,
+        'resName': this.reservation[0].e_res_name,
+        'type': this.reservation[0].e_type,
+        'resPhone': this.reservation[0].e_res_phone,
+        'date': this.reservation[0].e_date
       };
 
       var config = {
@@ -184,10 +187,8 @@ export default {
         headers: {
           'memberId': localStorage.getItem("Id"),
         },
-        data: data
+        data: datas
       }
-
-      data = qs.stringify(data)
 
       axios(config)
         .then(function (response) {

@@ -133,7 +133,7 @@ export default {
     Edit(item) {
       this.$router.push({
         name: "ReservationEdit",
-        query: { data: item }
+        query: { data: item.e_id }
       })
     }
   }
