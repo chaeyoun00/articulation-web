@@ -92,7 +92,7 @@
           <tr v-if="qtype[i - 1] !== 'word'"> 
             <td class="ap-table-content" >{{ num[i - 1] }}</td>
             <td class="ap-table-content">{{ questions[i - 1].q_body }}</td>
-            <td class="ap-table-content">{{ answers[i - 1] }}</td>
+            <td class="ap-table-content">{{ answers[0][i - 1] }}</td>
             <td><div class="ap-radio"><input type="radio" value="1" v-model="picked[i - 1]"></div></td>
             <td><div class="ap-radio"><input type="radio" value="2" v-model="picked[i - 1]"></div></td>
             <td><div class="ap-radio"><input type="radio" value="3" v-model="picked[i - 1]"></div></td>
@@ -128,6 +128,7 @@
       <v-btn
         depressed
         class="submit-btn"
+        @click="Save(), Totest()"
       >저장</v-btn>
     </v-layout>
   </v-container>
@@ -204,21 +205,44 @@ export default {
 
       await axios.get('/api/languageSummary?type=SCT-AP&userId=' + this.user[0].u_id + '&resId=' + this.resId)
       .then(response => {
-        this.answers = response.data.data[0].lg_answer.split(',').splice(1);
-        //console.log(this.antAnswer[0].lg_answer)
-        for (let i = 0; i < this.answers.length; i++) {
-          if (this.answers[i] === '0') {
-            this.answers[i] = ''
+        this.apAnswer = response.data.data[0]
+        this.answers = response.data.data[0].lg_answer.split('[');
+        this.answers[0] = this.answers[0].split(',').splice(1)
+        for (let i = 0; i < this.answers[0].length; i++) {
+          if (this.answers[0][i] === '0') {
+            this.answers[0][i] = ''
           }
         }
-        console.log(this.answers)
+
+        this.answers[1] = this.answers[1].split(',').splice(1)
       })
       .catch(error => {
         console.log(error.response)
       })
     },
     Save() {
+      const data = {
+        'id': this.apAnswer.lg_summery_id,
+        'answers': this.apAnswer.lg_answer + '[' + this.picked + ']'
+      }
+      console.log(data)
+      var config = {
+        method: 'put',
+        url: 'http://49.50.172.137:3000/api/languageSummary',
+        headers: {
+          'memberId': localStorage.getItem("Id"),
+          //'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: data
+      }
 
+      axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
   }
 }
