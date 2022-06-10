@@ -110,6 +110,15 @@
         <tbody>
           <tr>
             <td colspan="2">문장유형별 점수</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="2">총점</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="2">문장유형별 점수</td>
+            <td></td>
           </tr>
         </tbody>
       </table>
