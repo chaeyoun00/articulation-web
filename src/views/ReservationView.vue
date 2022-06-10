@@ -98,6 +98,11 @@ export default {
         //console.log(JSON.stringify(response.data));
         // this.items.push(response.data.data)
         this.items = response.data.data
+        // let j = 0;
+        // for (let i = response.data.data.length - 1; i >= 0; i--){
+        //   this.items[j] = response.data.data[i];
+        //   j++;
+        // }
         //console.log(this.items)
       })
       .catch(error => {

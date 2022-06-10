@@ -55,54 +55,35 @@
     <v-layout justify-center column class="story-form2">
       <p class="test-title">Story Telling (흥부놀부 이야기 만들기)</p>
       <table class="story-table">
-        <tr>
-          <td class="story-table-title" style="border-radius: 21px 21px 0px 0px;">1번 그림</td>
-          <td class="story-table-text">
-            <textarea name="content1" class="story-table-content" placeholder="환자 발화 입력"></textarea>
-          </td>         
-        </tr>
-        <tr>
-          <td class="story-table-title">2번 그림</td>
-          <td class="story-table-text">
-            <textarea name="content2" class="story-table-content" placeholder="환자 발화 입력"></textarea>  
-          </td>         
-        </tr>
-        <tr>
-          <td class="story-table-title">3번 그림</td>
-          <td class="story-table-text">
-            <textarea name="content3" class="story-table-content" placeholder="환자 발화 입력"></textarea>  
-          </td>         
-        </tr>
-        <tr>
-          <td class="story-table-title">4번 그림</td>
-          <td class="story-table-text">
-            <textarea name="content4" class="story-table-content" placeholder="환자 발화 입력"></textarea>  
-          </td>         
-        </tr>
-        <tr>
-          <td class="story-table-title">5번 그림</td>
-          <td class="story-table-text">
-            <textarea name="content5" class="story-table-content" placeholder="환자 발화 입력"></textarea>  
-          </td>         
-        </tr>
-        <tr>
-          <td class="story-table-title">6번 그림</td>
-          <td class="story-table-text">
-            <textarea name="content6" class="story-table-content" placeholder="환자 발화 입력"></textarea>  
-          </td>         
-        </tr>
-        <tr>
-          <td class="story-table-title">7번 그림</td>
-          <td class="story-table-text">
-            <textarea name="content7" class="story-table-content" placeholder="환자 발화 입력"></textarea>  
-          </td>         
-        </tr>
-        <tr>
-          <td class="story-table-title" style="border-radius: 0px 0px 21px 21px;">8번 그림</td>
-          <td class="story-table-text">
-            <textarea name="content8" class="story-table-content" placeholder="환자 발화 입력"></textarea>
-          </td>         
-        </tr>
+        <tbody v-for="i in questions.length" v-bind:key="i">
+          <tr v-if="i == 1">
+            <td class="story-table-title" style="border-radius: 21px 21px 0px 0px;">
+              {{ i }}번째 그림
+              <audio :id="questions[i - 1].q_id" controls controlsList="nodownload noplaybackrate"></audio>
+            </td>
+            <td class="story-table-text">
+              <textarea class="story-table-content" placeholder="환자 발화 입력" v-model="image[i - 1]"></textarea>  
+            </td> 
+          </tr>
+          <tr v-else-if="i == questions.length">
+            <td class="story-table-title" style="border-radius: 0px 0px 21px 21px;">
+              {{ i }}번째 그림
+              <audio :id="questions[i - 1].q_id" controls controlsList="nodownload noplaybackrate"></audio>
+            </td>
+            <td class="story-table-text">
+              <textarea class="story-table-content" placeholder="환자 발화 입력" v-model="image[i - 1]"></textarea>  
+            </td> 
+          </tr>
+          <tr v-else>
+            <td class="story-table-title">
+              {{ i }}번째 그림
+              <audio :id="questions[i - 1].q_id" controls controlsList="nodownload noplaybackrate"></audio>
+            </td>
+            <td class="story-table-text">
+              <textarea class="story-table-content" placeholder="환자 발화 입력" v-model="image[i - 1]"></textarea>  
+            </td> 
+          </tr>
+        </tbody>
       </table>
     </v-layout>
 
@@ -110,6 +91,7 @@
       <v-btn
         depressed
         class="submit-btn"
+        @click="Save(), ToTest()"
       >저장</v-btn>
     </v-layout>
   </v-container>
@@ -123,6 +105,10 @@ export default {
     user: [{
       u_id: '',
     }],
+    resId: '',
+    image: [],
+    questions: [],
+    storyAnswer: [],
   }),
   mounted () {
     this.initialize()
@@ -133,8 +119,18 @@ export default {
       //this.$router.push('/main')
       this.$router.go(-1)
     },
-    initialize () {
-      axios.get('/api/examUsers?id=' + this.$route.query.patient)
+    async initialize () {
+      await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
+      .then(response => {
+        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
+        this.resId = response.data.data.e_id;
+        //console.log(this.resId)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/examUsers?id=' + this.$route.query.patient)
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         //console.log(response.data.data)
@@ -144,16 +140,67 @@ export default {
         console.log(error.response)
       })
 
-      axios.get('/api/answerPapers?type=Story_Telling&userId=' + this.u_id)
+      await axios.get('/api/questions/question?type=Story_Telling')
       .then(response => {
-        console.log(JSON.stringify(response.data));
-        //this.items.push(response.data.data)
-        //this.items = response.data.data
-        //console.log(this.items)
+        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
+        //console.log(response.data.data)
+        this.questions = response.data.data
+        //console.log(String.fromCharCode(...this.questions[0].q_data.data).split("\"")[11])
       })
       .catch(error => {
         console.log(error.response)
       })
+
+      await axios.get('/api/answerPapers?type=Story_Telling&examId=' + this.resId)
+      .then(response => {
+        var uint8;
+        var audio;
+        for (let i = 0; i < response.data.data.length; i++) {
+          uint8 = new Uint8Array(response.data.data[i].a_data.data);
+          var blob = new Blob([uint8], { type: 'audio' });
+          var blobUrl = URL.createObjectURL(blob);
+          audio = document.getElementById(this.questions[i].q_id)
+          audio.src = blobUrl;
+          //console.log(audio)
+        }
+        //console.log(this.audioURL)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/languageSummary?type=Story_Telling&userId=' + this.user[0].u_id + '&resId=' + this.resId)
+      .then(response => {
+        this.storyAnswer = response.data.data;
+        this.image = this.storyAnswer[0].lg_answer.slice(1, -1).split(',')
+      })
+      .catch(error => {
+        console.log(error.response)
+      })    
+    },
+    Save() {
+      const data = {
+        'id': this.storyAnswer[0].lg_summery_id,
+        'answers': '[' + this.image + ']'
+      }
+      
+      var config = {
+        method: 'put',
+        url: 'http://49.50.172.137:3000/api/languageSummary',
+        headers: {
+          'memberId': localStorage.getItem("Id"),
+          //'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: data
+      }
+
+      axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
   }
 }
@@ -217,5 +264,13 @@ textarea.story-table-content {
 
 textarea:focus.story-table-content {
   outline: none;
+}
+
+audio {
+  width: 250px;
+}
+
+audio::-webkit-media-controls-panel { 
+  background-color: #E8E8E8; 
 }
 </style>

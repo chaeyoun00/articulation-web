@@ -58,8 +58,8 @@
         <thead>
           <tr>
             <td class="ant-table-header" style="border-radius: 21px 0px 0px 21px">#</td>
-            <td class="ant-table-header">논항</td>
-            <td class="ant-table-header">목표동사</td>
+            <td class="ant-table-header" style="width: 80px">논항</td>
+            <td class="ant-table-header" style="width: 200px">목표동사</td>
             <td class="ant-table-header1" style="border-right: 1px solid #C9C9C9">IE</td>
             <td class="ant-table-header1" style="border-right: 1px solid #C9C9C9">IU</td>
             <td class="ant-table-header1" style="border-right: 1px solid #C9C9C9">2</td>
@@ -70,30 +70,27 @@
 
         <tbody v-for="i in questions.length" v-bind:key="i">
           <tr>
-            <td class="ant-table-content" style="background-color: #FAFAFA">{{ i }}</td>
+            <td v-if="i == questions.length" class="ant-table-content" style="border-radius: 0px 0px 0px 21px; background-color: #FAFAFA">{{ i }}</td>
+            <td v-else class="ant-table-content" style="background-color: #FAFAFA">{{ i }}</td>
             <td class="ant-table-content" style="background-color: #FAFAFA">
-              {{ questions[i - 1].q_data.split("\"")[7]}}
+              {{ num[i - 1] }}
             </td>
             <td class="ant-table-content" style="background-color: #FAFAFA">{{ questions[i - 1].q_body }}</td>
             <td class="ant-table-content">
-              <div class="ant-radio"><input type="radio" value="1" v-model="picked[i - 1]"></div>
+              <div class="ant-radio"><input type="radio" value="IE" v-model="picked[i - 1]"></div>
             </td>
             <td class="ant-table-content">
-              <div class="ant-input">
-                <input type=text placeholder="입력" style="width: 50px;"/>
-              </div>
+              <div class="ant-radio"><input type="radio" value="IU" v-model="picked[i - 1]"></div>
             </td>
             <td class="ant-table-content">
-              <div class="ant-input">
-                <input type=text placeholder="입력" style="width: 50px;"/>
-              </div>
+              <div class="ant-radio"><input type="radio" value="2" v-model="picked[i - 1]"></div>
             </td>
             <td class="ant-table-content">
-              <div class="ant-input">
-                <input type=text placeholder="입력" style="width: 50px;"/>
-              </div>
+              <div class="ant-radio"><input type="radio" value="3" v-model="picked[i - 1]"></div>
             </td>
-            <td></td>
+            <td class="ant-table-content" style="width: 300px">
+              <audio :id="questions[i - 1].q_id" controls controlsList="nodownload noplaybackrate" class="ant-audio"></audio>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -103,6 +100,7 @@
       <v-btn
         depressed
         class="submit-btn"
+        @click="Save()"
       >저장</v-btn>
     </v-layout>
   </v-container>
@@ -118,46 +116,113 @@ export default {
     }],
     questions: [],
     picked: [],
+    num: [],
+    resId: '',
+    antAnswer: [],
   }),
   mounted () {
     this.initialize()
   },
   methods: {
-    ToTest() {
-      Object.assign(this.$data, this.$options.data())
-      //this.$router.push('/main')
-      this.$router.go(-1)
-    },
-    initialize () {
-      axios.get('/api/examUsers?id=' + this.$route.query.patient)
+    async initialize () {
+      await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        //console.log(response.data.data)
-        this.user = response.data.data
+        this.resId = response.data.data.e_id;
+        //console.log(this.resId)
       })
       .catch(error => {
         console.log(error.response)
       })
 
-      axios.get('/api/questions/question?type=ANT')
+      await axios.get('/api/examUsers?id=' + this.$route.query.patient)
+      .then(response => {
+        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
+        //console.log(response.data.data)
+        this.user = response.data.data
+        //console.log(this.user)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/questions/question?type=ANT')
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         //console.log(response.data.data)
         this.questions = response.data.data
         for (let i = 0; i < this.questions.length; i++){
           this.questions[i].q_data = String.fromCharCode(...this.questions[i].q_data.data)
+          if (JSON.parse(this.questions[i].q_data)["type_of_question"] === "ex") {
+            this.num[i] = "P" + JSON.parse(this.questions[i].q_data)["no"].replace('0', '')
+          }
+          else {
+            this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace('0', '')
+          }
         }
-        console.log(this.questions)
         //console.log(String.fromCharCode(...this.questions[0].q_data.data).split("\"")[11])
       })
       .catch(error => {
         console.log(error.response)
       })
+
+      await axios.get('/api/answerPapers?type=ANT&examId=' + this.resId)
+      .then(response => {
+        var uint8;
+        var audio;
+        for (let i = 0; i < response.data.data.length; i++) {
+          uint8 = new Uint8Array(response.data.data[i].a_data.data);
+          var blob = new Blob([uint8], { type: 'audio' });
+          var blobUrl = URL.createObjectURL(blob);
+          audio = document.getElementById(response.data.data[i].a_question_id)
+          audio.src = blobUrl;
+          //console.log(audio)
+        }
+        //console.log(this.audioURL)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/languageSummary?type=ANT&userId=' + this.user[0].u_id + '&resId=' + this.resId)
+      .then(response => {
+        this.antAnswer = response.data.data;
+        //console.log(this.antAnswer[0].lg_answer)
+        this.picked = this.antAnswer[0].lg_answer.slice(1, -1).split(',')
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
     },
-    splitType(item) {
-      console.log(item.q_data.split("\"")[3])
-      return item.q_data.split("\"")[3]
-    }
+    ToTest() {
+      Object.assign(this.$data, this.$options.data())
+      //this.$router.push('/main')
+      this.$router.go(-1)
+    },
+    Save() {
+      const data = {
+        'id': this.antAnswer[0].lg_summery_id,
+        'answers': '[' + this.picked + ']',
+      }
+
+      var config = {
+        method: 'put',
+        url: 'http://49.50.172.137:3000/api/languageSummary',
+        headers: {
+          'memberId': localStorage.getItem("Id"),
+          //'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: data
+      }
+
+      axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
   }
 }
 </script>
@@ -215,7 +280,7 @@ td.ant-table-content {
   font-family: 'Noto Sans KR Regular';
   font-size: 20px;
   letter-spacing: 0px;
-  height: 50px;
+  height: 60px;
   text-align: center;
   border-bottom: 1px solid #C9C9C9;
 }
@@ -228,5 +293,41 @@ td.ant-table-content {
   outline: none;
 }
 
+div.ant-radio {
+  display: inline-flex;
+  align-items: center
+}
 
+.ant-radio input[type=radio] {
+  appearance: none;
+}
+
+.ant-radio input[type=radio] {
+  display: inline;
+  width: 33px;
+  height: 33px;
+  margin-top: 8px;
+  border-radius: 50%;
+  border: 1px solid #E8E8E8;
+}
+
+.ant-radio input[type=radio]:checked {
+  appearance: none;
+}
+
+.ant-radio input[type=radio]:checked {
+  width: 33px;
+  height: 33px;
+  border: 1px solid #707070;
+  border-radius: 50%;
+  background-color: #707070;
+}
+
+audio {
+  width: 250px;
+}
+
+.ant-audio::-webkit-media-controls-panel {
+  background-color: #ffffff; 
+}
 </style>

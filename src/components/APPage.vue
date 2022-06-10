@@ -55,45 +55,61 @@
     <v-layout justify-center column class="ap-form2">
       <p class="test-title">SCT-AP</p>
       <table class="ap-table">
-        <tr>
-          <td colspan="3" class="ap-table-header" style="border-radius: 21px 0px 0px 0px"></td>
-          <td colspan="12" class="ap-table-header" style="border-radius: 0px 21px 0px 0px">대상자 반응</td>
-        </tr>
-        <tr>
-          <td colspan="3" class="ap-table-header"></td>
-          <td colspan="2" class="ap-table-header1" style="border-right: 1px solid #C9C9C9; border-bottom: 1px solid #C9C9C9;">A2_C</td>
-          <td colspan="2" class="ap-table-header1" style="border-right: 1px solid #C9C9C9; border-bottom: 1px solid #C9C9C9;">A2_NC</td>
-          <td colspan="2" class="ap-table-header1" style="border-right: 1px solid #C9C9C9; border-bottom: 1px solid #C9C9C9;">A3_C</td>
-          <td colspan="2" class="ap-table-header1" style="border-right: 1px solid #C9C9C9; border-bottom: 1px solid #C9C9C9;">A3_NC</td>
-          <td colspan="2" class="ap-table-header1" style="border-right: 1px solid #C9C9C9; border-bottom: 1px solid #C9C9C9;">P_C</td>
-          <td colspan="2" class="ap-table-header1" style="border-bottom: 1px solid #C9C9C9;">P_NC</td>
-        </tr>
-        <tr>
-          <td class="ap-table-header" style="border-radius: 0px 0px 0px 21px">번호</td>
-          <td class="ap-table-header">문장</td>
-          <td class="ap-table-header">정답</td>
-          <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">1st</td>
-          <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">반복</td>
-          <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">1st</td>
-          <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">반복</td>
-          <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">1st</td>
-          <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">반복</td>
-          <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">1st</td>
-          <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">반복</td>
-          <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">1st</td>
-          <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">반복</td>
-          <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">1st</td>
-          <td class="ap-table-header1" style="border-radius: 0px 0px 21px 0px">반복</td>
-        </tr>
+        <thead>
+          <tr>
+            <td colspan="3" class="ap-table-header" style="border-radius: 21px 0px 0px 0px"></td>
+            <td colspan="12" class="ap-table-header" style="border-radius: 0px 21px 0px 0px">대상자 반응</td>
+          </tr>
+          <tr>
+            <td colspan="3" class="ap-table-header"></td>
+            <td colspan="2" class="ap-table-header1" style="border-right: 1px solid #C9C9C9; border-bottom: 1px solid #C9C9C9;">A2_C</td>
+            <td colspan="2" class="ap-table-header1" style="border-right: 1px solid #C9C9C9; border-bottom: 1px solid #C9C9C9;">A2_NC</td>
+            <td colspan="2" class="ap-table-header1" style="border-right: 1px solid #C9C9C9; border-bottom: 1px solid #C9C9C9;">A3_C</td>
+            <td colspan="2" class="ap-table-header1" style="border-right: 1px solid #C9C9C9; border-bottom: 1px solid #C9C9C9;">A3_NC</td>
+            <td colspan="2" class="ap-table-header1" style="border-right: 1px solid #C9C9C9; border-bottom: 1px solid #C9C9C9;">P_C</td>
+            <td colspan="2" class="ap-table-header1" style="border-bottom: 1px solid #C9C9C9;">P_NC</td>
+          </tr>
+          <tr>
+            <td class="ap-table-header" style="border-radius: 0px 0px 0px 21px">번호</td>
+            <td class="ap-table-header" style="width: 310px">문장</td>
+            <td class="ap-table-header">정답</td>
+            <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">1st</td>
+            <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">반복</td>
+            <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">1st</td>
+            <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">반복</td>
+            <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">1st</td>
+            <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">반복</td>
+            <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">1st</td>
+            <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">반복</td>
+            <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">1st</td>
+            <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">반복</td>
+            <td class="ap-table-header1" style="border-right: 1px solid #C9C9C9;">1st</td>
+            <td class="ap-table-header1" style="border-radius: 0px 0px 21px 0px">반복</td>
+          </tr>
+        </thead>
 
-        <tbody v-for="question in questions" v-bind:key="question.q_id">
-          <tr class="ap-table-body" v-if="splitType(question) != 'word'">
-            <td></td>
-            <td>{{ question.q_body }}</td>
-            <td>{{ question.q_data.split('"')[11] }}</td>
-            <td>
-              
-            </td>
+        <tbody v-for="i in questions.length" v-bind:key="i">
+          <tr v-if="qtype[i - 1] !== 'word'"> 
+            <td class="ap-table-content" >{{ num[i - 1] }}</td>
+            <td class="ap-table-content">{{ questions[i - 1].q_body }}</td>
+            <td class="ap-table-content">{{ answers[i - 1] }}</td>
+            <td><div class="ap-radio"><input type="radio" value="1" v-model="picked[i - 1]"></div></td>
+            <td><div class="ap-radio"><input type="radio" value="2" v-model="picked[i - 1]"></div></td>
+            <td><div class="ap-radio"><input type="radio" value="3" v-model="picked[i - 1]"></div></td>
+            <td><div class="ap-radio"><input type="radio" value="4" v-model="picked[i - 1]"></div></td>
+            <td><div class="ap-radio"><input type="radio" value="5" v-model="picked[i - 1]"></div></td>
+            <td><div class="ap-radio"><input type="radio" value="6" v-model="picked[i - 1]"></div></td>
+            <td><div class="ap-radio"><input type="radio" value="7" v-model="picked[i - 1]"></div></td>
+            <td><div class="ap-radio"><input type="radio" value="8" v-model="picked[i - 1]"></div></td>
+            <td><div class="ap-radio"><input type="radio" value="9" v-model="picked[i - 1]"></div></td>
+            <td><div class="ap-radio"><input type="radio" value="10" v-model="picked[i - 1]"></div></td>
+            <td><div class="ap-radio"><input type="radio" value="11" v-model="picked[i - 1]"></div></td>
+            <td><div class="ap-radio"><input type="radio" value="12" v-model="picked[i - 1]"></div></td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <td colspan="2">문장유형별 점수</td>
           </tr>
         </tbody>
       </table>
@@ -116,7 +132,13 @@ export default {
     user: [{
       u_id: '',
     }],
+    resId: '',
     questions: [],
+    num: [],
+    qtype: [],
+    answers: [],
+    picked: [],
+    apAnswer: [],
   }),
   mounted () {
     this.initialize()
@@ -127,8 +149,18 @@ export default {
       //this.$router.push('/main')
       this.$router.go(-1)
     },
-    initialize () {
-      axios.get('/api/examUsers?id=' + this.$route.query.patient)
+    async initialize () {
+      await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
+      .then(response => {
+        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
+        this.resId = response.data.data.e_id;
+        //console.log(this.resId)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/examUsers?id=' + this.$route.query.patient)
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         //console.log(response.data.data)
@@ -139,25 +171,45 @@ export default {
         console.log(error.response)
       })
 
-      axios.get('/api/questions/question?type=SCT-AP')
+      await axios.get('/api/questions/question?type=SCT-AP')
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         //console.log(response.data.data)
         this.questions = response.data.data
-        for (let i = 0; i < this.questions.length; i++){
+        for (let i = 0; i < this.questions.length; i++) {
           this.questions[i].q_body = this.questions[i].q_body.replace(/,/g, " ")
           this.questions[i].q_data = String.fromCharCode(...this.questions[i].q_data.data)
+          this.qtype[i] = JSON.parse(this.questions[i].q_data)["type_of_question"]
+          if (JSON.parse(this.questions[i].q_data)["type_of_question"] === "ex") {
+            this.num[i] = "P" + JSON.parse(this.questions[i].q_data)["no"].replace('0', '')
+          }
+          else {
+            this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace('0', '')
+          }
         }
-        console.log(this.questions)
-        //console.log(String.fromCharCode(...this.questions[0].q_data.data).split("\"")[11])
+        //console.log(this.questions)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/languageSummary?type=SCT-AP&userId=' + this.user[0].u_id + '&resId=' + this.resId)
+      .then(response => {
+        this.answers = response.data.data[0].lg_answer.split(',').splice(1);
+        //console.log(this.antAnswer[0].lg_answer)
+        for (let i = 0; i < this.answers.length; i++) {
+          if (this.answers[i] === '0') {
+            this.answers[i] = ''
+          }
+        }
+        console.log(this.answers)
       })
       .catch(error => {
         console.log(error.response)
       })
     },
-    splitType(item) {
-      console.log(item.q_data.split("\"")[3])
-      return item.q_data.split("\"")[3]
+    Save() {
+
     }
   }
 }
@@ -211,13 +263,44 @@ td.ap-table-header1 {
   text-align: center;
 }
 
-tr.ap-table-body {
-  background-color: #FFFFFF;
-  color: #333333;
-  font-family: 'Noto Sans KR Medium';
-  font-size: 16px;
+td.ap-table-content {
+  background-color: #FAFAFA;
+  font-family: 'Noto Sans KR Regular';
+  font-size: 20px;
   letter-spacing: 0px;
+  height: 60px;
   text-align: center;
-  height: 68px;
+  
+}
+
+div.ap-radio {
+  display: inline-flex;
+  align-items: center;
+}
+
+.ap-radio input[type=radio] {
+  appearance: none;
+}
+
+.ap-radio input[type=radio] {
+  display: inline;
+  width: 33px;
+  height: 33px;
+  margin-top: 8px;
+  border-radius: 50%;
+  border: 1px solid #E8E8E8;
+  margin-left: 12px;
+}
+
+.ap-radio input[type=radio]:checked {
+  appearance: none;
+}
+
+.ap-radio input[type=radio]:checked {
+  width: 33px;
+  height: 33px;
+  border: 1px solid #707070;
+  border-radius: 50%;
+  background-color: #707070;
 }
 </style>

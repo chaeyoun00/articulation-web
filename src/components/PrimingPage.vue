@@ -69,10 +69,10 @@
             <td class="priming-table-header"></td>
         </tr>
         <tr>
-            <td class="priming-table-header" style="border-radius: 0px 0px 0px 21px">번호</td>
-            <td class="priming-table-header">점화문자</td>
-            <td class="priming-table-header">목표반응</td>
-            <td class="priming-table-header">대상자 반응</td>
+            <td class="priming-table-header" style="border-radius: 0px 0px 0px 21px; width: 27px">번호</td>
+            <td class="priming-table-header" style="width: 180px;">점화문자</td>
+            <td class="priming-table-header" style="width: 180px;">목표반응</td>
+            <td class="priming-table-header" style="width: 180px;">대상자 반응</td>
             <td class="priming-table-header2" style="border-right: 1px solid #C9C9C9">1st</td>
             <td class="priming-table-header2" style="border-right: 1px solid #C9C9C9">반복</td>
             <td class="priming-table-header2" style="border-right: 1px solid #C9C9C9">1st</td>
@@ -81,8 +81,49 @@
             <td class="priming-table-header2" style="border-right: 1px solid #C9C9C9">반복</td>
             <td class="priming-table-header2" style="border-right: 1px solid #C9C9C9">1st</td>
             <td class="priming-table-header2">반복</td>
-            <td class="priming-table-header" style="border-radius: 0px 0px 21px 0px">파일</td>
+            <td class="priming-table-header" style="border-radius: 0px 0px 21px 0px; width: 136px">파일</td>
         </tr>
+
+        <tbody v-for="i in questions.length" v-bind:key="i">
+          <tr v-if="qtype[i - 1] !== 'word' && i != questions.length">
+            <td class="priming-table-content" style="border-bottom: 1px solid #C9C9C9">{{ num[i - 1] }}</td>
+            <td class="priming-table-content" style="background-color: #FAFAFA;border-bottom: 1px solid #C9C9C9">{{ questions[i - 1].q_body }}</td>
+            <td class="priming-table-content" style="background-color: #FAFAFA;border-bottom: 1px solid #C9C9C9">{{ answers[i - 1] }}</td>
+            <td class="priming-table-content" style="border-bottom: 1px solid #C9C9C9">
+              <div class="priming-table-text"><input type="text" placeholder="반응 입력" v-model="text[i - 1]"></div>
+            </td>
+            <td style="border-bottom: 1px solid #C9C9C9"><div class="priming-radio"><input type="radio" value="1" v-model="picked[i - 1]"></div></td>
+            <td style="border-bottom: 1px solid #C9C9C9"><div class="priming-radio"><input type="radio" value="2" v-model="picked[i - 1]"></div></td>
+            <td style="border-bottom: 1px solid #C9C9C9"><div class="priming-radio"><input type="radio" value="3" v-model="picked[i - 1]"></div></td>
+            <td style="border-bottom: 1px solid #C9C9C9"><div class="priming-radio"><input type="radio" value="4" v-model="picked[i - 1]"></div></td>
+            <td style="border-bottom: 1px solid #C9C9C9"><div class="priming-radio"><input type="radio" value="5" v-model="picked[i - 1]"></div></td>
+            <td style="border-bottom: 1px solid #C9C9C9"><div class="priming-radio"><input type="radio" value="6" v-model="picked[i - 1]"></div></td>
+            <td style="border-bottom: 1px solid #C9C9C9"><div class="priming-radio"><input type="radio" value="7" v-model="picked[i - 1]"></div></td>
+            <td style="border-bottom: 1px solid #C9C9C9"><div class="priming-radio"><input type="radio" value="8" v-model="picked[i - 1]"></div></td>
+            <td style="border-bottom: 1px solid #C9C9C9; background-color: #FAFAFA">
+              <audio :id="questions[i - 1].q_id" controls controlsList="nodownload noplaybackrate" class="priming-audio"></audio>
+            </td>
+          </tr>
+          <tr v-else-if="qtype[i - 1] !== 'word'">
+            <td class="priming-table-content">{{ num[i - 1] }}</td>
+            <td class="priming-table-content" style="background-color: #FAFAFA">{{ questions[i - 1].q_body }}</td>
+            <td class="priming-table-content" style="background-color: #FAFAFA">{{ answers[i - 1] }}</td>
+            <td class="priming-table-content">
+              <div class="priming-table-text"><input type="text" placeholder="반응 입력" v-model="text[i - 1]"></div>
+            </td>
+            <td><div class="priming-radio"><input type="radio" value="1" v-model="picked[i - 1]"></div></td>
+            <td><div class="priming-radio"><input type="radio" value="2" v-model="picked[i - 1]"></div></td>
+            <td><div class="priming-radio"><input type="radio" value="3" v-model="picked[i - 1]"></div></td>
+            <td><div class="priming-radio"><input type="radio" value="4" v-model="picked[i - 1]"></div></td>
+            <td><div class="priming-radio"><input type="radio" value="5" v-model="picked[i - 1]"></div></td>
+            <td><div class="priming-radio"><input type="radio" value="6" v-model="picked[i - 1]"></div></td>
+            <td><div class="priming-radio"><input type="radio" value="7" v-model="picked[i - 1]"></div></td>
+            <td><div class="priming-radio"><input type="radio" value="8" v-model="picked[i - 1]"></div></td>
+            <td style="background-color: #FAFAFA; border-radius: 0px 0px 21px 0px">
+              <audio :id="questions[i - 1].q_id" controls controlsList="nodownload noplaybackrate" class="priming-audio"></audio>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </v-layout>
 
@@ -90,6 +131,7 @@
       <v-btn
         depressed
         class="submit-btn"
+        @click="Save(), ToTest()"
       >저장</v-btn>
     </v-layout>
   </v-container>
@@ -97,12 +139,21 @@
 
 <script>
 var axios = require('axios');
+const iconv = require('iconv-lite')
 
 export default {
   data: () => ({
     user: [{
       u_id: '',
     }],
+    resId: '',
+    picked: [],
+    questions: [],
+    num: [],
+    qtype: [],
+    text: [],
+    answers: [],
+    primingAnswer: [],
   }),
   mounted () {
     this.initialize()
@@ -113,8 +164,18 @@ export default {
       //this.$router.push('/main')
       this.$router.go(-1)
     },
-    initialize () {
-      axios.get('/api/examUsers?id=' + this.$route.query.patient)
+    async initialize () {
+      await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
+      .then(response => {
+        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
+        this.resId = response.data.data.e_id;
+        //console.log(this.resId)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/examUsers?id=' + this.$route.query.patient)
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         //console.log(response.data.data)
@@ -123,6 +184,81 @@ export default {
       .catch(error => {
         console.log(error.response)
       })
+
+      await axios.get('/api/questions/question?type=SPT-priming')
+      .then(response => {
+        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
+        //console.log(response.data.data)
+        this.questions = response.data.data
+        let contents;
+        for (let i = 0; i < this.questions.length; i++) {
+          this.questions[i].q_body = this.questions[i].q_body.replace(/,/g, " ")
+          contents = iconv.decode(this.questions[i].q_data.data, "UTF-8")
+          this.qtype[i] = JSON.parse(contents)["type_of_question"]
+          this.answers[i] = JSON.parse(contents)["answer"]
+          if (this.qtype[i] === "ex") {
+            this.num[i] = "P" + JSON.parse(contents)["no"].replace(/(^0+)/, "");
+          }
+          else {
+            this.num[i] = JSON.parse(contents)["no"].replace(/(^0+)/, "");
+          }
+        }
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/answerPapers?type=SPT-priming&examId=' + this.resId)
+      .then(response => {
+        var uint8;
+        var audio;
+        for (let i = 0; i < response.data.data.length; i++) {
+          uint8 = new Uint8Array(response.data.data[i].a_data.data);
+          var blob = new Blob([uint8], { type: 'audio' });
+          var blobUrl = URL.createObjectURL(blob);
+          audio = document.getElementById(response.data.data[i].a_question_id)
+          audio.src = blobUrl;
+        }
+        //console.log(this.audioURL)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/languageSummary?type=SPT-priming&userId=' + this.user[0].u_id + '&resId=' + this.resId)
+      .then(response => {
+        this.primingAnswer = response.data.data;
+        let splitAnswer = this.primingAnswer[0].lg_answer.slice(1, -1).split('|')
+        this.text = splitAnswer[0].split(',')
+        this.picked =  splitAnswer[1].split(',')
+      })
+      .catch(error => {
+        console.log(error.response)
+      })   
+    },
+    Save() {
+      const data = {
+        'id': this.primingAnswer[0].lg_summery_id,
+        'answers': '[' + this.text + '|' + this.picked + ']'
+      }
+
+      var config = {
+        method: 'put',
+        url: 'http://49.50.172.137:3000/api/languageSummary',
+        headers: {
+          'memberId': localStorage.getItem("Id"),
+          //'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: data
+      }
+
+      axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
   }
 }
@@ -184,5 +320,72 @@ td.priming-table-header2 {
   font-size: 14px;
   letter-spacing: 0px;
   text-align: center;
+}
+
+td.priming-table-content {
+  color: #333333;
+  font-family: 'Noto Sans KR Medium';
+  font-size: 13px;
+  letter-spacing: 0px;
+  text-align: center;
+  height: 60px;
+}
+
+div.priming-radio {
+  display: inline-flex;
+  align-items: center
+}
+
+.priming-radio input[type=radio] {
+  appearance: none;
+}
+
+.priming-radio input[type=radio] {
+  display: inline;
+  width: 25px;
+  height: 25px;
+  margin-top: 8px;
+  border-radius: 50%;
+  border: 1px solid #E8E8E8;
+  margin-left: 2px;
+}
+
+.priming-radio input[type=radio]:checked {
+  appearance: none;
+}
+
+.priming-radio input[type=radio]:checked {
+  width: 25px;
+  height: 25px;
+  border: 1px solid #707070;
+  border-radius: 50%;
+  background-color: #707070;
+}
+
+.priming-table-text input[type=text] {
+  text-align: center;
+  width: 175px;
+}
+
+.priming-table-text input[type=text]:focus {
+  outline: none;
+}
+
+.priming-audio {
+  width: 136px;
+}
+
+.priming-audio::-webkit-media-controls-panel {
+  background-color: #FAFAFA;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.priming-audio::-webkit-media-controls-time-remaining-display{
+  display: none;
+}
+
+.priming-audio::-webkit-media-controls-current-time-display{
+  display: none;
 }
 </style>

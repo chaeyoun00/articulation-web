@@ -56,15 +56,21 @@
       <p class="test-title">절차 설명하기</p>
       <table class="step-table">
         <tr>
-          <td class="step-table-title1">라면 끓이기</td>
+          <td class="step-table-title1">
+            라면 끓이기
+            <audio id=0 controls controlsList="nodownload noplaybackrate"></audio>
+          </td>
           <td class="step-table-text">
-            <textarea name="content1" class="step-table-content" placeholder="환자 발화 입력"></textarea>
+            <textarea name="content1" class="step-table-content" placeholder="환자 발화 입력" v-model="image[0]"></textarea>
           </td>         
         </tr>
         <tr>
-          <td class="step-table-title2">양치질하기</td>
+          <td class="step-table-title2">
+            양치질하기
+            <audio id=1 controls controlsList="nodownload noplaybackrate"></audio>
+          </td>
           <td class="step-table-text">
-            <textarea name="content2" class="step-table-content" placeholder="환자 발화 입력"></textarea>
+            <textarea name="content2" class="step-table-content" placeholder="환자 발화 입력" v-model="image[1]"></textarea>
           </td>         
         </tr>
       </table>
@@ -74,6 +80,7 @@
       <v-btn
         depressed
         class="submit-btn"
+        @click="Save(), ToTest()"
       >저장</v-btn>
     </v-layout>
   </v-container>
@@ -87,6 +94,9 @@ export default {
     user: [{
       u_id: '',
     }],
+    resId: '',
+    image: [],
+    stepAnswer: [],
   }),
   mounted () {
     this.initialize()
@@ -97,8 +107,18 @@ export default {
       //this.$router.push('/main')
       this.$router.go(-1)
     },
-    initialize () {
-      axios.get('/api/examUsers?id=' + this.$route.query.patient)
+    async initialize () {
+      await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
+      .then(response => {
+        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
+        this.resId = response.data.data.e_id;
+        //console.log(this.resId)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/examUsers?id=' + this.$route.query.patient)
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         //console.log(response.data.data)
@@ -107,7 +127,59 @@ export default {
       .catch(error => {
         console.log(error.response)
       })
+
+      await axios.get('/api/answerPapers?type=Explain_Procedure&examId=' + this.resId)
+      .then(response => {
+        var uint8;
+        var audio;
+        for (let i = 0; i < response.data.data.length; i++) {
+          uint8 = new Uint8Array(response.data.data[i].a_data.data);
+          var blob = new Blob([uint8], { type: 'audio' });
+          var blobUrl = URL.createObjectURL(blob);
+          audio = document.getElementById(i)
+          audio.src = blobUrl;
+          //console.log(audio)
+        }
+        //console.log(this.audioURL)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/languageSummary?type=Explain_Procedure&userId=' + this.user[0].u_id + '&resId=' + this.resId)
+      .then(response => {
+        this.stepAnswer = response.data.data;
+        this.image = this.stepAnswer[0].lg_answer.slice(1, -1).split(',')
+      })
+      .catch(error => {
+        console.log(error.response)
+      })     
+    },
+    Save() {
+      const data = {
+        'id': this.stepAnswer[0].lg_summery_id,
+        'answers': '[' + this.image + ']'
+      }
+      
+      var config = {
+        method: 'put',
+        url: 'http://49.50.172.137:3000/api/languageSummary',
+        headers: {
+          'memberId': localStorage.getItem("Id"),
+          //'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: data
+      }
+
+      axios(config)
+      .then(function (response) {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
+    
   }
 }
 </script>

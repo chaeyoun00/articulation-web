@@ -238,4 +238,8 @@ export default {
   background-color: #A2A2A2 !important;
   color: #FFFFFF !important;
 }
+
+.v-btn:not(.v-btn--round).v-size--default {
+  min-width: 10px;
+}
 </style>

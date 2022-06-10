@@ -58,12 +58,11 @@
           <tr>
               <td colspan="2" class="cmpt-table-header" style="border-radius: 21px 0px 0px 0px; border-right: 1px solid #C9C9C9"></td>
               <td colspan="6" class="cmpt-table-header" style="border-right: 1px solid #C9C9C9; border-bottom: 1px solid #C9C9C9;">문장유형</td>
-              <td colspan="7" class="cmpt-table-header" style="border-right: 1px solid #C9C9C9; border-bottom: 1px solid #C9C9C9;">대상자 반응</td>
-              <td class="cmpt-table-header" style="border-radius: 0px 21px 0px 0px"></td>
+              <td colspan="7" class="cmpt-table-header" style="border-radius: 0px 21px 0px 0px; border-bottom: 1px solid #C9C9C9;">대상자 반응</td>
           </tr>
           <tr>
-              <td class="cmpt-table-header" style="border-radius: 0px 0px 0px 21px">번호</td>
-              <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">목표문장</td>
+              <td class="cmpt-table-header" style="border-radius: 0px 0px 0px 21px; width: 35px">번호</td>
+              <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9; width: 200px">목표문장</td>
               <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">A2_C</td>
               <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">A2_NC</td>
               <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">A3_C</td>
@@ -76,21 +75,29 @@
               <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">+/-</td>
               <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">3rd trial</td>
               <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">+/-</td>
-              <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">정반응 여부</td>
-              <td class="cmpt-table-header" style="border-radius: 0px 0px 21px 0px">파일</td>
+              <td class="cmpt-table-header" style="border-radius: 0px 0px 21px 0px; width: 136px">정반응 여부</td>
           </tr>
-          <tr>
-          </tr>
-          <tr>
-            <td colspan="2">문장유형 별 합계</td>
-            <td>
-            </td>
-            <td colspan="8"></td>
-          </tr>
-          <tr>
-            <td colspan="2">총점</td>
-            
-          </tr>
+          
+          <tbody v-for="i in questions.length" v-bind:key="i">
+            <tr v-if="qtype[i - 1] !== 'word'">
+              <td class="cmpt-table-content">{{ num[i - 1] }}</td>
+              <td class="cmpt-table-content" style="background-color: #FAFAFA">{{ answers[i - 1] }}</td>
+              <td class="cmpt-table-content"><div class="cmpt-radio"><input type="radio" value="1" v-model="picked[i - 1]"></div></td>
+              <td class="cmpt-table-content"><div class="cmpt-radio"><input type="radio" value="2" v-model="picked[i - 1]"></div></td>
+              <td class="cmpt-table-content"><div class="cmpt-radio"><input type="radio" value="3" v-model="picked[i - 1]"></div></td>
+              <td class="cmpt-table-content"><div class="cmpt-radio"><input type="radio" value="4" v-model="picked[i - 1]"></div></td>
+              <td class="cmpt-table-content"><div class="cmpt-radio"><input type="radio" value="5" v-model="picked[i - 1]"></div></td>
+              <td class="cmpt-table-content"><div class="cmpt-radio"><input type="radio" value="6" v-model="picked[i - 1]"></div></td>
+              <td class="cmpt-table-content"><div class="cmpt-table-text"><input type="text" placeholder="반응 입력"  style="width: 50px" v-model="text[i]"></div></td>
+              <td class="cmpt-table-content"><div class="cmpt-table-text"><input type="text" placeholder="입력" style="width: 30px" v-model="text1[i]"></div></td>
+              <td class="cmpt-table-content"><div class="cmpt-table-text"><input type="text" placeholder="반응 입력" style="width: 50px" v-model="text2[i]"></div></td>
+              <td class="cmpt-table-content"><div class="cmpt-table-text"><input type="text" placeholder="입력" style="width: 30px" v-model="text3[i]"></div></td>
+              <td class="cmpt-table-content"><div class="cmpt-table-text"><input type="text" placeholder="반응 입력" style="width: 50px" v-model="text4[i]"></div></td>
+              <td class="cmpt-table-content"><div class="cmpt-table-text"><input type="text" placeholder="입력" style="width: 30px" v-model="text5[i]"></div></td>
+              <td class="cmpt-table-content"><div class="cmpt-table-text"><input type="text" placeholder="반응 입력" style="width: 50px" v-model="text6[i]"></div></td>
+              
+            </tr>
+          </tbody>
       </table>
     </v-layout>
 
@@ -105,12 +112,26 @@
 
 <script>
 var axios = require('axios');
+const iconv = require('iconv-lite')
 
 export default {
   data: () => ({
     user: [{
       u_id: '',
     }],
+    resId: '',
+    picked: [],
+    questions: [],
+    num: [],
+    qtype: [],
+    answers: [],
+    text: [],
+    text1: [],
+    text2: [],
+    text3: [],
+    text4: [],
+    text5: [],
+    text6: [],
   }),
   mounted () {
     this.initialize()
@@ -121,12 +142,33 @@ export default {
       //this.$router.push('/main')
       this.$router.go(-1)
     },
-    initialize () {
-      axios.get('/api/examUsers?id=' + this.$route.query.patient)
+    async initialize () {
+      await axios.get('/api/examUsers?id=' + this.$route.query.patient)
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         //console.log(response.data.data)
         this.user = response.data.data
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/questions/question?type=CMPT')
+      .then(response => {
+        this.questions = response.data.data
+        let contents;
+        for (let i = 0; i < this.questions.length; i++) {
+          this.questions[i].q_body = this.questions[i].q_body.replace(/,/g, " ")
+          contents = iconv.decode(this.questions[i].q_data.data, "UTF-8")
+          this.qtype[i] = JSON.parse(contents)["type_of_question"]
+          this.answers[i] = JSON.parse(contents)["answer"].replace(/,/g, " ")
+          if (this.qtype[i] === "ex") {
+            this.num[i] = "P" + JSON.parse(contents)["no"].replace(/(^0+)/, "");
+          }
+          else {
+            this.num[i] = JSON.parse(contents)["no"].replace(/(^0+)/, "");
+          }
+        }
       })
       .catch(error => {
         console.log(error.response)
@@ -173,5 +215,71 @@ td.cmpt-table-header {
   letter-spacing: 0px;
   text-align: center;
   height: 50px;
+}
+
+td.cmpt-table-content {
+  color: #333333;
+  font-family: 'Noto Sans KR Medium';
+  font-size: 12px;
+  letter-spacing: 0px;
+  text-align: center;
+  height: 60px;
+}
+
+.cmpt-table-text input[type=text] {
+  text-align: center;
+}
+
+.cmpt-table-text input[type=text]:focus {
+  outline: none;
+}
+
+div.cmpt-radio {
+  display: inline-flex;
+  align-items: center
+}
+
+.cmpt-radio input[type=radio] {
+  appearance: none;
+}
+
+.cmpt-radio input[type=radio] {
+  display: inline;
+  width: 25px;
+  height: 25px;
+  margin-top: 8px;
+  border-radius: 50%;
+  border: 1px solid #E8E8E8;
+  margin-left: 2px;
+}
+
+.cmpt-radio input[type=radio]:checked {
+  appearance: none;
+}
+
+.cmpt-radio input[type=radio]:checked {
+  width: 25px;
+  height: 25px;
+  border: 1px solid #707070;
+  border-radius: 50%;
+  background-color: #707070;
+}
+
+.cmpt-audio {
+  width: 136px;
+}
+
+.cmpt-audio::-webkit-media-controls-panel {
+  background-color: #FAFAFA;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.cmpt-audio::-webkit-media-controls-time-remaining-display{
+  display: none;
+}
+
+.cmpt-audio::-webkit-media-controls-current-time-display{
+  display: none;
 }
 </style>

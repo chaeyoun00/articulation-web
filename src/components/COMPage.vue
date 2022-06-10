@@ -64,15 +64,20 @@
             <td class="com-table-header">Sentence</td>
             <td class="com-table-header" style="border-radius: 0px 21px 21px 0px">Answer</td>
           </tr>
-          <tbody v-for="question in questions" v-bind:key="question.q_id">
-            <tr v-if="splitType(question) != 'word'">
-              <td>{{  }}</td>
+
+          <tbody v-for="i in questions.length" v-bind:key="i">
+            <tr v-if="qtype[i - 1] !== 'word'">
+              <td class="com-table-content">{{ num[i - 1] }}</td>
+              <td class="com-table-content" style="background-color: #F5F5F5"></td>
               <td></td>
+              <td class="com-table-content" style="background-color: #F5F5F5"></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td class="com-table-content" style="background-color: #F5F5F5">{{ question.q_body }}</td>
-              <td></td>
+              <td class="com-table-content" style="background-color: #F5F5F5">{{ questions[i - 1].q_body }}</td>
+              <td class="com-table-content">
+                <div class="com-table-text">
+                  <input type="text" id="textarea" placeholder="입력" v-model="text[i]">
+                </div>
+              </td>
             </tr>
           </tbody>
       </table>
@@ -95,8 +100,13 @@ export default {
     user: [{
       u_id: '',
     }],
+    resId: '',
+    picked: [],
     questions: [],
-    answer: [],
+    num: [],
+    qtype: [],
+    answers: [],
+    text: []
   }),
   mounted () {
     this.initialize()
@@ -107,8 +117,8 @@ export default {
       //this.$router.push('/main')
       this.$router.go(-1)
     },
-    initialize () {
-      axios.get('/api/examUsers?id=' + this.$route.query.patient)
+    async initialize () {
+      await axios.get('/api/examUsers?id=' + this.$route.query.patient)
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         //console.log(response.data.data)
@@ -118,25 +128,29 @@ export default {
         console.log(error.response)
       })
 
-      axios.get('/api/questions/question?type=SCT-COM')
+      await axios.get('/api/questions/question?type=SCT-COM')
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         //console.log(response.data.data)
         this.questions = response.data.data
-        for (let i = 0; i < this.questions.length; i++){
+        for (let i = 0; i < this.questions.length; i++) {
           this.questions[i].q_body = this.questions[i].q_body.replace(/,/g, " ")
           this.questions[i].q_data = String.fromCharCode(...this.questions[i].q_data.data)
+          this.qtype[i] = JSON.parse(this.questions[i].q_data)["type_of_question"]
+          if (this.qtype[i] === "ex") {
+            this.num[i] = "P" + JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
+          }
+          else {
+            this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
+          }
         }
-        console.log(this.questions)
+        console.log(this.num)
+        console.log(this.qtype)
         //console.log(String.fromCharCode(...this.questions[0].q_data.data).split("\"")[11])
       })
       .catch(error => {
         console.log(error.response)
       })
-    },
-    splitType(item) {
-      console.log(item.q_data.split("\"")[3])
-      return item.q_data.split("\"")[3]
     }
   }
 }
@@ -182,10 +196,20 @@ td.com-table-header {
 }
 
 td.com-table-content {
+  color: #333333;
   font-family: 'Noto Sans KR Medium';
   font-size: 20px;
   letter-spacing: 0px;
   text-align: center;
   height: 60px;
+}
+
+.com-table-text input[type=text] {
+  text-align: center;
+  width: 50px;
+}
+
+.com-table-text input[type=text]:focus {
+  outline: none;
 }
 </style>

@@ -55,25 +55,45 @@
     <v-layout justify-center column class="ins-form2">
       <p class="test-title">SCT-INS</p>
       <table class="ins-table">
-        <tr>
-          <td colspan="7" class="ins-table-header" style="border-radius: 21px 0px 0px 0px"></td>
-          <td colspan="6"  class="ins-table-header" style="border-radius: 0px 21px 0px 0px">반응기록</td>
-        </tr>
-        <tr>
-          <td class="ins-table-header" style="border-radius: 0px 0px 0px 21px">번호</td>
-          <td class="ins-table-header">Condition</td>
-          <td class="ins-table-header">Reversibility</td>
-          <td class="ins-table-header">Plausibility</td>
-          <td class="ins-table-header">Canonicity</td>
-          <td class="ins-table-header">목표문장</td>
-          <td class="ins-table-header">정답</td>
-          <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">Cond1-C</td>
-          <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">Cond1-NC</td>
-          <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">Cond2-C</td>
-          <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">Cond2-NC</td>
-          <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">Cond3-C</td>
-          <td class="ins-table-header1" style="border-radius: 0px 0px 21px 0px">Cond3-NC</td>
-        </tr>
+        <thead>
+          <tr>
+            <td colspan="7" class="ins-table-header" style="border-radius: 21px 0px 0px 0px"></td>
+            <td colspan="6"  class="ins-table-header" style="border-radius: 0px 21px 0px 0px">반응기록</td>
+          </tr>
+          <tr>
+            <td class="ins-table-header" style="border-radius: 0px 0px 0px 21px">번호</td>
+            <td class="ins-table-header">Condition</td>
+            <td class="ins-table-header">Reversibility</td>
+            <td class="ins-table-header">Plausibility</td>
+            <td class="ins-table-header">Canonicity</td>
+            <td class="ins-table-header">목표문장</td>
+            <td class="ins-table-header">정답</td>
+            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">Cond1-C</td>
+            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">Cond1-NC</td>
+            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">Cond2-C</td>
+            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">Cond2-NC</td>
+            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">Cond3-C</td>
+            <td class="ins-table-header1" style="border-radius: 0px 0px 21px 0px">Cond3-NC</td>
+          </tr>
+        </thead>
+
+        <tbody v-for="i in questions.length" v-bind:key="i">
+          <tr class="ins-table-content">
+            <td>{{ num[i - 1] }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{ questions[i - 1].q_body }}</td>
+            <td>{{ answers[i - 1] }}</td>
+            <td><div class="ins-radio"><input type="radio" value="1" v-model="picked[i - 1]"></div></td>
+            <td><div class="ins-radio"><input type="radio" value="2" v-model="picked[i - 1]"></div></td>
+            <td><div class="ins-radio"><input type="radio" value="3" v-model="picked[i - 1]"></div></td>
+            <td><div class="ins-radio"><input type="radio" value="4" v-model="picked[i - 1]"></div></td>
+            <td><div class="ins-radio"><input type="radio" value="5" v-model="picked[i - 1]"></div></td>
+            <td><div class="ins-radio"><input type="radio" value="6" v-model="picked[i - 1]"></div></td>
+          </tr>
+        </tbody>
       </table>
     </v-layout>
 
@@ -94,6 +114,12 @@ export default {
     user: [{
       u_id: '',
     }],
+    resId: '',
+    picked: [],
+    questions: [],
+    num: [],
+    qtype: [],
+    answers: [],
   }),
   mounted () {
     this.initialize()
@@ -104,12 +130,60 @@ export default {
       //this.$router.push('/main')
       this.$router.go(-1)
     },
-    initialize () {
-      axios.get('/api/examUsers?id=' + this.$route.query.patient)
+    async initialize () {
+      await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
+      .then(response => {
+        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
+        this.resId = response.data.data.e_id;
+        //console.log(this.resId)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/examUsers?id=' + this.$route.query.patient)
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         //console.log(response.data.data)
         this.user = response.data.data
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/questions/question?type=SCT-INS')
+      .then(response => {
+        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
+        //console.log(response.data.data)
+        this.questions = response.data.data
+        
+        for (let i = 0; i < this.questions.length; i++) {
+          this.questions[i].q_body = this.questions[i].q_body.replace(/,/g, " ")
+          this.questions[i].q_data = String.fromCharCode(...this.questions[i].q_data.data)
+          this.qtype[i] = JSON.parse(this.questions[i].q_data)["type_of_question"]
+          if (this.qtype[i] === "ex") {
+            this.num[i] = "P" + JSON.parse(this.questions[i].q_data)["no"].replace('0', '')
+          }
+          else {
+            this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace('0', '')
+          }
+        }
+        //console.log(this.questions)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/languageSummary?type=SCT-INS&userId=' + this.user[0].u_id + '&resId=' + this.resId)
+      .then(response => {
+        this.answers = response.data.data[0].lg_answer.split(',').splice(1);
+        //console.log(this.antAnswer[0].lg_answer)
+        for (let i = 0; i < this.answers.length; i++) {
+          if (this.answers[i] === '0') {
+            this.answers[i] = ''
+          }
+        }
+        console.log(this.answers)
       })
       .catch(error => {
         console.log(error.response)
@@ -167,5 +241,45 @@ td.ins-table-header1 {
   letter-spacing: 0px;
   text-align: center;
   height: 50px;
+}
+
+tr.ins-table-content {
+  color: #333333;
+  font-family: 'Noto Sans KR Regular';
+  font-size: 12px;
+  letter-spacing: 0px;
+  height: 60px;
+  text-align: center;
+}
+
+div.ins-radio {
+  display: inline-flex;
+  align-items: center
+}
+
+.ins-radio input[type=radio] {
+  appearance: none;
+}
+
+.ins-radio input[type=radio] {
+  display: inline;
+  width: 33px;
+  height: 33px;
+  margin-top: 8px;
+  border-radius: 50%;
+  border: 1px solid #E8E8E8;
+  margin-left: 12px;
+}
+
+.ins-radio input[type=radio]:checked {
+  appearance: none;
+}
+
+.ins-radio input[type=radio]:checked {
+  width: 33px;
+  height: 33px;
+  border: 1px solid #707070;
+  border-radius: 50%;
+  background-color: #707070;
 }
 </style>

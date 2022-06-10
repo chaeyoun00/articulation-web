@@ -116,7 +116,7 @@
               depressed
               class="submit-btn"
               :disabled="invalid"
-              @click="Submit(), ToMain()"
+              @click="Submit()"
             >
             등록
             </v-btn>
@@ -152,6 +152,7 @@ export default {
     u_type: '',
     u_date: '',
     reservation: [],
+    users: [],
   }),
   mounted () {
     this.initialize()
@@ -176,28 +177,66 @@ export default {
 
       axios.get('/api/examUsers?userId=' + this.u_id)
       .then(response => {
-        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        var config = {
-          method: 'post',
-          url: 'http://49.50.172.137:3000/api/examReservations',
-          headers: {
-            'memberId': localStorage.getItem("Id"),
-          },
-          data: data
-        }
-
-        axios(config)
-          .then(function (response) {
-            //console.log(JSON.stringify(response.data));
-            //console.log(flag)
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        this.users = response.data.data
+        console(this.users)
       })
       .catch(error => {
         console.log(error.response)
       })
+
+      axios.get('/api/examReservations?userId=' + this.u_id + '&isValid=1')
+      .then(response => {
+        if (response.data.data.length > 0 || this.users.length === 0) {
+          alert("등록되지 않은 환자 또는 이미 예약된 환자입니다.")
+        }
+        else {
+          var config = {
+            method: 'post',
+            url: 'http://49.50.172.137:3000/api/examReservations',
+            headers: {
+              'memberId': localStorage.getItem("Id"),
+            },
+            data: data
+          }
+
+          axios(config)
+          .then(function (response) {
+            
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+          this.ToMain()
+        }
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+      // axios.get('/api/examUsers?userId=' + this.u_id)
+      // .then(response => {
+      //   //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
+      //   var config = {
+      //     method: 'post',
+      //     url: 'http://49.50.172.137:3000/api/examReservations',
+      //     headers: {
+      //       'memberId': localStorage.getItem("Id"),
+      //     },
+      //     data: data
+      //   }
+
+      //   axios(config)
+      //     .then(function (response) {
+      //       //console.log(JSON.stringify(response.data));
+      //       //console.log(flag)
+      //     })
+      //     .catch(function (error) {
+      //       console.log(error);
+      //     });
+      // })
+      // .catch(error => {
+      //   console.log(error.response)
+      // })
       
     }
   }
