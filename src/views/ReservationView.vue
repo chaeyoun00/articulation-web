@@ -114,8 +114,8 @@ export default {
       })
     },
     Delete(item) {
-      const url = 'http://49.50.172.137:3000/api/examReservations?id=' + item.e_id
-      console.log(item.e_id)
+      var url = 'http://49.50.172.137:3000/api/examReservations?id=' + item.e_id
+      
       var config = {
         method: 'delete',
         url: url,
@@ -126,7 +126,7 @@ export default {
 
       axios(config)
       .then(function (response) {
-        //console.log(JSON.stringify(response.data));
+        console.log(JSON.stringify(response.data));
       })
       .catch(function (error) {
         console.log(error);

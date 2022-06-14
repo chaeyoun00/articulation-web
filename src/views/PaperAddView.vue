@@ -69,6 +69,7 @@ export default {
         { text: '검사 유형 코드', value: 'qp_type', width: 261, sortable: false, align: 'center'},
         { text: '전체 문항수', value: 'qp_total_question', width: 261, sortable: false, align: 'center'},
         { text: '생성 시간', value: 'createdAt', width: 261, sortable: false, align: 'center'},
+        { text: '문제 리스트', value: 'list', width: 261, sortable: false, align: 'center'},
     ],
     items: [],
     numitems: ['5개씩', '10개씩', '15개씩'],

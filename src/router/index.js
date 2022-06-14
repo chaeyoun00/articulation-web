@@ -12,7 +12,6 @@ import LoginView from '../views/LoginView.vue'
 import Sign from '../views/SignView.vue'
 import MainView from '../views/MainView.vue'
 import Tested from '../views/ReservationView.vue'
-import Search from '../views/SearchPatientView.vue'
 import Cognitive from '../views/CognitiveTestView.vue'
 import Language from '../views/LanguageTestView.vue'
 import Question from '../views/QuestionAddView.vue'
@@ -79,14 +78,6 @@ const routes = [
     components: {
       header: MenuView,
       footer: Tested
-    }
-  },
-  {
-    path: '/searchpatient',
-    name: 'Search',
-    components: {
-      header: MenuView,
-      footer: Search
     }
   },
   {

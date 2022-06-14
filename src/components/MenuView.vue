@@ -61,11 +61,6 @@ export default {
             id: 1_2,
             title: "예약자 관리",
             target: "Tested"
-          },
-          {
-            id: 1_3,
-            title: "검사 기록 조회",
-            target: "Search"
           }
         ]
       },

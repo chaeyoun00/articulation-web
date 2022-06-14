@@ -226,9 +226,11 @@ export default {
       await axios.get('/api/languageSummary?type=SPT-completion&userId=' + this.user[0].u_id + '&resId=' + this.resId)
       .then(response => {
         this.completionAnswer = response.data.data;
-        let splitAnswer = this.completionAnswer[0].lg_answer.slice(1, -1).split('|')
-        this.text = splitAnswer[0].split(',')
-        this.picked =  splitAnswer[1].split(',')
+        if (this.completionAnswer[0].lg_answer !== '') {
+          let splitAnswer = this.completionAnswer[0].lg_answer.slice(1, -1).split('|')
+          this.text = splitAnswer[0].split(',')
+          this.picked =  splitAnswer[1].split(',')
+        }
       })
       .catch(error => {
         alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")

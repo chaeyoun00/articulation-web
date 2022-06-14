@@ -213,8 +213,8 @@ export default {
     ToTest() {
       this.$router.push('/cognitive')
     },
-    initialize () {
-      axios.get('/api/examUsers?id=' + this.$route.query.patient)
+    async initialize () {
+      await axios.get('/api/examUsers?id=' + this.$route.query.patient)
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         //console.log(response.data.data)
@@ -226,7 +226,7 @@ export default {
 
       this.resId = this.$route.query.resId;
 
-      axios.get('/api/recognitionSummary?type=IADL&resId=' + this.resId)
+      await axios.get('/api/recognitionSummary?type=IADL&resId=' + this.resId)
       .then(response => {
         console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         this.picked = response.data.data[0].rs_answer.slice(1, -1).split(',')
@@ -242,7 +242,7 @@ export default {
         const data = {
           'id': this.id,
           'resId': this.resId.toString(),
-          'userId': this.u_id,
+          'userId': this.user[0].u_id,
           'type': 'IADL',
           'totalQuestionNum': '8',
           'answers': '[' + this.picked + ']', 
@@ -261,7 +261,7 @@ export default {
       else {
         const data = {
           'resId': this.resId.toString(),
-          'userId': this.u_id,
+          'userId': this.user[0].u_id,
           'type': 'IADL',
           'totalQuestionNum': '8',
           'answers': '[' + this.picked + ']', 

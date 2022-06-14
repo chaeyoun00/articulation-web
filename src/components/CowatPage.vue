@@ -63,12 +63,18 @@
           <tr>
             <td colspan="2" class="cowat-table-header2">동물</td>
             <td colspan="2" class="cowat-table-header2">가게 물건</td>
-            <td colspan="2" class="cowat-table-header2">가게 물건</td>
+            <td colspan="2" class="cowat-table-header2">옷의 종류</td>
           </tr>
           <tr>
-            <td colspan="2"><audio controls controlsList="nodownload noplaybackrate"></audio></td>
-            <td colspan="2"><audio controls controlsList="nodownload noplaybackrate"></audio></td>
-            <td colspan="2"><audio controls controlsList="nodownload noplaybackrate"></audio></td>
+            <td colspan="2" class="cowat-table-header2" style="border-radius: 0px 0px 0px 21px">
+              <audio class="cowat-audio" controls controlsList="nodownload noplaybackrate" id=0></audio>
+            </td>
+            <td colspan="2" class="cowat-table-header2">
+              <audio class="cowat-audio" controls controlsList="nodownload noplaybackrate" id=1></audio>
+            </td>
+            <td colspan="2" class="cowat-table-header2" style="border-radius: 0px 0px 21px 0px">
+              <audio class="cowat-audio" controls controlsList="nodownload noplaybackrate" id=2>
+            </audio></td>
           </tr>
           <tr v-for="i in 30" v-bind:key="i">
             <td class="cowat-table-tag">{{ i }}</td>
@@ -122,9 +128,15 @@
             <td colspan="2" class="cowat-table-header2">ㅅ</td>
           </tr>
           <tr>
-            <td colspan="2"><audio controls controlsList="nodownload noplaybackrate"></audio></td>
-            <td colspan="2"><audio controls controlsList="nodownload noplaybackrate"></audio></td>
-            <td colspan="2"><audio controls controlsList="nodownload noplaybackrate"></audio></td>
+            <td colspan="2" class="cowat-table-header2" style="border-radius: 0px 0px 0px 21px">
+              <audio class="cowat-audio" controls controlsList="nodownload noplaybackrate" id=3></audio>
+            </td>
+            <td colspan="2" class="cowat-table-header2">
+              <audio class="cowat-audio" controls controlsList="nodownload noplaybackrate" id=4></audio>
+            </td>
+            <td colspan="2" class="cowat-table-header2" style="border-radius: 0px 0px 21px 0px">
+              <audio class="cowat-audio" controls controlsList="nodownload noplaybackrate" id=5></audio>
+            </td>
           </tr>
           <tr v-for="i in 30" v-bind:key="i">
             <td class="cowat-table-tag">{{ i }}</td>
@@ -187,6 +199,8 @@ export default {
     user: [{
       u_id: '',
     }],
+    resId: '',
+    text: [],
   }),
   mounted () {
     this.initialize()
@@ -197,8 +211,18 @@ export default {
       //this.$router.push('/main')
       this.$router.go(-1)
     },
-    initialize () {
-      axios.get('/api/examUsers?id=' + this.$route.query.patient)
+    async initialize () {
+       await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
+      .then(response => {
+        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
+        this.resId = response.data.data.e_id;
+        //console.log(this.resId)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/examUsers?id=' + this.$route.query.patient)
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         //console.log(response.data.data)
@@ -206,6 +230,31 @@ export default {
       })
       .catch(error => {
         console.log(error.response)
+      })
+
+      await axios.get('/api/answerPapers?type=COWAT&examId=' + this.resId)
+      .then(response => {
+        var uint8;
+        var audio;
+        for (let i = 0; i < response.data.data.length; i++) {
+          uint8 = new Uint8Array(response.data.data[i].a_data.data);
+          var blob = new Blob([uint8], { type: 'audio' });
+          var blobUrl = URL.createObjectURL(blob);
+          audio = document.getElementById(i)
+          audio.src = blobUrl;
+        }
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/languageSummary?type=COWAT&userId=' + this.user[0].u_id + '&resId=' + this.resId)
+      .then(response => {
+
+      })
+      .catch(error => {
+        alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
+        this.$router.go(-1)
       })
     }
   }
@@ -330,8 +379,21 @@ td.cowat-table-header3 {
   outline: none;
 }
 
-audio {
+.cowat-audio {
   width: 160px;
-  
+}
+
+.cowat-audio::-webkit-media-controls-panel {
+  background-color: #E8E8E8;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.cowat-audio::-webkit-media-controls-time-remaining-display{
+  display: none;
+}
+
+.cowat-audio::-webkit-media-controls-current-time-display{
+  display: none;
 }
 </style>
