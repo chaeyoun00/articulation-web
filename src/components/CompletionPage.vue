@@ -231,7 +231,8 @@ export default {
         this.picked =  splitAnswer[1].split(',')
       })
       .catch(error => {
-        console.log(error.response)
+        alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
+        this.$router.go(-1)
       })   
     },
     Save() {

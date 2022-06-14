@@ -58,11 +58,17 @@
       <v-row>
         <table class="cowat-table1">
           <tr>
-            <td colspan="4" class="cowat-table-header1">Semantic (category) word fluency</td>
+            <td colspan="6" class="cowat-table-header1">Semantic (category) word fluency</td>
           </tr>
           <tr>
-            <td colspan="2" class="cowat-table-header2" style="border-radius: 0px 0px 0px 21px">동물</td>
-            <td colspan="2"  class="cowat-table-header2" style="border-radius: 0px 0px 21px 0px">가게 물건</td>
+            <td colspan="2" class="cowat-table-header2">동물</td>
+            <td colspan="2" class="cowat-table-header2">가게 물건</td>
+            <td colspan="2" class="cowat-table-header2">가게 물건</td>
+          </tr>
+          <tr>
+            <td colspan="2"><audio controls controlsList="nodownload noplaybackrate"></audio></td>
+            <td colspan="2"><audio controls controlsList="nodownload noplaybackrate"></audio></td>
+            <td colspan="2"><audio controls controlsList="nodownload noplaybackrate"></audio></td>
           </tr>
           <tr v-for="i in 30" v-bind:key="i">
             <td class="cowat-table-tag">{{ i }}</td>
@@ -77,8 +83,20 @@
                 <input type="text" placeholder="단어 입력">
               </div>
             </td>
+            <td class="cowat-table-tag">{{ i }}</td>
+            <td class="cowat-table-content">
+              <div class="cowat-answer">
+                <input type="text" placeholder="단어 입력">
+              </div>
+            </td>
           </tr>
           <tr>
+            <td colspan="2" class="cowat-table-total">
+              <div class="cowat-score">
+                <input type="text" id="textarea" placeholder="0">
+                <label for="textarea">/ 30</label>
+              </div>
+            </td>
             <td colspan="2" class="cowat-table-total">
               <div class="cowat-score">
                 <input type="text" id="textarea" placeholder="0">
@@ -99,9 +117,14 @@
             <td colspan="6" class="cowat-table-header3">Phonemic (letter) word fluency</td>
           </tr>
           <tr>
-            <td colspan="2" class="cowat-table-header2" style="border-radius: 0px 0px 0px 21px">ㄱ</td>
+            <td colspan="2" class="cowat-table-header2">ㄱ</td>
             <td colspan="2" class="cowat-table-header2">ㅇ</td>
-            <td colspan="2" class="cowat-table-header2" style="border-radius: 0px 0px 21px 0px">ㅅ</td>
+            <td colspan="2" class="cowat-table-header2">ㅅ</td>
+          </tr>
+          <tr>
+            <td colspan="2"><audio controls controlsList="nodownload noplaybackrate"></audio></td>
+            <td colspan="2"><audio controls controlsList="nodownload noplaybackrate"></audio></td>
+            <td colspan="2"><audio controls controlsList="nodownload noplaybackrate"></audio></td>
           </tr>
           <tr v-for="i in 30" v-bind:key="i">
             <td class="cowat-table-tag">{{ i }}</td>
@@ -192,14 +215,14 @@ export default {
 <style>
 .cowat-form2 {
   padding-top: 48px;
-  padding-left: 177px;
-  padding-right: 178px;
+  padding-left: 165px;
+  padding-right: 166px;
 }
 
 .cowat-form3 {
   padding-top: 90px;
-  padding-left: 177px;
-  padding-right: 178px;
+  padding-left: 165px;
+  padding-right: 166px;
   padding-bottom: 90px;
 }
 
@@ -213,7 +236,7 @@ export default {
 table.cowat-table1 {
   box-shadow: 0 0 0 1px #C9C9C9;
   border-collapse: collapse;
-  width: 386px;
+  width: 500px;
   margin-right: 60px;
   border-radius: 21px;
 }
@@ -224,7 +247,6 @@ td.cowat-table-header1 {
   font-family: 'Noto Sans KR Medium';
   font-size: 16px;
   letter-spacing: 0px;
-  width: 386px;
   height: 35px;
   border-radius: 21px 21px 0px 0px;
   border-bottom: 1px solid #C9C9C9;
@@ -274,7 +296,7 @@ td.cowat-table-total {
 table.cowat-table2 {
   box-shadow: 0 0 0 1px #C9C9C9;
   border-collapse: collapse;
-  width: 579px;
+  width: 500px;
   border-radius: 21px;
 }
 
@@ -284,7 +306,6 @@ td.cowat-table-header3 {
   font-family: 'Noto Sans KR Medium';
   font-size: 16px;
   letter-spacing: 0px;
-  width: 579px;
   height: 35px;
   border-radius: 21px 21px 0px 0px;
   border-bottom: 1px solid #C9C9C9;
@@ -307,5 +328,10 @@ td.cowat-table-header3 {
 
 .cowat-score input[type=text]:focus {
   outline: none;
+}
+
+audio {
+  width: 160px;
+  
 }
 </style>

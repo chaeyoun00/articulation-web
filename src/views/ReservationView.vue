@@ -96,8 +96,7 @@ export default {
       axios.get('/api/examReservations')
       .then(response => {
         //console.log(JSON.stringify(response.data));
-        // this.items.push(response.data.data)
-        this.items = response.data.data
+        this.items = response.data.data.reverse()
         // let j = 0;
         // for (let i = response.data.data.length - 1; i >= 0; i--){
         //   this.items[j] = response.data.data[i];

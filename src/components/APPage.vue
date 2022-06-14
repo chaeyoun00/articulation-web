@@ -92,7 +92,7 @@
           <tr v-if="qtype[i - 1] !== 'word'"> 
             <td class="ap-table-content" >{{ num[i - 1] }}</td>
             <td class="ap-table-content">{{ questions[i - 1].q_body }}</td>
-            <td class="ap-table-content">{{ answers[0][i - 1] }}</td>
+            <td class="ap-table-content">{{ answers[i - 1] }}</td>
             <td><div class="ap-radio"><input type="radio" value="1" v-model="picked[i - 1]"></div></td>
             <td><div class="ap-radio"><input type="radio" value="2" v-model="picked[i - 1]"></div></td>
             <td><div class="ap-radio"><input type="radio" value="3" v-model="picked[i - 1]"></div></td>
@@ -107,20 +107,7 @@
             <td><div class="ap-radio"><input type="radio" value="12" v-model="picked[i - 1]"></div></td>
           </tr>
         </tbody>
-        <tbody>
-          <tr>
-            <td colspan="2">문장유형별 점수</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td colspan="2">총점</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td colspan="2">문장유형별 점수</td>
-            <td></td>
-          </tr>
-        </tbody>
+        
       </table>
     </v-layout>
 
@@ -128,7 +115,7 @@
       <v-btn
         depressed
         class="submit-btn"
-        @click="Save(), Totest()"
+        @click="Save(), ToTest()"
       >저장</v-btn>
     </v-layout>
   </v-container>
@@ -206,26 +193,32 @@ export default {
       await axios.get('/api/languageSummary?type=SCT-AP&userId=' + this.user[0].u_id + '&resId=' + this.resId)
       .then(response => {
         this.apAnswer = response.data.data[0]
-        this.answers = response.data.data[0].lg_answer.split('[');
-        this.answers[0] = this.answers[0].split(',').splice(1)
-        for (let i = 0; i < this.answers[0].length; i++) {
-          if (this.answers[0][i] === '0') {
-            this.answers[0][i] = ''
+        console.log(response.data.data[0].lg_answer.includes('Java'))
+        if (response.data.data[0].lg_answer.includes('[')) {
+          this.picked = response.data.data[0].lg_answer.split('[')[1].slice(0, -1).split(',')
+          this.answers = response.data.data[0].lg_answer.split('[')[0].split(',').splice(1)
+        }
+        else {
+          this.answers = response.data.data[0].lg_answer.split(',').splice(1)
+        }
+        for (let i = 0; i < this.answers.length; i++) {
+          if (this.answers[i] === '0') {
+            this.answers[i] = ''
           }
         }
-
-        this.answers[1] = this.answers[1].split(',').splice(1)
+        // this.picked = this.answers[1].split(',').splice(1)
       })
       .catch(error => {
-        console.log(error.response)
+        alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
+        this.$router.go(-1)
       })
     },
     Save() {
       const data = {
         'id': this.apAnswer.lg_summery_id,
-        'answers': this.apAnswer.lg_answer + '[' + this.picked + ']'
+        'answers': this.apAnswer.lg_answer.split('[')[0] + '[' + this.picked + ']'
       }
-      console.log(data)
+      
       var config = {
         method: 'put',
         url: 'http://49.50.172.137:3000/api/languageSummary',

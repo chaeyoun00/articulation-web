@@ -171,11 +171,13 @@ export default {
 
       await axios.get('/api/languageSummary?type=Story_Telling&userId=' + this.user[0].u_id + '&resId=' + this.resId)
       .then(response => {
+        console.log(response.data.data)
         this.storyAnswer = response.data.data;
         this.image = this.storyAnswer[0].lg_answer.slice(1, -1).split(',')
       })
       .catch(error => {
-        console.log(error.response)
+        alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
+        this.$router.go(-1)
       })    
     },
     Save() {
