@@ -66,11 +66,8 @@
             <tr v-if="qtype[i - 1] !== 'word'">
               <td class="com-table-content">{{ num[i - 1] }}</td>
               <td class="com-table-content" style="background-color: #F5F5F5">{{ questions[i - 1].q_body }}</td>
-              <td class="com-table-content">
-                <div class="com-table-text">
-                  <input type="text" id="textarea" placeholder="입력" v-model="text[i]">
-                </div>
-              </td>
+              <td class="com-table-content"></td>
+              <td></td>
             </tr>
           </tbody>
           <tbody>
@@ -103,7 +100,7 @@ export default {
     num: [],
     qtype: [],
     answers: [],
-    text: []
+    comAnswers: [],
   }),
   mounted () {
     this.initialize()
@@ -115,6 +112,16 @@ export default {
       this.$router.go(-1)
     },
     async initialize () {
+      await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
+      .then(response => {
+        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
+        this.resId = response.data.data.e_id;
+        //console.log(this.resId)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
       await axios.get('/api/examUsers?id=' + this.$route.query.patient)
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
@@ -125,9 +132,20 @@ export default {
         console.log(error.response)
       })
 
+      await axios.get('/api/languageSummary?type=SCT-COM&userId=' + this.user[0].u_id + '&resId=' + this.resId)
+      .then(response => {
+        this.comAnswers = response.data.data[0].lg_answer.split(',').splice(1)
+        console.log(this.comAnswers)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
       await axios.get('/api/questions/question?type=SCT-COM')
       .then(response => {
         this.questions = response.data.data
+
+        let j = 0
         for (let i = 0; i < this.questions.length; i++) {
           this.questions[i].q_body = this.questions[i].q_body.replace(/,/g, " ")
           this.questions[i].q_data = String.fromCharCode(...this.questions[i].q_data.data)
@@ -138,6 +156,8 @@ export default {
           else {
             this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
           }
+
+          
         }
 
         // for (let i = 0; i < this.questions.length; i++) {
@@ -190,13 +210,6 @@ export default {
   padding-bottom: 90px;
 }
 
-.language-select.theme--light.v-text-field--solo > .v-input__control > .v-input__slot {
-  width: 495px;
-  height: 46px;
-  border: 2px solid #E2E2E2;
-  border-radius: 8px;
-}
-
 table.com-table {
   box-shadow: 0 0 0 1px #C9C9C9;
   border-collapse: collapse;
@@ -244,14 +257,5 @@ td.com-table-end2 {
   text-align: center;
   height: 68px;
   border-radius: 0px 0px 21px 0px;
-}
-
-.com-table-text input[type=text] {
-  text-align: center;
-  width: 50px;
-}
-
-.com-table-text input[type=text]:focus {
-  outline: none;
 }
 </style>
