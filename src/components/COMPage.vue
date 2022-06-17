@@ -139,6 +139,19 @@ export default {
             this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
           }
         }
+
+        // for (let i = 0; i < this.questions.length; i++) {
+        //   this.questions[i].q_body = this.questions[i].q_body.replace(/,/g, " ")
+        //   this.questions[i].q_data = String.fromCharCode(...this.questions[i].q_data.data)
+        //   this.qtype[i] = JSON.parse(this.questions[i].q_data)["type_of_question"]
+        //   if (this.qtype[i] === "ex") {
+        //     this.num[i] = "P" + JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
+        //   }
+        //   else {
+        //     this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
+        //   }
+        // }
+
         
         // var inform;
         // for (let i = 0; i < response.data.data.length; i++) {

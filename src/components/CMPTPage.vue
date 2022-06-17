@@ -76,7 +76,12 @@
           <tr v-if="qtype[i - 1] !== 'word' && i != questions.length">
             <td>{{ num[i - 1] }}</td>
             <td>{{ answers[i - 1] }}</td>
-            <td>{{ cmptAnswer[i - 1] }}</td>
+            <td>{{ questions[i - 1].test }}</td>
+          </tr>
+          <tr v-else-if="qtype[i - 1] !== 'word'">
+            <td>{{ num[i - 1] }}</td>
+            <td>{{ answers[i - 1] }}</td>
+            <td>{{ questions[i - 1].test }}</td>
           </tr>
          </tbody>
       </table>
@@ -153,6 +158,7 @@ export default {
       .then(response => {
         this.questions = response.data.data
         let contents;
+        let j = 0;
         for (let i = 0; i < this.questions.length; i++) {
           this.questions[i].q_body = this.questions[i].q_body.replace(/,/g, " ")
           contents = iconv.decode(this.questions[i].q_data.data, "UTF-8")
@@ -163,6 +169,11 @@ export default {
           }
           else {
             this.num[i] = JSON.parse(contents)["no"].replace(/(^0+)/, "");
+          }
+
+          if (this.qtype[i] !== "word") {
+            this.questions[i].test = this.cmptAnswer[j]
+            j += 1
           }
         }
       })
