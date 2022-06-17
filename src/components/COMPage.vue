@@ -57,21 +57,14 @@
         <table class="com-table">
           <tr>
             <td class="com-table-header" style="border-radius: 21px 0px 0px 21px">ID</td>
-            <td class="com-table-header">Category</td>
-            <td class="com-table-header">Sub-Category</td>
-            <td class="com-table-header">Canonicity</td>
-            <td class="com-table-header">Congruency</td>
             <td class="com-table-header">Sentence</td>
-            <td class="com-table-header" style="border-radius: 0px 21px 21px 0px">Answer</td>
+            <td class="com-table-header">Answer</td>
+            <td class="com-table-header" style="border-radius: 0px 21px 21px 0px">Score</td>
           </tr>
 
           <tbody v-for="i in questions.length" v-bind:key="i">
             <tr v-if="qtype[i - 1] !== 'word'">
               <td class="com-table-content">{{ num[i - 1] }}</td>
-              <td class="com-table-content" style="background-color: #F5F5F5"></td>
-              <td></td>
-              <td class="com-table-content" style="background-color: #F5F5F5"></td>
-              <td></td>
               <td class="com-table-content" style="background-color: #F5F5F5">{{ questions[i - 1].q_body }}</td>
               <td class="com-table-content">
                 <div class="com-table-text">
@@ -79,6 +72,10 @@
                 </div>
               </td>
             </tr>
+          </tbody>
+          <tbody>
+            <td colspan="3" class="com-table-end1">총점</td>
+            <td class="com-table-end2">/</td>
           </tbody>
       </table>
     </v-layout>
@@ -130,8 +127,6 @@ export default {
 
       await axios.get('/api/questions/question?type=SCT-COM')
       .then(response => {
-        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        //console.log(response.data.data)
         this.questions = response.data.data
         for (let i = 0; i < this.questions.length; i++) {
           this.questions[i].q_body = this.questions[i].q_body.replace(/,/g, " ")
@@ -144,9 +139,21 @@ export default {
             this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
           }
         }
-        console.log(this.num)
-        console.log(this.qtype)
-        //console.log(String.fromCharCode(...this.questions[0].q_data.data).split("\"")[11])
+        
+        // var inform;
+        // for (let i = 0; i < response.data.data.length; i++) {
+        //   inform = { q_body: '', q_type: '' };
+        //   if (JSON.parse(String.fromCharCode(...response.data.data[i].q_data.data))["type_of_question"] !== "word") {
+        //     inform.q_body = response.data.data[i].q_body.replace(/,/g, " ")
+        //     if (JSON.parse(String.fromCharCode(...response.data.data[i].q_data.data))["type_of_question"] === "ex"){
+        //       inform.q_type = "P" + JSON.parse(String.fromCharCode(...response.data.data[i].q_data.data))["no"].replace(/(^0+)/, "");
+        //     }
+        //     else {
+        //       inform.q_type = JSON.parse(String.fromCharCode(...response.data.data[i].q_data.data))["no"].replace(/(^0+)/, "");
+        //     }
+        //     this.questions[i] = inform
+        //   }
+        // }
       })
       .catch(error => {
         console.log(error.response)
@@ -202,6 +209,28 @@ td.com-table-content {
   letter-spacing: 0px;
   text-align: center;
   height: 60px;
+}
+
+td.com-table-end1 {
+  background-color: #E8E8E8;
+  color: #333333;
+  font-family: 'Noto Sans KR Bold';
+  font-size: 20px;
+  letter-spacing: 0px;
+  text-align: center;
+  height: 68px;
+  border-radius: 0px 0px 0px 21px;
+}
+
+td.com-table-end2 {
+  background-color: #F4F4F4;
+  color: #333333;
+  font-family: 'Noto Sans KR Bold';
+  font-size: 20px;
+  letter-spacing: 0px;
+  text-align: center;
+  height: 68px;
+  border-radius: 0px 0px 21px 0px;
 }
 
 .com-table-text input[type=text] {

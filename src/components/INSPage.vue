@@ -57,15 +57,11 @@
       <table class="ins-table">
         <thead>
           <tr>
-            <td colspan="7" class="ins-table-header" style="border-radius: 21px 0px 0px 0px"></td>
+            <td colspan="3" class="ins-table-header" style="border-radius: 21px 0px 0px 0px"></td>
             <td colspan="6"  class="ins-table-header" style="border-radius: 0px 21px 0px 0px">반응기록</td>
           </tr>
           <tr>
             <td class="ins-table-header" style="border-radius: 0px 0px 0px 21px">번호</td>
-            <td class="ins-table-header">Condition</td>
-            <td class="ins-table-header">Reversibility</td>
-            <td class="ins-table-header">Plausibility</td>
-            <td class="ins-table-header">Canonicity</td>
             <td class="ins-table-header">목표문장</td>
             <td class="ins-table-header">정답</td>
             <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">Cond1-C</td>
@@ -80,10 +76,6 @@
         <tbody v-for="i in questions.length" v-bind:key="i">
           <tr class="ins-table-content">
             <td>{{ num[i - 1] }}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
             <td>{{ questions[i - 1].q_body }}</td>
             <td>{{ answers[i - 1] }}</td>
             <td><div class="ins-radio"><input type="radio" value="1" v-model="picked[i - 1]"></div></td>

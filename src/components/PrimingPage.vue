@@ -55,71 +55,39 @@
     <v-layout justify-center column class="priming-form2">
       <p class="test-title">SPT-priming</p>
       <table class="priming-table">
-        <tr>
-            <td colspan="4" class="priming-table-header" style="border-radius: 21px 0px 0px 0px"></td>
-            <td colspan="8" class="priming-table-header">정반응 여부</td>
-            <td class="priming-table-header" style="border-radius: 0px 21px 0px 0px"></td>
-        </tr>
-        <tr>
-            <td colspan="4" class="priming-table-header"></td>
-            <td colspan="2" class="priming-table-header1" style="border-right: 1px solid #C9C9C9">A_C</td>
-            <td colspan="2" class="priming-table-header1" style="border-right: 1px solid #C9C9C9">A_NC</td>
-            <td colspan="2" class="priming-table-header1" style="border-right: 1px solid #C9C9C9">P_C</td>
-            <td colspan="2" class="priming-table-header1">P_NC</td>
-            <td class="priming-table-header"></td>
-        </tr>
-        <tr>
-            <td class="priming-table-header" style="border-radius: 0px 0px 0px 21px; width: 27px">번호</td>
-            <td class="priming-table-header" style="width: 180px;">점화문자</td>
-            <td class="priming-table-header" style="width: 180px;">목표반응</td>
-            <td class="priming-table-header" style="width: 180px;">대상자 반응</td>
-            <td class="priming-table-header2" style="border-right: 1px solid #C9C9C9">1st</td>
-            <td class="priming-table-header2" style="border-right: 1px solid #C9C9C9">반복</td>
-            <td class="priming-table-header2" style="border-right: 1px solid #C9C9C9">1st</td>
-            <td class="priming-table-header2" style="border-right: 1px solid #C9C9C9">반복</td>
-            <td class="priming-table-header2" style="border-right: 1px solid #C9C9C9">1st</td>
-            <td class="priming-table-header2" style="border-right: 1px solid #C9C9C9">반복</td>
-            <td class="priming-table-header2" style="border-right: 1px solid #C9C9C9">1st</td>
-            <td class="priming-table-header2">반복</td>
-            <td class="priming-table-header" style="border-radius: 0px 0px 21px 0px; width: 136px">파일</td>
-        </tr>
-
+        <thead class="priming-table-header">
+          <tr>
+            <td style="border-radius: 21px 0px 0px 21px">번호</td>
+            <td>점화문장</td>
+            <td>목표 반응</td>
+            <td>대상자 반응</td>
+            <td style="border-radius: 0px 21px 21px 0px">파일</td>
+          </tr>
+        </thead>
         <tbody v-for="i in questions.length" v-bind:key="i">
-          <tr v-if="qtype[i - 1] !== 'word' && i != questions.length">
-            <td class="priming-table-content" style="border-bottom: 1px solid #C9C9C9">{{ num[i - 1] }}</td>
-            <td class="priming-table-content" style="background-color: #FAFAFA;border-bottom: 1px solid #C9C9C9">{{ questions[i - 1].q_body }}</td>
-            <td class="priming-table-content" style="background-color: #FAFAFA;border-bottom: 1px solid #C9C9C9">{{ answers[i - 1] }}</td>
-            <td class="priming-table-content" style="border-bottom: 1px solid #C9C9C9">
-              <div class="priming-table-text"><input type="text" placeholder="반응 입력" v-model="text[i - 1]"></div>
+          <tr v-if="qtype[i - 1] !== 'word' && i != questions.length" class="priming-table-body" style="border-bottom: 1px solid #C9C9C9">
+            <td>{{ num[i - 1] }}</td>
+            <td>{{ questions[i - 1].q_body }}</td>
+            <td>{{ answers[i - 1] }}</td>
+            <td style="background-color: #ffffff">
+              <div class="priming-table-text">
+                <input type="text" id="textarea" placeholder="입력" v-model="text[i - 1]">
+              </div>
             </td>
-            <td style="border-bottom: 1px solid #C9C9C9"><div class="priming-radio"><input type="radio" value="1" v-model="picked[i - 1]"></div></td>
-            <td style="border-bottom: 1px solid #C9C9C9"><div class="priming-radio"><input type="radio" value="2" v-model="picked[i - 1]"></div></td>
-            <td style="border-bottom: 1px solid #C9C9C9"><div class="priming-radio"><input type="radio" value="3" v-model="picked[i - 1]"></div></td>
-            <td style="border-bottom: 1px solid #C9C9C9"><div class="priming-radio"><input type="radio" value="4" v-model="picked[i - 1]"></div></td>
-            <td style="border-bottom: 1px solid #C9C9C9"><div class="priming-radio"><input type="radio" value="5" v-model="picked[i - 1]"></div></td>
-            <td style="border-bottom: 1px solid #C9C9C9"><div class="priming-radio"><input type="radio" value="6" v-model="picked[i - 1]"></div></td>
-            <td style="border-bottom: 1px solid #C9C9C9"><div class="priming-radio"><input type="radio" value="7" v-model="picked[i - 1]"></div></td>
-            <td style="border-bottom: 1px solid #C9C9C9"><div class="priming-radio"><input type="radio" value="8" v-model="picked[i - 1]"></div></td>
-            <td style="border-bottom: 1px solid #C9C9C9; background-color: #FAFAFA">
+            <td>
               <audio :id="questions[i - 1].q_id" controls controlsList="nodownload noplaybackrate" class="priming-audio"></audio>
             </td>
           </tr>
-          <tr v-else-if="qtype[i - 1] !== 'word'">
-            <td class="priming-table-content">{{ num[i - 1] }}</td>
-            <td class="priming-table-content" style="background-color: #FAFAFA">{{ questions[i - 1].q_body }}</td>
-            <td class="priming-table-content" style="background-color: #FAFAFA">{{ answers[i - 1] }}</td>
-            <td class="priming-table-content">
-              <div class="priming-table-text"><input type="text" placeholder="반응 입력" v-model="text[i - 1]"></div>
+          <tr v-else-if="qtype[i - 1] !== 'word'" class="priming-table-body">
+            <td>{{ num[i - 1] }}</td>
+            <td>{{ questions[i - 1].q_body }}</td>
+            <td>{{ answers[i - 1] }}</td>
+            <td style="background-color: #ffffff">
+              <div class="priming-table-text">
+                <input type="text" id="textarea" placeholder="입력" v-model="text[i - 1]">
+              </div>
             </td>
-            <td><div class="priming-radio"><input type="radio" value="1" v-model="picked[i - 1]"></div></td>
-            <td><div class="priming-radio"><input type="radio" value="2" v-model="picked[i - 1]"></div></td>
-            <td><div class="priming-radio"><input type="radio" value="3" v-model="picked[i - 1]"></div></td>
-            <td><div class="priming-radio"><input type="radio" value="4" v-model="picked[i - 1]"></div></td>
-            <td><div class="priming-radio"><input type="radio" value="5" v-model="picked[i - 1]"></div></td>
-            <td><div class="priming-radio"><input type="radio" value="6" v-model="picked[i - 1]"></div></td>
-            <td><div class="priming-radio"><input type="radio" value="7" v-model="picked[i - 1]"></div></td>
-            <td><div class="priming-radio"><input type="radio" value="8" v-model="picked[i - 1]"></div></td>
-            <td style="background-color: #FAFAFA; border-radius: 0px 0px 21px 0px">
+            <td>
               <audio :id="questions[i - 1].q_id" controls controlsList="nodownload noplaybackrate" class="priming-audio"></audio>
             </td>
           </tr>
@@ -147,7 +115,6 @@ export default {
       u_id: '',
     }],
     resId: '',
-    picked: [],
     questions: [],
     num: [],
     qtype: [],
@@ -228,21 +195,23 @@ export default {
       await axios.get('/api/languageSummary?type=SPT-priming&userId=' + this.user[0].u_id + '&resId=' + this.resId)
       .then(response => {
         this.primingAnswer = response.data.data;
-        if (this.primingAnswer[0].lg_answer !== '') {
-          let splitAnswer = this.primingAnswer[0].lg_answer.slice(1, -1).split('|')
-          this.text = splitAnswer[0].split(',')
-          this.picked =  splitAnswer[1].split(',')
-        }
+        this.text = response.data.data[0].lg_answer.slice(1, -1).split(',')
       })
       .catch(error => {
-        alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
-        this.$router.go(-1)
+        //alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
+        //this.$router.go(-1)
       })   
     },
     Save() {
+      for (let i = 0; i < this.text.length; i++) {
+        if (!this.text[i]) {
+          this.text[i] = ''
+        }
+      }
+      
       const data = {
         'id': this.primingAnswer[0].lg_summery_id,
-        'answers': '[' + this.text + '|' + this.picked + ']'
+        'answers': '[' + this.text + ']'
       }
 
       var config = {
@@ -281,14 +250,8 @@ export default {
   padding-bottom: 90px;
 }
 
-.language-select.theme--light.v-text-field--solo > .v-input__control > .v-input__slot {
-  width: 495px;
-  height: 46px;
-  border: 2px solid #E2E2E2;
-  border-radius: 8px;
-}
-
 table.priming-table {
+  background-color: #FAFAFA;
   box-shadow: 0 0 0 1px #C9C9C9;
   border-collapse: collapse;
   width: 1044px;
@@ -296,78 +259,28 @@ table.priming-table {
   border-radius: 21px;
 }
 
-td.priming-table-header {
+thead.priming-table-header {
   background-color: #E8E8E8;
   color: #678FFF;
   font-family: 'Noto Sans KR Medium';
-  font-size: 14px;
+  font-size: 20px;
   letter-spacing: 0px;
   text-align: center;
-  height: 50px;
+  height: 68px;
 }
 
-td.priming-table-header1 {
-  background-color: #FAFAFA;
-  color: #678FFF;
-  font-family: 'Noto Sans KR Medium';
-  font-size: 14px;
-  letter-spacing: 0px;
-  text-align: center;
-  border-bottom: 1px solid #C9C9C9;
-}
-
-td.priming-table-header2 {
-  background-color: #FAFAFA;
-  color: #678FFF;
-  font-family: 'Noto Sans KR Medium';
-  font-size: 14px;
-  letter-spacing: 0px;
-  text-align: center;
-}
-
-td.priming-table-content {
+tr.priming-table-body {
   color: #333333;
   font-family: 'Noto Sans KR Medium';
-  font-size: 13px;
+  font-size: 18px;
   letter-spacing: 0px;
   text-align: center;
-  height: 60px;
-}
-
-div.priming-radio {
-  display: inline-flex;
-  align-items: center
-}
-
-.priming-radio input[type=radio] {
-  appearance: none;
-}
-
-.priming-radio input[type=radio] {
-  display: inline;
-  width: 25px;
-  height: 25px;
-  margin-top: 8px;
-  border-radius: 50%;
-  border: 1px solid #E8E8E8;
-  margin-left: 2px;
-}
-
-.priming-radio input[type=radio]:checked {
-  appearance: none;
-}
-
-.priming-radio input[type=radio]:checked {
-  width: 25px;
-  height: 25px;
-  border: 1px solid #707070;
-  border-radius: 50%;
-  background-color: #707070;
+  height: 68px;
 }
 
 .priming-table-text input[type=text] {
   text-align: center;
-  width: 175px;
+  width: 240px;
 }
 
 .priming-table-text input[type=text]:focus {
@@ -375,20 +288,12 @@ div.priming-radio {
 }
 
 .priming-audio {
-  width: 136px;
+  width: 220px;
 }
 
 .priming-audio::-webkit-media-controls-panel {
   background-color: #FAFAFA;
   padding-left: 0px;
   padding-right: 0px;
-}
-
-.priming-audio::-webkit-media-controls-time-remaining-display{
-  display: none;
-}
-
-.priming-audio::-webkit-media-controls-current-time-display{
-  display: none;
 }
 </style>

@@ -66,7 +66,7 @@
           <td class="cread-table-content">J3. MMSE-KC</td>
           <td class="cread-table-content1">
             <div class="cread-score1">
-              <input type="text" id="textarea" placeholder="0" v-model="scores[0]">
+              <input type="text" id="textarea" placeholder="0" v-model="scores[0]" @input="Set(event)">
               <label for="textarea">/ 30</label>
             </div>
           </td>
@@ -503,6 +503,9 @@ export default {
       .catch(function (error) {
         console.log(error);
       });
+    },
+    Set(event) {
+      console.log(event.target.value)
     }
   }
 }

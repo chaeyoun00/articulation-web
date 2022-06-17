@@ -47,7 +47,7 @@
           </table>
         </v-card-text>
       </v-card>
-
+    
     </v-layout>
 
     <v-divider></v-divider>
@@ -106,8 +106,7 @@
             <td><div class="ap-radio"><input type="radio" value="11" v-model="picked[i - 1]"></div></td>
             <td><div class="ap-radio"><input type="radio" value="12" v-model="picked[i - 1]"></div></td>
           </tr>
-        </tbody>
-        
+        </tbody>        
       </table>
     </v-layout>
 
@@ -178,12 +177,18 @@ export default {
           this.questions[i].q_data = String.fromCharCode(...this.questions[i].q_data.data)
           this.qtype[i] = JSON.parse(this.questions[i].q_data)["type_of_question"]
           if (JSON.parse(this.questions[i].q_data)["type_of_question"] === "ex") {
-            this.num[i] = "P" + JSON.parse(this.questions[i].q_data)["no"].replace('0', '')
+            this.num[i] = "P" + JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
+            this.answers[i] = "1";
+          }
+          else if (JSON.parse(this.questions[i].q_data)["type_of_question"] === "qt") {
+            this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
+            this.answers[i] = "1";
           }
           else {
-            this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace('0', '')
+            this.answers[i] = "0";
           }
         }
+        
         //console.log(this.questions)
       })
       .catch(error => {
@@ -193,19 +198,31 @@ export default {
       await axios.get('/api/languageSummary?type=SCT-AP&userId=' + this.user[0].u_id + '&resId=' + this.resId)
       .then(response => {
         this.apAnswer = response.data.data[0]
-        console.log(response.data.data[0].lg_answer.includes('Java'))
-        if (response.data.data[0].lg_answer.includes('[')) {
-          this.picked = response.data.data[0].lg_answer.split('[')[1].slice(0, -1).split(',')
-          this.answers = response.data.data[0].lg_answer.split('[')[0].split(',').splice(1)
-        }
-        else {
-          this.answers = response.data.data[0].lg_answer.split(',').splice(1)
-        }
-        for (let i = 0; i < this.answers.length; i++) {
-          if (this.answers[i] === '0') {
-            this.answers[i] = ''
+
+        var j = 0;
+        var testData = response.data.data[0].lg_answer.split(',').splice(1)
+        for (let i = 0; i < this.questions.length; i++) {
+          if (JSON.parse(this.questions[i].q_data)["type_of_question"] === "word") {
+            this.answers[i] = '0'
+          }
+          else {
+            this.answers[i] = testData[j];
+            j += 1;
           }
         }
+        // if (response.data.data[0].lg_answer.includes('[')) {
+        //   this.picked = response.data.data[0].lg_answer.split('[')[1].slice(0, -1).split(',')
+        //   this.answers = response.data.data[0].lg_answer.split('[')[0].split(',').splice(1)
+        // }
+        // else {
+        //   this.answers = response.data.data[0].lg_answer.split(',').splice(1)
+        // }
+        // for (let i = 0; i < this.answers.length; i++) {
+        //   if (this.answers[i] === '0') {
+        //     this.answers[i] = ''
+        //   }
+        // }
+        console.log(this.answers)
         // this.picked = this.answers[1].split(',').splice(1)
       })
       .catch(error => {

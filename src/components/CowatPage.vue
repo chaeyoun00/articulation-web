@@ -256,6 +256,9 @@ export default {
         alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
         this.$router.go(-1)
       })
+    },
+    Save() {
+      
     }
   }
 }

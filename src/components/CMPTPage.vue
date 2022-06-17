@@ -55,49 +55,30 @@
     <v-layout justify-center column class="cmpt-form2">
       <p class="test-title">CMPT</p>
       <table class="cmpt-table">
+         <thead>
           <tr>
-              <td colspan="2" class="cmpt-table-header" style="border-radius: 21px 0px 0px 0px; border-right: 1px solid #C9C9C9"></td>
-              <td colspan="6" class="cmpt-table-header" style="border-right: 1px solid #C9C9C9; border-bottom: 1px solid #C9C9C9;">문장유형</td>
-              <td colspan="7" class="cmpt-table-header" style="border-radius: 0px 21px 0px 0px; border-bottom: 1px solid #C9C9C9;">대상자 반응</td>
+            <td colspan="3" class="cmpt-table-header1" style="border-radius: 21px 0px 0px 0px"></td>
+            <td colspan="6" class="cmpt-table-header1" style="border-radius: 0px 21px 0px 0px">문장유형</td>
           </tr>
           <tr>
-              <td class="cmpt-table-header" style="border-radius: 0px 0px 0px 21px; width: 35px">번호</td>
-              <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9; width: 200px">목표문장</td>
-              <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">A2_C</td>
-              <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">A2_NC</td>
-              <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">A3_C</td>
-              <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">A3_NC</td>
-              <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">P_C</td>
-              <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">P_NC</td>
-              <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">1st trial</td>
-              <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">+/-</td>
-              <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">2nd trial</td>
-              <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">+/-</td>
-              <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">3rd trial</td>
-              <td class="cmpt-table-header" style="border-right: 1px solid #C9C9C9;">+/-</td>
-              <td class="cmpt-table-header" style="border-radius: 0px 0px 21px 0px; width: 136px">정반응 여부</td>
+            <td class="cmpt-table-header1" style="border-radius: 0px 0px 0px 21px">번호</td>
+            <td class="cmpt-table-header1">목표문장</td>
+            <td class="cmpt-table-header1">대상자 반응</td>
+            <td class="cmpt-table-header2" style="border-right: 1px solid #C9C9C9">A2_C</td>
+            <td class="cmpt-table-header2" style="border-right: 1px solid #C9C9C9">A2_NC</td>
+            <td class="cmpt-table-header2" style="border-right: 1px solid #C9C9C9">A3_C</td>
+            <td class="cmpt-table-header2" style="border-right: 1px solid #C9C9C9">A3_NC</td>
+            <td class="cmpt-table-header2" style="border-right: 1px solid #C9C9C9">P_C</td>
+            <td class="cmpt-table-header2" style="border-radius: 0px 0px 21px 0px">P_NC</td>
           </tr>
-          
-          <tbody v-for="i in questions.length" v-bind:key="i">
-            <tr v-if="qtype[i - 1] !== 'word'">
-              <td class="cmpt-table-content">{{ num[i - 1] }}</td>
-              <td class="cmpt-table-content" style="background-color: #FAFAFA">{{ answers[i - 1] }}</td>
-              <td class="cmpt-table-content"><div class="cmpt-radio"><input type="radio" value="1" v-model="picked[i - 1]"></div></td>
-              <td class="cmpt-table-content"><div class="cmpt-radio"><input type="radio" value="2" v-model="picked[i - 1]"></div></td>
-              <td class="cmpt-table-content"><div class="cmpt-radio"><input type="radio" value="3" v-model="picked[i - 1]"></div></td>
-              <td class="cmpt-table-content"><div class="cmpt-radio"><input type="radio" value="4" v-model="picked[i - 1]"></div></td>
-              <td class="cmpt-table-content"><div class="cmpt-radio"><input type="radio" value="5" v-model="picked[i - 1]"></div></td>
-              <td class="cmpt-table-content"><div class="cmpt-radio"><input type="radio" value="6" v-model="picked[i - 1]"></div></td>
-              <td class="cmpt-table-content"><div class="cmpt-table-text"><input type="text" placeholder="반응 입력"  style="width: 50px" v-model="text[i]"></div></td>
-              <td class="cmpt-table-content"><div class="cmpt-table-text"><input type="text" placeholder="입력" style="width: 30px" v-model="text1[i]"></div></td>
-              <td class="cmpt-table-content"><div class="cmpt-table-text"><input type="text" placeholder="반응 입력" style="width: 50px" v-model="text2[i]"></div></td>
-              <td class="cmpt-table-content"><div class="cmpt-table-text"><input type="text" placeholder="입력" style="width: 30px" v-model="text3[i]"></div></td>
-              <td class="cmpt-table-content"><div class="cmpt-table-text"><input type="text" placeholder="반응 입력" style="width: 50px" v-model="text4[i]"></div></td>
-              <td class="cmpt-table-content"><div class="cmpt-table-text"><input type="text" placeholder="입력" style="width: 30px" v-model="text5[i]"></div></td>
-              <td class="cmpt-table-content"><div class="cmpt-table-text"><input type="text" placeholder="반응 입력" style="width: 50px" v-model="text6[i]"></div></td>
-              
-            </tr>
-          </tbody>
+         </thead>
+         <tbody v-for="i in questions.length" v-bind:key="i">
+          <tr v-if="qtype[i - 1] !== 'word' && i != questions.length">
+            <td>{{ num[i - 1] }}</td>
+            <td>{{ answers[i - 1] }}</td>
+            <td>{{ cmptAnswer[i - 1] }}</td>
+          </tr>
+         </tbody>
       </table>
     </v-layout>
 
@@ -125,13 +106,7 @@ export default {
     num: [],
     qtype: [],
     answers: [],
-    text: [],
-    text1: [],
-    text2: [],
-    text3: [],
-    text4: [],
-    text5: [],
-    text6: [],
+    cmptAnswer: [],
   }),
   mounted () {
     this.initialize()
@@ -143,11 +118,32 @@ export default {
       this.$router.go(-1)
     },
     async initialize () {
+      await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
+      .then(response => {
+        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
+        this.resId = response.data.data.e_id;
+        //console.log(this.resId)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
       await axios.get('/api/examUsers?id=' + this.$route.query.patient)
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         //console.log(response.data.data)
         this.user = response.data.data
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/answerPapers?type=CMPT&examId=' + this.resId)
+      .then(response => {
+        for (let i = 0; i < response.data.data.length; i++) {
+          this.cmptAnswer[i] = response.data.data[i].a_answer.replace("  ", " ")
+        }
+        console.log(this.cmptAnswer)
       })
       .catch(error => {
         console.log(error.response)
@@ -173,6 +169,7 @@ export default {
       .catch(error => {
         console.log(error.response)
       })
+
     }
   }
 }
@@ -192,13 +189,6 @@ export default {
   padding-bottom: 90px;
 }
 
-.language-select.theme--light.v-text-field--solo > .v-input__control > .v-input__slot {
-  width: 495px;
-  height: 46px;
-  border: 2px solid #E2E2E2;
-  border-radius: 8px;
-}
-
 table.cmpt-table {
   box-shadow: 0 0 0 1px #C9C9C9;
   border-collapse: collapse;
@@ -207,31 +197,34 @@ table.cmpt-table {
   border-radius: 21px;
 }
 
-td.cmpt-table-header {
+thead.cmpt-table-header {
   background-color: #E8E8E8;
   color: #678FFF;
   font-family: 'Noto Sans KR Medium';
-  font-size: 14px;
+  font-size: 18px;
+  letter-spacing: 0px;
+  text-align: center;
+  height: 68px;
+}
+
+td.cmpt-table-header1 {
+  background-color: #E8E8E8;
+  color: #678FFF;
+  font-family: 'Noto Sans KR Medium';
+  font-size: 18px;
   letter-spacing: 0px;
   text-align: center;
   height: 50px;
 }
 
-td.cmpt-table-content {
-  color: #333333;
+td.cmpt-table-header2 {
+  background-color: #FAFAFA;
+  color: #678FFF;
   font-family: 'Noto Sans KR Medium';
-  font-size: 12px;
+  font-size: 18px;
   letter-spacing: 0px;
   text-align: center;
-  height: 60px;
-}
-
-.cmpt-table-text input[type=text] {
-  text-align: center;
-}
-
-.cmpt-table-text input[type=text]:focus {
-  outline: none;
+  height: 50px;
 }
 
 div.cmpt-radio {
@@ -273,13 +266,5 @@ div.cmpt-radio {
   background-color: #FAFAFA;
   padding-left: 0px;
   padding-right: 0px;
-}
-
-.cmpt-audio::-webkit-media-controls-time-remaining-display{
-  display: none;
-}
-
-.cmpt-audio::-webkit-media-controls-current-time-display{
-  display: none;
 }
 </style>

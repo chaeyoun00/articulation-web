@@ -55,71 +55,39 @@
     <v-layout justify-center column class="completion-form2">
       <p class="test-title">SPT-completion</p>
       <table class="completion-table">
-        <tr>
-          <td colspan="4" class="completion-table-header" style="border-radius: 21px 0px 0px 0px"></td>
-          <td colspan="8" class="completion-table-header">정반응 여부</td>
-          <td class="completion-table-header" style="border-radius: 0px 21px 0px 0px"></td>
-        </tr>
-        <tr>
-          <td colspan="4" class="completion-table-header"></td>
-          <td colspan="2" class="completion-table-header1" style="border-right: 1px solid #C9C9C9">A_C</td>
-          <td colspan="2" class="completion-table-header1" style="border-right: 1px solid #C9C9C9">A_NC</td>
-          <td colspan="2" class="completion-table-header1" style="border-right: 1px solid #C9C9C9">P_C</td>
-          <td colspan="2" class="completion-table-header1">P_NC</td>
-          <td class="completion-table-header"></td>
-        </tr>
-        <tr>
-          <td class="completion-table-header" style="border-radius: 0px 0px 0px 21px; width: 27px">번호</td>
-          <td class="completion-table-header" style="width: 180px;">제시</td>
-          <td class="completion-table-header" style="width: 180px;">목표반응</td>
-          <td class="completion-table-header" style="width: 180px;">대상자 반응</td>
-          <td class="completion-table-header2" style="border-right: 1px solid #C9C9C9">1st</td>
-          <td class="completion-table-header2" style="border-right: 1px solid #C9C9C9;">반복</td>
-          <td class="completion-table-header2" style="border-right: 1px solid #C9C9C9">1st</td>
-          <td class="completion-table-header2" style="border-right: 1px solid #C9C9C9">반복</td>
-          <td class="completion-table-header2" style="border-right: 1px solid #C9C9C9">1st</td>
-          <td class="completion-table-header2" style="border-right: 1px solid #C9C9C9">반복</td>
-          <td class="completion-table-header2" style="border-right: 1px solid #C9C9C9">1st</td>
-          <td class="completion-table-header2">반복</td>
-          <td class="completion-table-header" style="border-radius: 0px 0px 21px 0px; width: 136px">파일</td>
-        </tr>
-
+        <thead class="completion-table-header">
+          <tr>
+            <td style="border-radius: 21px 0px 0px 21px">번호</td>
+            <td>제시</td>
+            <td>목표 반응</td>
+            <td>대상자 반응</td>
+            <td style="border-radius: 0px 21px 21px 0px">파일</td>
+          </tr>
+        </thead>
         <tbody v-for="i in questions.length" v-bind:key="i">
-          <tr v-if="qtype[i - 1] !== 'word' && i != questions.length">
-            <td class="completion-table-content" style="border-bottom: 1px solid #C9C9C9">{{ num[i - 1] }}</td>
-            <td class="completion-table-content" style="background-color: #FAFAFA; border-bottom: 1px solid #C9C9C9">{{ questions[i - 1].q_body }}</td>
-            <td class="completion-table-content" style="background-color: #FAFAFA; border-bottom: 1px solid #C9C9C9">{{ answers[i - 1] }}</td>
-            <td class="completion-table-content" style="border-bottom: 1px solid #C9C9C9">
-              <div class="completion-table-text"><input type="text" placeholder="반응 입력" v-model="text[i - 1]"></div>
+          <tr v-if="qtype[i - 1] !== 'word' && i != questions.length" class="completion-table-body" style="border-bottom: 1px solid #C9C9C9">
+            <td>{{ num[i - 1] }}</td>
+            <td>{{ questions[i - 1].q_body }}</td>
+            <td>{{ answers[i - 1] }}</td>
+            <td style="background-color: #ffffff">
+              <div class="completion-table-text">
+                <input type="text" id="textarea" placeholder="입력" v-model="text[i - 1]">
+              </div>
             </td>
-            <td style="border-bottom: 1px solid #C9C9C9"><div class="completion-radio"><input type="radio" value="1" v-model="picked[i - 1]"></div></td>
-            <td style="border-bottom: 1px solid #C9C9C9"><div class="completion-radio"><input type="radio" value="2" v-model="picked[i - 1]"></div></td>
-            <td style="border-bottom: 1px solid #C9C9C9"><div class="completion-radio"><input type="radio" value="3" v-model="picked[i - 1]"></div></td>
-            <td style="border-bottom: 1px solid #C9C9C9"><div class="completion-radio"><input type="radio" value="4" v-model="picked[i - 1]"></div></td>
-            <td style="border-bottom: 1px solid #C9C9C9"><div class="completion-radio"><input type="radio" value="5" v-model="picked[i - 1]"></div></td>
-            <td style="border-bottom: 1px solid #C9C9C9"><div class="completion-radio"><input type="radio" value="6" v-model="picked[i - 1]"></div></td>
-            <td style="border-bottom: 1px solid #C9C9C9"><div class="completion-radio"><input type="radio" value="7" v-model="picked[i - 1]"></div></td>
-            <td style="border-bottom: 1px solid #C9C9C9"><div class="completion-radio"><input type="radio" value="8" v-model="picked[i - 1]"></div></td>
-            <td style="background-color: #FAFAFA">
+            <td>
               <audio :id="questions[i - 1].q_id" controls controlsList="nodownload noplaybackrate" class="completion-audio"></audio>
             </td>
           </tr>
-          <tr v-else-if="qtype[i - 1] !== 'word'">
-            <td class="completion-table-content">{{ num[i - 1] }}</td>
-            <td class="completion-table-content" style="background-color: #FAFAFA">{{ questions[i - 1].q_body }}</td>
-            <td class="completion-table-content" style="background-color: #FAFAFA">{{ answers[i - 1] }}</td>
-            <td class="completion-table-content">
-              <div class="completion-table-text"><input type="text" placeholder="반응 입력" v-model="text[i - 1]"></div>
+          <tr v-else-if="qtype[i - 1] !== 'word'" class="completion-table-body">
+            <td>{{ num[i - 1] }}</td>
+            <td>{{ questions[i - 1].q_body }}</td>
+            <td>{{ answers[i - 1] }}</td>
+            <td style="background-color: #ffffff">
+              <div class="completion-table-text">
+                <input type="text" id="textarea" placeholder="입력" v-model="text[i - 1]">
+              </div>
             </td>
-            <td><div class="completion-radio"><input type="radio" value="1" v-model="picked[i - 1]"></div></td>
-            <td><div class="completion-radio"><input type="radio" value="2" v-model="picked[i - 1]"></div></td>
-            <td><div class="completion-radio"><input type="radio" value="3" v-model="picked[i - 1]"></div></td>
-            <td><div class="completion-radio"><input type="radio" value="4" v-model="picked[i - 1]"></div></td>
-            <td><div class="completion-radio"><input type="radio" value="5" v-model="picked[i - 1]"></div></td>
-            <td><div class="completion-radio"><input type="radio" value="6" v-model="picked[i - 1]"></div></td>
-            <td><div class="completion-radio"><input type="radio" value="7" v-model="picked[i - 1]"></div></td>
-            <td><div class="completion-radio"><input type="radio" value="8" v-model="picked[i - 1]"></div></td>
-            <td style="background-color: #FAFAFA; border-radius: 0px 0px 21px 0px">
+            <td>
               <audio :id="questions[i - 1].q_id" controls controlsList="nodownload noplaybackrate" class="completion-audio"></audio>
             </td>
           </tr>
@@ -226,11 +194,7 @@ export default {
       await axios.get('/api/languageSummary?type=SPT-completion&userId=' + this.user[0].u_id + '&resId=' + this.resId)
       .then(response => {
         this.completionAnswer = response.data.data;
-        if (this.completionAnswer[0].lg_answer !== '') {
-          let splitAnswer = this.completionAnswer[0].lg_answer.slice(1, -1).split('|')
-          this.text = splitAnswer[0].split(',')
-          this.picked =  splitAnswer[1].split(',')
-        }
+        this.text = response.data.data[0].lg_answer.slice(1, -1).split(',')
       })
       .catch(error => {
         alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
@@ -238,9 +202,15 @@ export default {
       })   
     },
     Save() {
+      for (let i = 0; i < this.text.length; i++) {
+        if (!this.text[i]) {
+          this.text[i] = ''
+        }
+      }
+
       const data = {
         'id': this.completionAnswer[0].lg_summery_id,
-        'answers': '[' + this.text + '|' + this.picked + ']'
+        'answers': '[' + this.text + ']'
       }
 
       var config = {
@@ -279,14 +249,8 @@ export default {
   padding-bottom: 90px;
 }
 
-.language-select.theme--light.v-text-field--solo > .v-input__control > .v-input__slot {
-  width: 495px;
-  height: 46px;
-  border: 2px solid #E2E2E2;
-  border-radius: 8px;
-}
-
 table.completion-table {
+  background-color: #FAFAFA;
   box-shadow: 0 0 0 1px #C9C9C9;
   border-collapse: collapse;
   width: 1044px;
@@ -294,78 +258,28 @@ table.completion-table {
   border-radius: 21px;
 }
 
-td.completion-table-header {
+thead.completion-table-header {
   background-color: #E8E8E8;
   color: #678FFF;
   font-family: 'Noto Sans KR Medium';
-  font-size: 14px;
+  font-size: 20px;
   letter-spacing: 0px;
   text-align: center;
-  height: 50px;
+  height: 68px;
 }
 
-td.completion-table-header1 {
-  background-color: #FAFAFA;
-  color: #678FFF;
-  font-family: 'Noto Sans KR Medium';
-  font-size: 14px;
-  letter-spacing: 0px;
-  text-align: center;
-  border-bottom: 1px solid #C9C9C9;
-}
-
-td.completion-table-header2 {
-  background-color: #FAFAFA;
-  color: #678FFF;
-  font-family: 'Noto Sans KR Medium';
-  font-size: 14px;
-  letter-spacing: 0px;
-  text-align: center;
-}
-
-td.completion-table-content {
+tr.completion-table-body {
   color: #333333;
   font-family: 'Noto Sans KR Medium';
-  font-size: 14px;
+  font-size: 18px;
   letter-spacing: 0px;
   text-align: center;
-  height: 60px;
-}
-
-div.completion-radio {
-  display: inline-flex;
-  align-items: center
-}
-
-.completion-radio input[type=radio] {
-  appearance: none;
-}
-
-.completion-radio input[type=radio] {
-  display: inline;
-  width: 25px;
-  height: 25px;
-  margin-top: 8px;
-  border-radius: 50%;
-  border: 1px solid #E8E8E8;
-  margin-left: 2px;
-}
-
-.completion-radio input[type=radio]:checked {
-  appearance: none;
-}
-
-.completion-radio input[type=radio]:checked {
-  width: 25px;
-  height: 25px;
-  border: 1px solid #707070;
-  border-radius: 50%;
-  background-color: #707070;
+  height: 68px;
 }
 
 .completion-table-text input[type=text] {
   text-align: center;
-  width: 175px;
+  width: 280px;
 }
 
 .completion-table-text input[type=text]:focus {
@@ -373,20 +287,12 @@ div.completion-radio {
 }
 
 .completion-audio {
-  width: 136px;
+  width: 220px;
 }
 
 .completion-audio::-webkit-media-controls-panel {
   background-color: #FAFAFA;
   padding-left: 0px;
   padding-right: 0px;
-}
-
-.completion-audio::-webkit-media-controls-time-remaining-display{
-  display: none;
-}
-
-.completion-audio::-webkit-media-controls-current-time-display{
-  display: none;
 }
 </style>

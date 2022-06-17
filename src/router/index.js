@@ -239,6 +239,14 @@ const routes = [
       header: MenuView,
       footer: () => import('../components/CMPTPage.vue')
     }
+  },
+  {
+    path: '/questionlist',
+    name: 'List',
+    components: {
+      header: MenuView,
+      footer: () => import('../components/QuestionListPage.vue')
+    }
   }
   
 ]
