@@ -106,7 +106,7 @@
               depressed
               @click="AddQuestion(), ToMain()"
               class="submit-btn"
-            >등록</v-btn>
+            >수정</v-btn>
           </v-layout>
         </form>
       </validation-observer>
@@ -119,6 +119,7 @@ import { required } from 'vee-validate/dist/rules'
 import { extend, ValidationObserver, ValidationProvider } from 'vee-validate'
 import axios from 'axios'
 import qs from 'qs'
+const iconv = require('iconv-lite');
 
 extend('required', {
   ...required,
@@ -143,9 +144,34 @@ export default {
     image: '',
     image1: '',
   }),
+  mounted () {
+    this.initialize()
+  },
   methods: {
+    initialize () {
+      axios.get('/api/questions?id=' + this.$route.query.data)
+      .then(response => {
+        console.log(response.data.data[0])
+        this.test = response.data.data[0].q_type
+        if (JSON.parse(iconv.decode(response.data.data[0].q_data.data, "UTF-8"))["type_of_question"] === "ex") {
+          this.type = '연습 문항'
+        }
+        else if (JSON.parse(iconv.decode(response.data.data[0].q_data.data, "UTF-8"))["type_of_question"] === "qt") {
+          this.type = '문항'
+        }
+        else {
+           this.type = '예시 문항'
+        }
+        this.text = response.data.data[0].q_body.replace(/,/g, " ")
+        this.id = JSON.parse(iconv.decode(response.data.data[0].q_data.data, "UTF-8"))["no"].replace(/(^0+)/, "")
+        this.answer = JSON.parse(iconv.decode(response.data.data[0].q_data.data, "UTF-8"))["answer"].replace(/(^0+)/, "")
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+    },
     ToMain() {
-      //Object.assign(this.$data, this.$options.data())
+      Object.assign(this.$data, this.$options.data())
       this.$router.push('/question')
     },
     AddQuestion() {

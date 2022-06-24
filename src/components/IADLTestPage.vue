@@ -78,6 +78,7 @@
           <td>
             <div class="iadl-radio"><input type="radio" value="4" v-model="picked[0]"></div>
           </td>
+          <td></td>
         </tr>
         <tr class="iadl-table-text">
           <td class="iadl-table-title">B. 물건 사기</td>
@@ -93,6 +94,7 @@
           <td>
             <div class="iadl-radio"><input type="radio" value="4" v-model="picked[1]"></div>
           </td>
+          <td></td>
         </tr>
         <tr class="iadl-table-text">
           <td class="iadl-table-title">C. 음식 준비하기</td>
@@ -108,6 +110,7 @@
           <td>
             <div class="iadl-radio"><input type="radio" value="4" v-model="picked[2]"></div>
           </td>
+          <td></td>
         </tr>
         <tr class="iadl-table-text">
           <td class="iadl-table-title">D. 집안일 하기</td>
@@ -138,6 +141,7 @@
           <td>
             <div class="iadl-radio"><input type="radio" value="3" v-model="picked[4]"></div>
           </td>
+          <td colspan="2"></td>
         </tr>
         <tr class="iadl-table-text">
           <td class="iadl-table-title">F. 교통수단 이용</td>
@@ -168,6 +172,7 @@
           <td>
             <div class="iadl-radio"><input type="radio" value="3" v-model="picked[6]"></div>
           </td>
+          <td colspan="2"></td>
         </tr>
         <tr class="iadl-table-text1">
           <td class="iadl-table-title1">H. 돈 관리 능력</td>
@@ -228,16 +233,24 @@ export default {
 
       await axios.get('/api/recognitionSummary?type=IADL&resId=' + this.resId)
       .then(response => {
-        console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        this.picked = response.data.data[0].rs_answer.slice(1, -1).split(',')
-        this.id = response.data.data[0].rs_summery_id;
-        this.flag = 1
+        if (response.data.data.length > 0) {
+          this.picked = response.data.data[0].rs_answer.slice(1, -1).split(',')
+          this.id = response.data.data[0].rs_summery_id;
+          this.flag = 1
+        }
+       
       })
       .catch(error => {
         console.log(error.response)
       })
     },
     Send() {
+      for (let i = 0; i < 8; i++) {
+        if(!this.picked[i]) {
+          this.picked[i] = "-1"
+        }
+      }
+      console.log(this.picked)
       if (this.flag === 1) {
         const data = {
           'id': this.id,

@@ -116,8 +116,7 @@ export default {
   methods: {
     ToTest() {
       Object.assign(this.$data, this.$options.data())
-      //this.$router.push('/main')
-      this.$router.go(-1)
+      this.$router.push('/language')
     },
     async initialize () {
       await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
@@ -140,7 +139,7 @@ export default {
         console.log(error.response)
       })
 
-      await axios.get('/api/questions/question?type=Story_Telling')
+      await axios.get('/api/questions/noimage?type=Story_Telling')
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         //console.log(response.data.data)
@@ -243,6 +242,7 @@ td.story-table-title {
   text-align: center;
   color: #678FFF;
   border-bottom: 1px solid #C9C9C9;
+  height: 222px;
   width: 209px;
   font-family: 'Noto Sans KR Medium';
   font-size: 25px;

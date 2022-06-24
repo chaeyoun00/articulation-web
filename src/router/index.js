@@ -113,6 +113,14 @@ const routes = [
     }
   },
   {
+    path: '/questionedit',
+    name: 'QuestionEdit',
+    components: {
+      header: MenuView,
+      footer: () => import('../components/QuestionEditPage.vue')
+    }
+  },
+  {
     path: '/paper',
     name: 'Paper',
     components: {

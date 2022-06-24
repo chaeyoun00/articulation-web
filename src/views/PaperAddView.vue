@@ -2,15 +2,15 @@
   <v-container>
     <v-layout justify-center class="paper-layout">
       <table class="paper-table">
-        <thead class="paper-table-header">
-          <td style="border-radius: 21px 0px 0px 21px;">과제 유형</td>
-          <td>과제 이름</td>
-          <td>전체 문항수</td>
-          <td>활성화된 문항수</td>
-          <td style="border-radius: 0px 21px 21px 0px;">문제 리스트</td>
+        <thead>
+          <td class="paper-table-header" style="border-radius: 21px 0px 0px 21px;">과제 유형</td>
+          <td class="paper-table-header">과제 이름</td>
+          <td class="paper-table-header">전체 문항수</td>
+          <td class="paper-table-header">활성화된 문항수</td>
+          <td class="paper-table-header" style="border-radius: 0px 21px 21px 0px;">문제 리스트</td>
         </thead>
-        <tbody v-for="i in types.length" v-bind:key="i" class="paper-table-content">
-          <tr v-if="i != types.length" style="border-bottom: 1px solid #C9C9C9">
+        <tbody v-for="i in types.length" v-bind:key="i" >
+          <tr v-if="i != types.length" style="border-bottom: 1px solid #C9C9C9" class="paper-table-content">
             <td v-if="i - 1 < 3">이해 과제</td>
             <td v-else>표현 과제</td>
             <td>{{ types[i - 1] }}</td>
@@ -38,7 +38,7 @@
               </svg>
             </v-btn></td>
           </tr>
-          <tr v-else>
+          <tr v-else class="paper-table-content">
             <td>표현 과제</td>
             <td>{{ types[i - 1] }}</td>
             <td>{{ list[i - 1] }}</td>
@@ -87,7 +87,7 @@ export default {
   methods: {
     async initialize () {
       for (let i = 0; i < this.types.length; i++) {
-        await axios.get('/api/questions/question?type=' + this.types[i])
+        await axios.get('/api/questions/noimage?type=' + this.types[i])
         .then(response => {
           this.count[i] = response.data.data.length
           this.valid[i] = 0
@@ -122,6 +122,7 @@ export default {
 
 .st0{fill:#E3E3E3;}
 .st1{fill:#678FFF;}
+
 svg {
   width: 35px;
 }
@@ -133,7 +134,7 @@ table.paper-table {
   border-radius: 21px;
 }
 
-thead.paper-table-header {
+td.paper-table-header {
   background-color: #E8E8E8;
   color: #678FFF;
   font-family: 'Noto Sans KR Medium';
@@ -143,7 +144,7 @@ thead.paper-table-header {
   height: 68px;
 }
 
-tbody.paper-table-content {
+tr.paper-table-content {
   color: #333333;
   font-family: 'Noto Sans KR Regular';
   font-size: 14px;

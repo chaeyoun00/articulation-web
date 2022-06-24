@@ -169,8 +169,8 @@ export default {
 <style>
 .container.outline_lang {
   padding-top: 29px;
-  padding-left: 177px;
-  padding-right: 179px;
+  padding-left: 150px;
+  padding-right: 150px;
 }
 
 </style>

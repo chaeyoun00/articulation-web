@@ -48,11 +48,10 @@ export default {
   methods: {
     ToTest() {
       Object.assign(this.$data, this.$options.data())
-      //this.$router.push('/main')
-      this.$router.go(-1)
+      this.$router.push('/paper')
     },
     async initialize() {
-      await axios.get('/api/questions/question?type=' + this.$route.query.data)
+      await axios.get('/api/questions/noimage?type=' + this.$route.query.data)
       .then(response => {
         this.lists = response.data.data
         for (let i = 0; i < this.lists.length; i++) {

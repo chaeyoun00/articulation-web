@@ -157,8 +157,7 @@ export default {
   methods: {
     ToMain() {
       Object.assign(this.$data, this.$options.data())
-      //this.$router.push('/main')
-      this.$router.go(-1)
+      this.$router.push('/testedperson')
     },
     initialize () {
       axios.get('/api/examReservations?id=' + this.$route.query.data)

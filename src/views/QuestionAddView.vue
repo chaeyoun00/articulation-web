@@ -93,6 +93,7 @@
       <v-pagination
         v-model="page"
         :length="pageCount"
+        :total-visible="10"
       ></v-pagination>
       </v-flex>
     </v-layout>
@@ -126,7 +127,7 @@ export default {
         this.$router.push('/questionadd');
     },
     initialize () {
-      axios.get('/api/questions/question')
+      axios.get('/api/questions/noimage')
       .then(response => {
         //console.log(JSON.stringify(response.data.data));
         //console.log(response.data.data)
@@ -140,10 +141,31 @@ export default {
       })
     },
     Edit(item) {
-      console.log(item)
+      this.$router.push({
+        name: "QuestionEdit",
+        query: { data: item.q_id }
+      })
     },
-    Delete(i) {
+    Delete(item) {
+      const url = 'http://49.50.172.137:3000/api/questions?id=' + item.q_id
       
+      var config = {
+        method: 'delete',
+        url: url,
+        headers: {
+          //
+        }
+      }
+
+      const vm = this;
+      axios(config)
+      .then(function (response) {
+        vm.items.splice(vm.items.indexOf(item), 1)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
     }
   },
 }

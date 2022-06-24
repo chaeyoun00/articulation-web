@@ -284,8 +284,7 @@ export default {
     },
     ToMain() {
       Object.assign(this.$data, this.$options.data())
-      //this.$router.push('/main')
-      this.$router.go(-1)
+      this.$router.push('/main')
     },
     Edit() {
       var datas = {

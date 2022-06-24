@@ -180,7 +180,7 @@ export default {
       console.log(item)
       this.$router.push({
         name: "Reservation",
-        query: { id: item.u_id}
+        query: { id: item.u_id, path: "/main"}
       })
     },
     Delete(item) {
@@ -190,19 +190,19 @@ export default {
         method: 'delete',
         url: url,
         headers: {
-          //'Content-Type': 'application/x-www-form-urlencoded'
+
         }
       }
 
+      const vm = this;
       axios(config)
       .then(function (response) {
-        //console.log(JSON.stringify(response.data));
+        vm.items.splice(vm.items.indexOf(item), 1)
       })
       .catch(function (error) {
         console.log(error);
       });
 
-      this.$router.go();
     },
     Edit(item) {
       this.$router.push({

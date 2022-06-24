@@ -84,7 +84,7 @@
           <td class="cread-table-header1">Total score (raw)</td>
           <td class="cread-table-header1" style="border-radius: 0px 21px 21px 0px;">Z - score</td>
         </tr>
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2">J1. 언어유창성 검사: "동물 범주"</td>
           <td class="cread-table-content1">
             <div class="cread-score2">
@@ -98,7 +98,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2">J2. 보스톤 이름대기 검사</td>
           <td class="cread-table-content1">
             <div class="cread-score1">
@@ -113,7 +113,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2">J4. 단어목록 기억검사</td>
           <td class="cread-table-content1">
             <div class="cread-score1">
@@ -128,7 +128,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2" style="background-color: #FAFAFA">(1)</td>
           <td class="cread-table-content1">
             <div class="cread-score1">
@@ -143,7 +143,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2" style="background-color: #FAFAFA">(2)</td>
           <td class="cread-table-content1">
             <div class="cread-score1">
@@ -158,7 +158,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2" style="background-color: #FAFAFA">(3)</td>
           <td class="cread-table-content1">
             <div class="cread-score1">
@@ -173,7 +173,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2">J6. 단어목록 회상 검사</td>
           <td class="cread-table-content1">
             <div class="cread-score1">
@@ -188,7 +188,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2" style="background-color: #FAFAFA">(회상률 %)</td>
           <td class="cread-table-content1">
             <div class="cread-score1">
@@ -203,7 +203,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2">J7. 단어목록 재인검사</td>
           <td class="cread-table-content1">
             <div class="cread-score1">
@@ -218,7 +218,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2" style="background-color: #FAFAFA">예</td>
           <td class="cread-table-content1">
             <div class="cread-score1">
@@ -233,7 +233,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2" style="background-color: #FAFAFA">아니오</td>
           <td class="cread-table-content1">
             <div class="cread-score1">
@@ -248,7 +248,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2">J5. 구성행동 검사</td>
           <td class="cread-table-content1">
             <div class="cread-score1">
@@ -263,7 +263,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2">J8. 구성회상 검사</td>
           <td class="cread-table-content1">
             <div class="cread-score1">
@@ -278,7 +278,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2" style="background-color:#E8E8E8">총점 I</td>
           <td class="cread-table-content1">
             <div class="cread-score1">
@@ -293,7 +293,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2" style="background-color:#E8E8E8">총점 II</td>
           <td class="cread-table-content1">
             <div class="cread-score1">
@@ -308,7 +308,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2">STROOP 단어페이지</td>
           <td class="cread-table-content1">
             <div class="cread-score2">
@@ -322,7 +322,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2">색깔페이지</td>
           <td class="cread-table-content1">
             <div class="cread-score2">
@@ -336,7 +336,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2">색깔 - 단어페이지</td>
           <td class="cread-table-content1">
             <div class="cread-score2">
@@ -350,7 +350,7 @@
           </td>
         </tr>
 
-        <tr>
+        <tr style="border-bottom: 1px solid #C9C9C9">
           <td class="cread-table-content2">길찾기 A</td>
           <td class="cread-table-content1">
             <div class="cread-score2">
@@ -440,22 +440,35 @@ export default {
         this.user = response.data.data
       })
       .catch(error => {
-        console.log(error.response)
+        console.log(error)
       })
 
       this.resId = this.$route.query.resId;
 
       await axios.get('/api/recognitionSummary?type=CREAD-K&resId=' + this.resId)
       .then(response => {
-        this.scores = response.data.data[0].rs_answer.slice(1, -1).split(',')
-        this.id = response.data.data[0].rs_summery_id;
-        this.flag = 1
+        if (response.data.data.length > 0) {
+          this.scores = response.data.data[0].rs_answer.slice(1, -1).split(',')
+          for (let i = 0; i < this.scores.length; i++) {
+            if (this.scores[i] === "-1") {
+              this.scores[i] = ""
+            }
+          }
+          this.id = response.data.data[0].rs_summery_id;
+          this.flag = 1
+        }
       })
       .catch(error => {
-        console.log(error.response)
+        console.log(error)
       })
     },
     Send() {
+      for (let i = 0; i < 44; i++) {
+        if (!this.scores[i]) {
+          this.scores[i] = "-1"
+        }
+      }
+      console.log(this.scores)
       if (this.flag === 1) {
         const data = {
           'id': this.id,
@@ -471,7 +484,6 @@ export default {
           url: 'http://49.50.172.137:3000/api/recognitionSummary',
           headers: {
             'memberId': localStorage.getItem("Id"),
-            //'Content-Type': 'application/x-www-form-urlencoded'
           },
           data: data
         }
@@ -481,7 +493,7 @@ export default {
           'resId': this.resId.toString(),
           'userId': this.user[0].u_id,
           'type': 'CREAD-K',
-          'totalQuestionNum': '8',
+          'totalQuestionNum': '44',
           'answers': '[' + this.scores + ']', 
         }
 
@@ -665,7 +677,6 @@ td.cread-table-content2 {
   font-size: 25px;
   letter-spacing: 0px;
   text-align: center;
-  border-bottom: 1px solid #C9C9C9;
 }
 
 textarea.cread-table-vlaue {

@@ -131,8 +131,8 @@ export default {
 <style>
 .container.outline_cog {
   padding-top: 60px;
-  padding-left: 177px;
-  padding-right: 179px;
+  padding-left: 160px;
+  padding-right: 161px;
 }
 
 .test {

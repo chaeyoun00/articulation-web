@@ -56,7 +56,7 @@
       <p class="test-title">SPT-completion</p>
       <table class="completion-table">
         <thead class="completion-table-header">
-          <tr>
+          <tr style="height: 68px">
             <td style="border-radius: 21px 0px 0px 21px">번호</td>
             <td>제시</td>
             <td>목표 반응</td>
@@ -129,8 +129,7 @@ export default {
   methods: {
     ToTest() {
       Object.assign(this.$data, this.$options.data())
-      //this.$router.push('/main')
-      this.$router.go(-1)
+      this.$router.push('/language')
     },
     async initialize () {
       await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
@@ -153,7 +152,7 @@ export default {
         console.log(error.response)
       })
 
-      await axios.get('/api/questions/question?type=SPT-completion')
+      await axios.get('/api/questions/noimage?type=SPT-completion')
       .then(response => {
         this.questions = response.data.data
         let contents;
@@ -176,16 +175,29 @@ export default {
 
       await axios.get('/api/answerPapers?type=SPT-completion&examId=' + this.resId)
       .then(response => {
+        let array = [];
+        let index = [];
+        array.push(response.data.data[0].a_question_id)
+        index.push(0)
+        for (let i = 0; i < response.data.data.length; i++) {
+          var top = array[array.length - 1]
+          if (top === response.data.data[i].a_question_id) {
+            array.pop()
+            index.pop()
+          }
+          array.push(response.data.data[i].a_question_id)
+          index.push(i)
+        }
+        
         var uint8;
         var audio;
-        for (let i = 0; i < response.data.data.length; i++) {
-          uint8 = new Uint8Array(response.data.data[i].a_data.data);
+        for (let i = 0; i < index.length; i++) {
+          uint8 = new Uint8Array(response.data.data[index[i]].a_data.data);
           var blob = new Blob([uint8], { type: 'audio' });
           var blobUrl = URL.createObjectURL(blob);
-          audio = document.getElementById(response.data.data[i].a_question_id)
+          audio = document.getElementById(response.data.data[index[i]].a_question_id)
           audio.src = blobUrl;
         }
-        //console.log(this.audioURL)
       })
       .catch(error => {
         console.log(error.response)
@@ -265,7 +277,6 @@ thead.completion-table-header {
   font-size: 20px;
   letter-spacing: 0px;
   text-align: center;
-  height: 68px;
 }
 
 tr.completion-table-body {

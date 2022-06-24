@@ -56,7 +56,7 @@
       <p class="test-title">SPT-priming</p>
       <table class="priming-table">
         <thead class="priming-table-header">
-          <tr>
+          <tr style="height: 68px">
             <td style="border-radius: 21px 0px 0px 21px">번호</td>
             <td>점화문장</td>
             <td>목표 반응</td>
@@ -128,8 +128,7 @@ export default {
   methods: {
     ToTest() {
       Object.assign(this.$data, this.$options.data())
-      //this.$router.push('/main')
-      this.$router.go(-1)
+      this.$router.push('/language')
     },
     async initialize () {
       await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
@@ -152,7 +151,7 @@ export default {
         console.log(error.response)
       })
 
-      await axios.get('/api/questions/question?type=SPT-priming')
+      await axios.get('/api/questions/noimage?type=SPT-priming')
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         //console.log(response.data.data)
@@ -177,19 +176,33 @@ export default {
 
       await axios.get('/api/answerPapers?type=SPT-priming&examId=' + this.resId)
       .then(response => {
+        let array = [];
+        let index = [];
+        array.push(response.data.data[0].a_question_id)
+        index.push(0)
+        for (let i = 0; i < response.data.data.length; i++) {
+          var top = array[array.length - 1]
+          if (top === response.data.data[i].a_question_id) {
+            array.pop()
+            index.pop()
+          }
+          array.push(response.data.data[i].a_question_id)
+          index.push(i)
+        }
+        
         var uint8;
         var audio;
-        for (let i = 0; i < response.data.data.length; i++) {
-          uint8 = new Uint8Array(response.data.data[i].a_data.data);
+        for (let i = 0; i < index.length; i++) {
+          uint8 = new Uint8Array(response.data.data[index[i]].a_data.data);
           var blob = new Blob([uint8], { type: 'audio' });
           var blobUrl = URL.createObjectURL(blob);
-          audio = document.getElementById(response.data.data[i].a_question_id)
+          audio = document.getElementById(response.data.data[index[i]].a_question_id)
           audio.src = blobUrl;
         }
         //console.log(this.audioURL)
       })
       .catch(error => {
-        console.log(error.response)
+        console.log(error)
       })
 
       await axios.get('/api/languageSummary?type=SPT-priming&userId=' + this.user[0].u_id + '&resId=' + this.resId)
@@ -198,8 +211,8 @@ export default {
         this.text = response.data.data[0].lg_answer.slice(1, -1).split(',')
       })
       .catch(error => {
-        //alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
-        //this.$router.go(-1)
+        alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
+        this.$router.go(-1)
       })   
     },
     Save() {
@@ -208,6 +221,8 @@ export default {
           this.text[i] = ''
         }
       }
+
+      //console.log(this.text)
       
       const data = {
         'id': this.primingAnswer[0].lg_summery_id,
@@ -266,7 +281,6 @@ thead.priming-table-header {
   font-size: 20px;
   letter-spacing: 0px;
   text-align: center;
-  height: 68px;
 }
 
 tr.priming-table-body {

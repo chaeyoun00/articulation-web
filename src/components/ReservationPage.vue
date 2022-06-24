@@ -160,13 +160,12 @@ export default {
   methods: {
     ToMain() {
       Object.assign(this.$data, this.$options.data())
-      //this.$router.push('/main')
-      this.$router.go(-1)
+     this.$router.push(this.$route.query.path)
     },
     initialize () {
       this.u_id = this.$route.query.id
     },
-    Submit() {
+    async Submit() {
       const data = {
         'userId': this.u_id,
         'resName': this.u_name,
@@ -175,16 +174,16 @@ export default {
         'date': this.u_date
       };
 
-      axios.get('/api/examUsers?userId=' + this.u_id)
+      await axios.get('/api/examUsers?id=' + this.u_id)
       .then(response => {
         this.users = response.data.data
-        console(this.users)
+        console.log(this.users)
       })
       .catch(error => {
-        console.log(error.response)
+        console.log(error)
       })
 
-      axios.get('/api/examReservations?userId=' + this.u_id + '&isValid=1')
+      await axios.get('/api/examReservations?userId=' + this.u_id + '&isValid=1')
       .then(response => {
         if (response.data.data.length > 0 || this.users.length === 0) {
           alert("등록되지 않은 환자 또는 이미 예약된 환자입니다.")
@@ -211,32 +210,8 @@ export default {
         }
       })
       .catch(error => {
-        console.log(error.response)
+        console.log(error)
       })
-      // axios.get('/api/examUsers?userId=' + this.u_id)
-      // .then(response => {
-      //   //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-      //   var config = {
-      //     method: 'post',
-      //     url: 'http://49.50.172.137:3000/api/examReservations',
-      //     headers: {
-      //       'memberId': localStorage.getItem("Id"),
-      //     },
-      //     data: data
-      //   }
-
-      //   axios(config)
-      //     .then(function (response) {
-      //       //console.log(JSON.stringify(response.data));
-      //       //console.log(flag)
-      //     })
-      //     .catch(function (error) {
-      //       console.log(error);
-      //     });
-      // })
-      // .catch(error => {
-      //   console.log(error.response)
-      // })
       
     }
   }

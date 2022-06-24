@@ -58,32 +58,102 @@
         <thead>
           <tr>
             <td colspan="3" class="ins-table-header" style="border-radius: 21px 0px 0px 0px"></td>
-            <td colspan="6"  class="ins-table-header" style="border-radius: 0px 21px 0px 0px">반응기록</td>
+            <td colspan="12"  class="ins-table-header" style="border-radius: 0px 21px 0px 0px">반응기록</td>
+          </tr>
+          <tr>
+            <td colspan="3" class="ins-table-header"></td>
+            <td colspan="2" class="ins-table-header1" style="border-right: 1px solid #C9C9C9; border-bottom: 1px solid #C9C9C9">Cond1-C</td>
+            <td colspan="2" class="ins-table-header1" style="border-right: 1px solid #C9C9C9; border-bottom: 1px solid #C9C9C9">Cond1-NC</td>
+            <td colspan="2" class="ins-table-header1" style="border-right: 1px solid #C9C9C9; border-bottom: 1px solid #C9C9C9">Cond2-C</td>
+            <td colspan="2" class="ins-table-header1" style="border-right: 1px solid #C9C9C9; border-bottom: 1px solid #C9C9C9">Cond2-NC</td>
+            <td colspan="2" class="ins-table-header1" style="border-right: 1px solid #C9C9C9; border-bottom: 1px solid #C9C9C9">Cond3-C</td>
+            <td colspan="2" class="ins-table-header1" style="border-bottom: 1px solid #C9C9C9">Cond3-NC</td>
           </tr>
           <tr>
             <td class="ins-table-header" style="border-radius: 0px 0px 0px 21px">번호</td>
             <td class="ins-table-header">목표문장</td>
             <td class="ins-table-header">정답</td>
-            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">Cond1-C</td>
-            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">Cond1-NC</td>
-            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">Cond2-C</td>
-            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">Cond2-NC</td>
-            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">Cond3-C</td>
-            <td class="ins-table-header1" style="border-radius: 0px 0px 21px 0px">Cond3-NC</td>
+            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">1st</td>
+            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">반복</td>
+            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">1st</td>
+            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">반복</td>
+            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">1st</td>
+            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">반복</td>
+            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">1st</td>
+            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">반복</td>
+            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">1st</td>
+            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">반복</td>
+            <td class="ins-table-header1" style="border-right: 1px solid #C9C9C9">1st</td>
+            <td class="ins-table-header1" style="border-radius: 0px 0px 21px 0px">반복</td>
           </tr>
         </thead>
 
         <tbody v-for="i in questions.length" v-bind:key="i">
-          <tr class="ins-table-content">
-            <td>{{ num[i - 1] }}</td>
-            <td>{{ questions[i - 1].q_body }}</td>
-            <td>{{ answers[i - 1] }}</td>
-            <td><div class="ins-radio"><input type="radio" value="1" v-model="picked[i - 1]"></div></td>
-            <td><div class="ins-radio"><input type="radio" value="2" v-model="picked[i - 1]"></div></td>
-            <td><div class="ins-radio"><input type="radio" value="3" v-model="picked[i - 1]"></div></td>
-            <td><div class="ins-radio"><input type="radio" value="4" v-model="picked[i - 1]"></div></td>
-            <td><div class="ins-radio"><input type="radio" value="5" v-model="picked[i - 1]"></div></td>
-            <td><div class="ins-radio"><input type="radio" value="6" v-model="picked[i - 1]"></div></td>
+          <tr class="ins-table-content" style="border-bottom: 1px solid #C9C9C9">
+            <td style="background-color: #FAFAFA">{{ num[i - 1] }}</td>
+            <td style="background-color: #FAFAFA">{{ questions[i - 1].q_body }}</td>
+            <td style="background-color: #FAFAFA">{{ insAnswers[i - 1] }}</td>
+            <td v-if="questions[i - 1].questiontype === '1'" class="ins-table-content1">
+              {{ first[i - 1] }}
+            </td><td v-else class="ins-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '1'" class="ins-table-content1">
+              {{ repeat[i - 1] }}
+            </td><td v-else class="ins-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '2'" class="ins-table-content1">
+              {{ first[i - 1] }}
+            </td><td v-else class="ins-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '2'" class="ins-table-content1">
+              {{ repeat[i - 1] }}
+            </td><td v-else class="ins-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '3'" class="ins-table-content1">
+              {{ first[i - 1] }}
+            </td><td v-else class="ins-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '3'" class="ins-table-content1">
+              {{ repeat[i - 1] }}
+            </td><td v-else class="ins-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '4'" class="ins-table-content1">
+              {{ first[i - 1] }}
+            </td><td v-else class="ins-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '4'" class="ins-table-content1">
+              {{ repeat[i - 1] }}
+            </td><td v-else class="ins-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '5'" class="ins-table-content1">
+              {{ first[i - 1] }}
+            </td><td v-else class="ins-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '5'" class="ins-table-content1">
+              {{ repeat[i - 1] }}
+            </td><td v-else class="ins-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '6'" class="ins-table-content1">
+              {{ first[i - 1] }}
+            </td><td v-else class="ins-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '6'" class="ins-table-content1">
+              {{ repeat[i - 1] }}
+            </td><td v-else class="ins-table-blank"></td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <td class="ins-table-end" colspan="3">문장유형별 점수</td>
+            <td class="ins-table-end2">{{score[0]}} / {{scores[0]}}</td>
+            <td class="ins-table-end2">{{score[1]}} / {{scores[1]}}</td>
+            <td class="ins-table-end2">{{score[2]}} / {{scores[2]}}</td>
+            <td class="ins-table-end2">{{score[3]}} / {{scores[3]}}</td>
+            <td class="ins-table-end2">{{score[4]}} / {{scores[4]}}</td>
+            <td class="ins-table-end2">{{score[5]}} / {{scores[5]}}</td>
+            <td class="ins-table-end2">{{score[6]}} / {{scores[6]}}</td>
+            <td class="ins-table-end2">{{score[7]}} / {{scores[7]}}</td>
+            <td class="ins-table-end2">{{score[8]}} / {{scores[8]}}</td>
+            <td class="ins-table-end2">{{score[9]}} / {{scores[9]}}</td>
+            <td class="ins-table-end2">{{score[10]}} / {{scores[10]}}</td>
+            <td class="ins-table-end2">{{score[11]}} / {{scores[11]}}</td>
+          </tr>
+          <tr>
+            <td class="ins-table-end" colspan="3">총점</td>
+            <td class="ins-table-end1" colspan="12">{{ firstscore }} / {{ count }}</td>
+          </tr>
+          <tr>
+            <td class="ins-table-end" colspan="3" style="border-radius: 0px 0px 0px 21px">반복포함 총점</td>
+            <td class="ins-table-end1" colspan="12" style="border-radius: 0px 0px 21px 0px">{{ totalscore }} / {{ count }}</td>
           </tr>
         </tbody>
       </table>
@@ -93,7 +163,8 @@
       <v-btn
         depressed
         class="submit-btn"
-      >저장</v-btn>
+        @click="ToTest()"
+      >확인</v-btn>
     </v-layout>
   </v-container>
 </template>
@@ -107,11 +178,17 @@ export default {
       u_id: '',
     }],
     resId: '',
-    picked: [],
+    count: '',
+    firstscore: '',
+    totalscore: '',
     questions: [],
     num: [],
     qtype: [],
-    answers: [],
+    insAnswers: [],
+    scores: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    score: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    first: [],
+    repeat: [],
   }),
   mounted () {
     this.initialize()
@@ -119,8 +196,7 @@ export default {
   methods: {
     ToTest() {
       Object.assign(this.$data, this.$options.data())
-      //this.$router.push('/main')
-      this.$router.go(-1)
+      this.$router.push('/language')
     },
     async initialize () {
       await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
@@ -130,7 +206,7 @@ export default {
         //console.log(this.resId)
       })
       .catch(error => {
-        console.log(error.response)
+        console.log(error)
       })
 
       await axios.get('/api/examUsers?id=' + this.$route.query.patient)
@@ -140,46 +216,120 @@ export default {
         this.user = response.data.data
       })
       .catch(error => {
-        console.log(error.response)
+        console.log(error)
       })
 
-      await axios.get('/api/questions/question?type=SCT-INS')
+      await axios.get('/api/languageSummary?type=SCT-INS&userId=' + this.user[0].u_id + '&resId=' + this.resId)
       .then(response => {
-        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        //console.log(response.data.data)
+        this.insAnswers = response.data.data[0].lg_answer.split(',').splice(1);
+        //console.log(this.antAnswer[0].lg_answer)
+        for (let i = 0; i < this.insAnswers.length; i++) {
+          if (this.insAnswers[i] === '0') {
+            this.insAnswers[i] = ''
+          }
+        }
+        //console.log(this.insAnswers)
+      })
+      .catch(error => {
+        alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
+        this.$router.go(-1)
+      })
+
+      await axios.get('/api/questions/noimage?type=SCT-INS')
+      .then(response => {
         this.questions = response.data.data
         
+        this.count = 0
         for (let i = 0; i < this.questions.length; i++) {
           this.questions[i].q_body = this.questions[i].q_body.replace(/,/g, " ")
           this.questions[i].q_data = String.fromCharCode(...this.questions[i].q_data.data)
           this.qtype[i] = JSON.parse(this.questions[i].q_data)["type_of_question"]
+          if (this.qtype[i] === "word") {
+            this.questions.splice(i, 1);
+            i -= 1;
+            continue;
+          }
+
+          this.questions[i].questiontype = String.fromCharCode(...[this.questions[i].q_data3.data[3]])
           if (this.qtype[i] === "ex") {
-            this.num[i] = "P" + JSON.parse(this.questions[i].q_data)["no"].replace('0', '')
+            this.num[i] = "P" + JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
           }
           else {
-            this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace('0', '')
+            this.scores[this.questions[i].questiontype * 2 - 1] += 1   // 1, 3, 5, 7, 9, 11
+            this.scores[this.questions[i].questiontype * 2 - 2] += 1   // 0, 2, 4, 6, 8, 10
+            this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
+            this.count += 1
+          }
+          if (JSON.parse(this.questions[i].q_data)["answer"] === this.insAnswers[i]) {
+            this.questions[i].score = "1";
+          }
+          else {
+            this.questions[i].score = "0"
           }
         }
         //console.log(this.questions)
       })
       .catch(error => {
-        console.log(error.response)
+        console.log(error)
       })
 
-      await axios.get('/api/languageSummary?type=SCT-INS&userId=' + this.user[0].u_id + '&resId=' + this.resId)
+      await axios.get('/api/answerPapers?type=SCT-INS&userId=' + this.user[0].u_id + '&examId=' + this.resId)
       .then(response => {
-        this.answers = response.data.data[0].lg_answer.split(',').splice(1);
-        //console.log(this.antAnswer[0].lg_answer)
-        for (let i = 0; i < this.answers.length; i++) {
-          if (this.answers[i] === '0') {
-            this.answers[i] = ''
+        let j = 0;
+        let array = [];
+        
+        this.firstscore = 0
+        this.totalscore = 0
+        array.push(response.data.data[0].a_question_id)
+        for (let i = 1; i < response.data.data.length; i++) {
+          var top = array[array.length - 1]
+          if (top !== response.data.data[i].a_question_id) {
+            if (this.questions[j].score === "1") {
+              this.first.push("1")
+              if (this.qtype[j] === "qt") {
+                this.score[this.questions[j].questiontype * 2 - 2] += 1
+                this.firstscore += 1
+                this.totalscore += 1
+              }
+            }
+            else this.first.push("0")
+            this.repeat.push("")
+            j += 1
+
+            array.push(response.data.data[i].a_question_id)
+            if (i === response.data.data.length - 1) {
+              if (this.questions[j].score === "1") {
+              this.first.push("1")
+              if (this.qtype[j] === "qt") {
+                this.score[this.questions[j].questiontype * 2 - 2] += 1
+                this.firstscore += 1
+                this.totalscore += 1
+              }
+            }
+              else this.first.push("0")
+              this.repeat.push("")
+            }
           }
-        }
-        console.log(this.answers)
+          else {
+            if (this.questions[j].score === "1") {
+              this.repeat.push("1")
+              if (this.qtype[j] === "qt") {
+                this.score[this.questions[j].questiontype * 2 - 1] += 1
+                this.totalscore += 1
+              }
+            }
+            else this.repeat.push("0")
+            this.first.push("")
+            j += 1
+          }
+
+          
+        }        
+        //console.log(array)
+        //console.log(this.first)
       })
       .catch(error => {
-        alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
-        this.$router.go(-1)
+        //console.log(error.response)
       })
     }
   }
@@ -239,7 +389,47 @@ td.ins-table-header1 {
 tr.ins-table-content {
   color: #333333;
   font-family: 'Noto Sans KR Regular';
-  font-size: 12px;
+  font-size: 16px;
+  letter-spacing: 0px;
+  height: 60px;
+  text-align: center;
+}
+
+td.ins-table-content1 {
+  font-family: 'Noto Sans KR Regular';
+  font-size: 16px;
+  letter-spacing: 0px;
+  height: 60px;
+  text-align: center;
+}
+
+td.ins-table-blank {
+  background-color: #F4F4F4;
+}
+
+td.ins-table-end {
+  background-color: #E8E8E8;
+  color: #333333;
+  font-family: 'Noto Sans KR Medium';
+  font-size: 16px;
+  letter-spacing: 0px;
+  text-align: center;
+  height: 60px;
+}
+
+td.ins-table-end1 {
+  background-color: #F4F4F4;
+  color: #333333;
+  font-family: 'Noto Sans KR Medium';
+  font-size: 16px;
+  letter-spacing: 0px;
+  text-align: center;
+  height: 60px;
+}
+
+td.ins-table-end2 {
+  font-family: 'Noto Sans KR Regular';
+  font-size: 16px;
   letter-spacing: 0px;
   height: 60px;
   text-align: center;

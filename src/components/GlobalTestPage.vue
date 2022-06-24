@@ -176,7 +176,7 @@ export default {
           'resId': this.resId.toString(),
           'userId': this.user[0].u_id,
           'type': 'Global_Deterioraion',
-          'totalQuestionNum': '8',
+          'totalQuestionNum': '1',
           'answers': '[' + this.picked + ']', 
         }
 

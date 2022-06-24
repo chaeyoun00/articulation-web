@@ -89,24 +89,73 @@
         </thead>
 
         <tbody v-for="i in questions.length" v-bind:key="i">
-          <tr v-if="qtype[i - 1] !== 'word'"> 
+          <tr style="border-bottom: 1px solid #C9C9C9"> 
             <td class="ap-table-content" >{{ num[i - 1] }}</td>
             <td class="ap-table-content">{{ questions[i - 1].q_body }}</td>
-            <td class="ap-table-content">{{ answers[i - 1] }}</td>
-            <td><div class="ap-radio"><input type="radio" value="1" v-model="picked[i - 1]"></div></td>
-            <td><div class="ap-radio"><input type="radio" value="2" v-model="picked[i - 1]"></div></td>
-            <td><div class="ap-radio"><input type="radio" value="3" v-model="picked[i - 1]"></div></td>
-            <td><div class="ap-radio"><input type="radio" value="4" v-model="picked[i - 1]"></div></td>
-            <td><div class="ap-radio"><input type="radio" value="5" v-model="picked[i - 1]"></div></td>
-            <td><div class="ap-radio"><input type="radio" value="6" v-model="picked[i - 1]"></div></td>
-            <td><div class="ap-radio"><input type="radio" value="7" v-model="picked[i - 1]"></div></td>
-            <td><div class="ap-radio"><input type="radio" value="8" v-model="picked[i - 1]"></div></td>
-            <td><div class="ap-radio"><input type="radio" value="9" v-model="picked[i - 1]"></div></td>
-            <td><div class="ap-radio"><input type="radio" value="10" v-model="picked[i - 1]"></div></td>
-            <td><div class="ap-radio"><input type="radio" value="11" v-model="picked[i - 1]"></div></td>
-            <td><div class="ap-radio"><input type="radio" value="12" v-model="picked[i - 1]"></div></td>
+            <td class="ap-table-content">{{ apAnswer[i - 1] }}</td>
+            <td v-if="questions[i - 1].questiontype === '1'" class="ap-table-content1">
+              {{ first[i - 1] }}
+            </td><td v-else class="ap-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '1'" class="ap-table-content1">
+              {{ repeat[i - 1] }}
+            </td><td v-else class="ap-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '2'" class="ap-table-content1">
+              {{ first[i - 1] }}
+            </td><td v-else class="ap-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '2'" class="ap-table-content1">
+              {{ repeat[i - 1] }}
+            </td><td v-else class="ap-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '3'" class="ap-table-content1">
+              {{ first[i - 1] }}
+            </td><td v-else class="ap-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '3'" class="ap-table-content1">
+              {{ repeat[i - 1] }}
+            </td><td v-else class="ap-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '4'" class="ap-table-content1">
+              {{ first[i - 1] }}
+            </td><td v-else class="ap-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '4'" class="ap-table-content1">
+              {{ repeat[i - 1] }}
+            </td><td v-else class="ap-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '5'" class="ap-table-content1">
+              {{ first[i - 1] }}
+            </td><td v-else class="ap-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '5'" class="ap-table-content1">
+              {{ repeat[i - 1] }}
+            </td><td v-else class="ap-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '6'" class="ap-table-content1">
+              {{ first[i - 1] }}
+            </td><td v-else class="ap-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '6'" class="ap-table-content1">
+              {{ repeat[i - 1] }}
+            </td><td v-else class="ap-table-blank"></td>
           </tr>
-        </tbody>        
+        </tbody>      
+        <tbody>
+          <tr>
+            <td class="ap-table-end" colspan="3">문장유형별 점수</td>
+            <td class="ap-table-content1">{{score[0]}} / {{scores[0]}}</td>
+            <td class="ap-table-content1">{{score[1]}} / {{scores[1]}}</td>
+            <td class="ap-table-content1">{{score[2]}} / {{scores[2]}}</td>
+            <td class="ap-table-content1">{{score[3]}} / {{scores[3]}}</td>
+            <td class="ap-table-content1">{{score[4]}} / {{scores[4]}}</td>
+            <td class="ap-table-content1">{{score[5]}} / {{scores[5]}}</td>
+            <td class="ap-table-content1">{{score[6]}} / {{scores[6]}}</td>
+            <td class="ap-table-content1">{{score[7]}} / {{scores[7]}}</td>
+            <td class="ap-table-content1">{{score[8]}} / {{scores[8]}}</td>
+            <td class="ap-table-content1">{{score[9]}} / {{scores[9]}}</td>
+            <td class="ap-table-content1">{{score[10]}} / {{scores[10]}}</td>
+            <td class="ap-table-content1">{{score[11]}} / {{scores[11]}}</td>
+          </tr>
+          <tr>
+            <td class="ap-table-end" colspan="3">총점</td>
+            <td class="ap-table-end1" colspan="12">{{ firstscore }} / {{ count }}</td>
+          </tr>
+          <tr>
+            <td class="ap-table-end" colspan="3" style="border-radius: 0px 0px 0px 21px">반복포함 총점</td>
+            <td class="ap-table-end1" colspan="12" style="border-radius: 0px 0px 21px 0px">{{ totalscore }} / {{ count }}</td>
+          </tr>
+        </tbody>  
       </table>
     </v-layout>
 
@@ -114,8 +163,8 @@
       <v-btn
         depressed
         class="submit-btn"
-        @click="Save(), ToTest()"
-      >저장</v-btn>
+        @click="ToTest()"
+      >확인</v-btn>
     </v-layout>
   </v-container>
 </template>
@@ -129,12 +178,18 @@ export default {
       u_id: '',
     }],
     resId: '',
+    count: '',
+    firstscore: '',
+    totalscore: '',
     questions: [],
     num: [],
     qtype: [],
-    answers: [],
     picked: [],
     apAnswer: [],
+    scores: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    score: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    first: [],
+    repeat: [],
   }),
   mounted () {
     this.initialize()
@@ -142,8 +197,7 @@ export default {
   methods: {
     ToTest() {
       Object.assign(this.$data, this.$options.data())
-      //this.$router.push('/main')
-      this.$router.go(-1)
+      this.$router.push('/language')
     },
     async initialize () {
       await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
@@ -167,93 +221,137 @@ export default {
         console.log(error.response)
       })
 
-      await axios.get('/api/questions/question?type=SCT-AP')
-      .then(response => {
-        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        //console.log(response.data.data)
-        this.questions = response.data.data
-        for (let i = 0; i < this.questions.length; i++) {
-          this.questions[i].q_body = this.questions[i].q_body.replace(/,/g, " ")
-          this.questions[i].q_data = String.fromCharCode(...this.questions[i].q_data.data)
-          this.qtype[i] = JSON.parse(this.questions[i].q_data)["type_of_question"]
-          if (JSON.parse(this.questions[i].q_data)["type_of_question"] === "ex") {
-            this.num[i] = "P" + JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
-            this.answers[i] = "1";
-          }
-          else if (JSON.parse(this.questions[i].q_data)["type_of_question"] === "qt") {
-            this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
-            this.answers[i] = "1";
-          }
-          else {
-            this.answers[i] = "0";
-          }
-        }
-        
-        //console.log(this.questions)
-      })
-      .catch(error => {
-        console.log(error.response)
-      })
-
       await axios.get('/api/languageSummary?type=SCT-AP&userId=' + this.user[0].u_id + '&resId=' + this.resId)
       .then(response => {
-        this.apAnswer = response.data.data[0]
-
-        var j = 0;
-        var testData = response.data.data[0].lg_answer.split(',').splice(1)
-        for (let i = 0; i < this.questions.length; i++) {
-          if (JSON.parse(this.questions[i].q_data)["type_of_question"] === "word") {
-            this.answers[i] = '0'
-          }
-          else {
-            this.answers[i] = testData[j];
-            j += 1;
-          }
-        }
-        // if (response.data.data[0].lg_answer.includes('[')) {
-        //   this.picked = response.data.data[0].lg_answer.split('[')[1].slice(0, -1).split(',')
-        //   this.answers = response.data.data[0].lg_answer.split('[')[0].split(',').splice(1)
-        // }
-        // else {
-        //   this.answers = response.data.data[0].lg_answer.split(',').splice(1)
-        // }
-        // for (let i = 0; i < this.answers.length; i++) {
-        //   if (this.answers[i] === '0') {
-        //     this.answers[i] = ''
-        //   }
-        // }
-        console.log(this.answers)
-        // this.picked = this.answers[1].split(',').splice(1)
+        this.apAnswer = response.data.data[0].lg_answer.split(',').splice(1)
       })
       .catch(error => {
         alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
         this.$router.go(-1)
       })
-    },
-    Save() {
-      const data = {
-        'id': this.apAnswer.lg_summery_id,
-        'answers': this.apAnswer.lg_answer.split('[')[0] + '[' + this.picked + ']'
-      }
-      
-      var config = {
-        method: 'put',
-        url: 'http://49.50.172.137:3000/api/languageSummary',
-        headers: {
-          'memberId': localStorage.getItem("Id"),
-          //'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        data: data
-      }
 
-      axios(config)
-      .then(function (response) {
-        console.log(JSON.stringify(response.data));
+      await axios.get('/api/questions/noimage?type=SCT-AP')
+      .then(response => {
+        this.questions = response.data.data
+
+        this.count = 0
+        for (let i = 0; i < this.questions.length; i++) {
+          this.questions[i].q_body = this.questions[i].q_body.replace(/,/g, " ")
+          this.questions[i].q_data = String.fromCharCode(...this.questions[i].q_data.data)
+          this.qtype[i] = JSON.parse(this.questions[i].q_data)["type_of_question"]
+          if (this.qtype[i] === "word") {
+            this.questions.splice(i, 1);
+            i -= 1;
+            continue;
+          }
+
+          this.questions[i].questiontype = String.fromCharCode(...[this.questions[i].q_data3.data[3]])
+          if (this.qtype[i] === "ex") {
+            this.num[i] = "P" + JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
+          }
+          else if (this.qtype[i] === "qt") {
+            this.scores[this.questions[i].questiontype * 2 - 1] += 1   // 1, 3, 5, 7, 9, 11
+            this.scores[this.questions[i].questiontype * 2 - 2] += 1   // 0, 2, 4, 6, 8, 10
+            this.count += 1
+            this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
+          }
+          if (JSON.parse(this.questions[i].q_data)["answer"] === this.apAnswer[i]) {
+            this.questions[i].score = "1";
+          }
+          else {
+            this.questions[i].score = "0"
+          }
+          // if (this.qtype[i] === "ex") {
+          //   this.questions[i].questiontype = String.fromCharCode(...[this.questions[i].q_data3.data[3]])
+          //   this.num[i] = "P" + JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
+          //   this.questions[i].answers = this.apAnswer[j]
+          //   if (JSON.parse(this.questions[i].q_data)["answer"] === this.apAnswer[j]) {
+          //     this.questions[i].score = "1";
+          //   }
+          //   else {
+          //     this.questions[i].score = "0"
+          //   }
+          //   j += 1
+          // }
+          // else if (this.qtype[i] === "qt") {
+          //   this.questions[i].questiontype = String.fromCharCode(...[this.questions[i].q_data3.data[3]])
+          //   this.count += 1
+          //   this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
+          //   this.questions[i].answers = this.apAnswer[j]
+          //   if (JSON.parse(this.questions[i].q_data)["answer"] === this.apAnswer[j]) {
+          //     this.questions[i].score = "1";
+          //     this.firstscore += 1
+          //   }
+          //   else {
+          //     this.questions[i].score = "0"
+          //   }
+          //   j += 1
+          // }
+        }
       })
-      .catch(function (error) {
-        console.log(error);
-      });
-    }
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/answerPapers?type=SCT-AP&userId=' + this.user[0].u_id + '&examId=' + this.resId)
+      .then(response => {
+        let j = 0;
+        let array = [];
+        
+        this.firstscore = 0
+        this.totalscore = 0
+        array.push(response.data.data[0].a_question_id)
+        for (let i = 1; i < response.data.data.length; i++) {
+          var top = array[array.length - 1]
+          if (top !== response.data.data[i].a_question_id) {
+            if (this.questions[j].score === "1") {
+              this.first.push("1")
+              if (this.qtype[j] === "qt") {
+                this.score[this.questions[j].questiontype * 2 - 2] += 1
+                this.firstscore += 1
+                this.totalscore += 1
+              }
+            }
+            else this.first.push("0")
+            this.repeat.push("")
+            j += 1
+
+            array.push(response.data.data[i].a_question_id)
+            if (i === response.data.data.length - 1) {
+              if (this.questions[j].score === "1") {
+              this.first.push("1")
+              if (this.qtype[j] === "qt") {
+                this.score[this.questions[j].questiontype * 2 - 2] += 1
+                this.firstscore += 1
+                this.totalscore += 1
+              }
+            }
+              else this.first.push("0")
+              this.repeat.push("")
+            }
+          }
+          else {
+            if (this.questions[j].score === "1") {
+              this.repeat.push("1")
+              if (this.qtype[j] === "qt") {
+                this.score[this.questions[j].questiontype * 2 - 1] += 1
+                this.totalscore += 1
+              }
+            }
+            else this.repeat.push("0")
+            this.first.push("")
+            j += 1
+          }
+
+          
+        }        
+        //console.log(array)
+        //console.log(this.first)
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+    },
   }
 }
 </script>
@@ -309,11 +407,42 @@ td.ap-table-header1 {
 td.ap-table-content {
   background-color: #FAFAFA;
   font-family: 'Noto Sans KR Regular';
-  font-size: 20px;
+  font-size: 16px;
   letter-spacing: 0px;
   height: 60px;
   text-align: center;
-  
+}
+
+td.ap-table-content1 {
+  font-family: 'Noto Sans KR Regular';
+  font-size: 16px;
+  letter-spacing: 0px;
+  height: 60px;
+  text-align: center;
+}
+
+td.ap-table-end {
+  background-color: #E8E8E8;
+  color: #333333;
+  font-family: 'Noto Sans KR Medium';
+  font-size: 16px;
+  letter-spacing: 0px;
+  text-align: center;
+  height: 60px;
+}
+
+td.ap-table-end1 {
+  background-color: #F4F4F4;
+  color: #333333;
+  font-family: 'Noto Sans KR Medium';
+  font-size: 16px;
+  letter-spacing: 0px;
+  text-align: center;
+  height: 60px;
+}
+
+td.ap-table-blank {
+  background-color: #F4F4F4;
 }
 
 div.ap-radio {

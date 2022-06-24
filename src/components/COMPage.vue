@@ -63,16 +63,22 @@
           </tr>
 
           <tbody v-for="i in questions.length" v-bind:key="i">
-            <tr v-if="qtype[i - 1] !== 'word'">
+            <tr v-if="qtype[i - 1] !== 'word' && i != questions.length" style="border-bottom: 1px solid #C9C9C9">
               <td class="com-table-content">{{ num[i - 1] }}</td>
               <td class="com-table-content" style="background-color: #F5F5F5">{{ questions[i - 1].q_body }}</td>
-              <td class="com-table-content"></td>
-              <td></td>
+              <td class="com-table-content">{{ questions[i - 1].answers }}</td>
+              <td class="com-table-content">{{ questions[i - 1].score }}</td>
+            </tr>
+            <tr v-else-if="qtype[i - 1] !== 'word'">
+              <td class="com-table-content">{{ num[i - 1] }}</td>
+              <td class="com-table-content" style="background-color: #F5F5F5">{{ questions[i - 1].q_body }}</td>
+              <td class="com-table-content">{{ questions[i - 1].answers }}</td>
+              <td class="com-table-content">{{ questions[i - 1].score }}</td>
             </tr>
           </tbody>
           <tbody>
             <td colspan="3" class="com-table-end1">총점</td>
-            <td class="com-table-end2">/</td>
+            <td class="com-table-end2">{{ score }} / {{ count }}</td>
           </tbody>
       </table>
     </v-layout>
@@ -81,7 +87,8 @@
       <v-btn
         depressed
         class="submit-btn"
-      >저장</v-btn>
+        @click="ToTest()"
+      >확인</v-btn>
     </v-layout>
   </v-container>
 </template>
@@ -95,11 +102,12 @@ export default {
       u_id: '',
     }],
     resId: '',
+    count: '',
+    score: '',
     picked: [],
     questions: [],
     num: [],
     qtype: [],
-    answers: [],
     comAnswers: [],
   }),
   mounted () {
@@ -108,15 +116,14 @@ export default {
   methods: {
     ToTest() {
       Object.assign(this.$data, this.$options.data())
-      //this.$router.push('/main')
-      this.$router.go(-1)
+      this.$router.push('/language')
     },
     async initialize () {
       await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         this.resId = response.data.data.e_id;
-        //console.log(this.resId)
+        console.log(this.resId)
       })
       .catch(error => {
         console.log(error.response)
@@ -135,58 +142,50 @@ export default {
       await axios.get('/api/languageSummary?type=SCT-COM&userId=' + this.user[0].u_id + '&resId=' + this.resId)
       .then(response => {
         this.comAnswers = response.data.data[0].lg_answer.split(',').splice(1)
-        console.log(this.comAnswers)
       })
       .catch(error => {
-        console.log(error.response)
+        alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
+        this.$router.go(-1)
       })
 
-      await axios.get('/api/questions/question?type=SCT-COM')
+      await axios.get('/api/questions/noimage?type=SCT-COM')
       .then(response => {
         this.questions = response.data.data
+        //console.log(this.questions)
 
         let j = 0
+        this.count = 0;
+        this.score = 0;
         for (let i = 0; i < this.questions.length; i++) {
           this.questions[i].q_body = this.questions[i].q_body.replace(/,/g, " ")
           this.questions[i].q_data = String.fromCharCode(...this.questions[i].q_data.data)
           this.qtype[i] = JSON.parse(this.questions[i].q_data)["type_of_question"]
           if (this.qtype[i] === "ex") {
             this.num[i] = "P" + JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
+            this.questions[i].answers = this.comAnswers[j]
+            if (JSON.parse(this.questions[i].q_data)["answer"] === this.comAnswers[j]) {
+              this.questions[i].score = "1";
+            }
+            else {
+              this.questions[i].score = "0"
+            }
+            j += 1
           }
-          else {
+          else if (this.qtype[i] === "qt") {
+            this.count += 1;
             this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
+            this.questions[i].answers = this.comAnswers[j]
+            if (JSON.parse(this.questions[i].q_data)["answer"] === this.comAnswers[j]) {
+              this.questions[i].score = "1";
+              this.score += 1
+            }
+            else {
+              this.questions[i].score = "0"
+            }
+            j += 1
           }
-
-          
         }
 
-        // for (let i = 0; i < this.questions.length; i++) {
-        //   this.questions[i].q_body = this.questions[i].q_body.replace(/,/g, " ")
-        //   this.questions[i].q_data = String.fromCharCode(...this.questions[i].q_data.data)
-        //   this.qtype[i] = JSON.parse(this.questions[i].q_data)["type_of_question"]
-        //   if (this.qtype[i] === "ex") {
-        //     this.num[i] = "P" + JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
-        //   }
-        //   else {
-        //     this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
-        //   }
-        // }
-
-        
-        // var inform;
-        // for (let i = 0; i < response.data.data.length; i++) {
-        //   inform = { q_body: '', q_type: '' };
-        //   if (JSON.parse(String.fromCharCode(...response.data.data[i].q_data.data))["type_of_question"] !== "word") {
-        //     inform.q_body = response.data.data[i].q_body.replace(/,/g, " ")
-        //     if (JSON.parse(String.fromCharCode(...response.data.data[i].q_data.data))["type_of_question"] === "ex"){
-        //       inform.q_type = "P" + JSON.parse(String.fromCharCode(...response.data.data[i].q_data.data))["no"].replace(/(^0+)/, "");
-        //     }
-        //     else {
-        //       inform.q_type = JSON.parse(String.fromCharCode(...response.data.data[i].q_data.data))["no"].replace(/(^0+)/, "");
-        //     }
-        //     this.questions[i] = inform
-        //   }
-        // }
       })
       .catch(error => {
         console.log(error.response)

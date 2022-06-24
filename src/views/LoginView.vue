@@ -37,15 +37,16 @@
             <span class="check-text">아이디 저장</span>
           </div>
 
-          <v-divider class="login-line"></v-divider>
+          <!-- <v-divider class="login-line"></v-divider> -->
 
           <v-card-actions class="login-action-set">
             <v-layout justify-center>
               <v-btn
+                disabled
                 text
                 class="login-sign-btn"
                 @click="Sign()"
-              >회원가입</v-btn>
+              ></v-btn>
             </v-layout>
           </v-card-actions>
         </v-form>
@@ -67,37 +68,79 @@ export default {
     this.initialize()
   },
   methods: {
-    Login() {
+    async Login() {
       const config = {
+        method: 'get',
+        url: 'http://49.50.172.137:3000/api/members?id=' + this.id
+      }
+
+      const configLogin = {
         method: 'get',
         url: 'http://49.50.172.137:3000/api/members/login?id=' + this.id + '&pw=' + this.pw
       }
 
       const vm = this;
-      axios(config)
+      await axios(config)
       .then(function (response) {
-        console.log(JSON.stringify(response.data));
-        if (response.data.data == "success") {
-          localStorage.setItem("Id", vm.id);
-          vm.$router.push('/main')
+        console.log(response.data.data)
+        if (response.data.data.length > 0) {
+          axios(configLogin)
+          .then(function (response) {
+            console.log(JSON.stringify(response.data));
+            if (response.data.data == "success") {
+              localStorage.setItem("Id", vm.id);
+              vm.$router.push('/main')
 
-          console.log(vm.checkbox)
-          if (vm.checkbox != '') {
-            localStorage.setItem("check", vm.id);
-          }
-          else {
-            localStorage.removeItem("check");
-          }
+              if (vm.checkbox != '') {
+                localStorage.setItem("check", vm.id);
+              }
+              else {
+                localStorage.removeItem("check");
+              }
+            }
+            else {
+              vm.id = ""
+              vm.pw = ""
+            }
+          })
         }
         else {
-          Object.assign(vm.$data, vm.$options.data())
+          vm.id = ""
+          vm.pw = ""
         }
       })
-      .catch(function (error) {
-        console.log(error);
-        alert('아이디 또는 비밀번호가 틀렸습니다.')
-        Object.assign(vm.$data, vm.$options.data())
-      });      
+      .catch(function (err) {
+
+      })
+      // const config = {
+      //   method: 'get',
+      //   url: 'http://49.50.172.137:3000/api/members/login?id=' + this.id + '&pw=' + this.pw
+      // }
+
+      // const vm = this;
+      // axios(config)
+      // .then(function (response) {
+      //   console.log(JSON.stringify(response.data));
+      //   if (response.data.data == "success") {
+      //     localStorage.setItem("Id", vm.id);
+      //     vm.$router.push('/main')
+
+      //     if (vm.checkbox != '') {
+      //       localStorage.setItem("check", vm.id);
+      //     }
+      //     else {
+      //       localStorage.removeItem("check");
+      //     }
+      //   }
+      //   else {
+      //     alert('아이디 또는 비밀번호가 틀렸습니다.')
+      //   }
+      // })
+      // .catch(function (error) {
+      //   //console.log(error);
+      //   alert('아이디 또는 비밀번호가 틀렸습니다.')
+      //   //Object.assign(vm.$data, vm.$options.data())
+      // });      
     },
     Sign() {
       this.$router.push('/sign');

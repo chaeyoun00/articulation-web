@@ -160,7 +160,7 @@ export default {
           'resId': this.resId.toString(),
           'userId': this.user[0].u_id,
           'type': 'Geriatric_Depression',
-          'totalQuestionNum': '1',
+          'totalQuestionNum': '2',
           'answers': '[' + answer + ']', 
         }
         console.log(data)

@@ -73,15 +73,43 @@
           </tr>
          </thead>
          <tbody v-for="i in questions.length" v-bind:key="i">
-          <tr v-if="qtype[i - 1] !== 'word' && i != questions.length">
+          <tr class="cmpt-table-content">
             <td>{{ num[i - 1] }}</td>
-            <td>{{ answers[i - 1] }}</td>
-            <td>{{ questions[i - 1].test }}</td>
+            <td style="background-color: #F5F5F5; width: 279px">{{ answers[i - 1] }}</td>
+            <td style="width: 279px">{{ cmptAnswer[i - 1] }}</td>
+            <td v-if="questions[i - 1].questiontype === '1'" style="width: 70px">
+              {{check[i - 1]}}
+            </td><td v-else class="cmpt-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '2'" style="width: 70px">
+              {{check[i - 1]}}
+            </td><td v-else class="cmpt-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '3'" style="width: 70px">
+              {{check[i - 1]}}
+            </td><td v-else class="cmpt-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '4'" style="width: 70px">
+              {{check[i - 1]}}
+            </td><td v-else class="cmpt-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '5'" style="width: 70px">
+              {{check[i - 1]}}
+            </td><td v-else class="cmpt-table-blank"></td>
+            <td v-if="questions[i - 1].questiontype === '6'" style="width: 70px">
+              {{check[i - 1]}}
+            </td><td v-else class="cmpt-table-blank"></td>
           </tr>
-          <tr v-else-if="qtype[i - 1] !== 'word'">
-            <td>{{ num[i - 1] }}</td>
-            <td>{{ answers[i - 1] }}</td>
-            <td>{{ questions[i - 1].test }}</td>
+         </tbody>
+         <tbody>
+          <tr class="cmpt-table-content1">
+            <td class="cmpt-table-end" colspan="3">문장유형 별 합계</td>
+            <td>{{score[0]}} / {{scores[0]}}</td>
+            <td>{{score[1]}} / {{scores[1]}}</td>
+            <td>{{score[2]}} / {{scores[2]}}</td>
+            <td>{{score[3]}} / {{scores[3]}}</td>
+            <td>{{score[4]}} / {{scores[4]}}</td>
+            <td>{{score[5]}} / {{scores[5]}}</td>
+          </tr>
+          <tr>
+            <td class="cmpt-table-end" colspan="3" style="border-radius: 0px 0px 0px 21px"> 총점</td>
+            <td class="cmpt-table-end1" colspan="6" style="border-radius: 0px 0px 21px 0px">{{totalscore}} / {{totalquestion}}</td>
           </tr>
          </tbody>
       </table>
@@ -91,7 +119,8 @@
       <v-btn
         depressed
         class="submit-btn"
-      >저장</v-btn>
+        @click="ToTest()"
+      >확인</v-btn>
     </v-layout>
   </v-container>
 </template>
@@ -106,12 +135,15 @@ export default {
       u_id: '',
     }],
     resId: '',
-    picked: [],
+    totalquestion: '',
+    totalscore: '',
     questions: [],
     num: [],
-    qtype: [],
     answers: [],
     cmptAnswer: [],
+    check: [],
+    scores: [0, 0, 0, 0, 0, 0],
+    score: [0, 0, 0, 0, 0, 0],
   }),
   mounted () {
     this.initialize()
@@ -119,8 +151,7 @@ export default {
   methods: {
     ToTest() {
       Object.assign(this.$data, this.$options.data())
-      //this.$router.push('/main')
-      this.$router.go(-1)
+      this.$router.push('/language')
     },
     async initialize () {
       await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
@@ -148,32 +179,46 @@ export default {
         for (let i = 0; i < response.data.data.length; i++) {
           this.cmptAnswer[i] = response.data.data[i].a_answer.replace("  ", " ")
         }
-        console.log(this.cmptAnswer)
+        // console.log(this.cmptAnswer)
       })
       .catch(error => {
         console.log(error.response)
       })
 
-      await axios.get('/api/questions/question?type=CMPT')
+      await axios.get('/api/questions/noimage?type=CMPT')
       .then(response => {
         this.questions = response.data.data
-        let contents;
-        let j = 0;
+
+        let sentence;
+        this.totalquestion = 0;
+        this.totalscore = 0;
         for (let i = 0; i < this.questions.length; i++) {
-          this.questions[i].q_body = this.questions[i].q_body.replace(/,/g, " ")
-          contents = iconv.decode(this.questions[i].q_data.data, "UTF-8")
-          this.qtype[i] = JSON.parse(contents)["type_of_question"]
-          this.answers[i] = JSON.parse(contents)["answer"].replace(/,/g, " ")
-          if (this.qtype[i] === "ex") {
-            this.num[i] = "P" + JSON.parse(contents)["no"].replace(/(^0+)/, "");
-          }
-          else {
-            this.num[i] = JSON.parse(contents)["no"].replace(/(^0+)/, "");
+          sentence = iconv.decode(this.questions[i].q_data.data, "UTF-8")
+          if (JSON.parse(sentence)["type_of_question"] === "word") {
+            this.questions.splice(i, 1);
+            i -= 1;
+            continue;
           }
 
-          if (this.qtype[i] !== "word") {
-            this.questions[i].test = this.cmptAnswer[j]
-            j += 1
+          this.answers[i] = JSON.parse(sentence)["answer"].replace(/,/g, " ")
+          if (this.answers[i] == this.cmptAnswer[i]) {
+            this.check[i] = "1"
+          }
+          else this.check[i] = "0"
+
+          this.questions[i].questiontype = String.fromCharCode(...[this.questions[i].q_data3.data[3]])
+          if (JSON.parse(sentence)["type_of_question"] === "ex") {
+            this.num[i] = "P" + JSON.parse(sentence)["no"].replace(/(^0+)/, "");
+          }
+          else {
+            this.num[i] = JSON.parse(sentence)["no"].replace(/(^0+)/, "");
+            this.scores[this.questions[i].questiontype - 1] += 1
+            this.totalquestion += 1
+
+            if (this.check[i] === "1") {
+              this.score[this.questions[i].questiontype - 1] += 1;
+              this.totalscore += 1;
+            }
           }
         }
       })
@@ -212,7 +257,7 @@ thead.cmpt-table-header {
   background-color: #E8E8E8;
   color: #678FFF;
   font-family: 'Noto Sans KR Medium';
-  font-size: 18px;
+  font-size: 16px;
   letter-spacing: 0px;
   text-align: center;
   height: 68px;
@@ -222,7 +267,7 @@ td.cmpt-table-header1 {
   background-color: #E8E8E8;
   color: #678FFF;
   font-family: 'Noto Sans KR Medium';
-  font-size: 18px;
+  font-size: 16px;
   letter-spacing: 0px;
   text-align: center;
   height: 50px;
@@ -232,50 +277,54 @@ td.cmpt-table-header2 {
   background-color: #FAFAFA;
   color: #678FFF;
   font-family: 'Noto Sans KR Medium';
-  font-size: 18px;
+  font-size: 16px;
   letter-spacing: 0px;
   text-align: center;
   height: 50px;
 }
 
-div.cmpt-radio {
-  display: inline-flex;
-  align-items: center
+td.cmpt-table-blank {
+  background-color: #F4F4F4;
 }
 
-.cmpt-radio input[type=radio] {
-  appearance: none;
+tr.cmpt-table-content {
+  color: #333333;
+  font-family: 'Noto Sans KR Medium';
+  font-size: 16px;
+  letter-spacing: 0px;
+  text-align: center;
+  height: 60px;
+  border-bottom: 1px solid #C9C9C9;
 }
 
-.cmpt-radio input[type=radio] {
-  display: inline;
-  width: 25px;
-  height: 25px;
-  margin-top: 8px;
-  border-radius: 50%;
-  border: 1px solid #E8E8E8;
-  margin-left: 2px;
+tr.cmpt-table-content1 {
+  color: #333333;
+  font-family: 'Noto Sans KR Medium';
+  font-size: 16px;
+  letter-spacing: 0px;
+  text-align: center;
+  height: 60px;
+  border-bottom: 1px solid #C9C9C9;
 }
 
-.cmpt-radio input[type=radio]:checked {
-  appearance: none;
+td.cmpt-table-end {
+  background-color: #E8E8E8;
+  color: #333333;
+  font-family: 'Noto Sans KR Medium';
+  font-size: 16px;
+  letter-spacing: 0px;
+  text-align: center;
+  height: 60px;
 }
 
-.cmpt-radio input[type=radio]:checked {
-  width: 25px;
-  height: 25px;
-  border: 1px solid #707070;
-  border-radius: 50%;
-  background-color: #707070;
+td.cmpt-table-end1 {
+  background-color: #F4F4F4;
+  color: #333333;
+  font-family: 'Noto Sans KR Medium';
+  font-size: 16px;
+  letter-spacing: 0px;
+  text-align: center;
+  height: 60px;
 }
 
-.cmpt-audio {
-  width: 136px;
-}
-
-.cmpt-audio::-webkit-media-controls-panel {
-  background-color: #FAFAFA;
-  padding-left: 0px;
-  padding-right: 0px;
-}
 </style>
