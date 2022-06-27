@@ -78,25 +78,6 @@
               rules="required"
             >
               <v-row class="input-label">
-                <p>검사 타입</p>
-                <p class="require-label">*</p>
-              </v-row>
-              <v-select
-                v-model="u_type"
-                label="검사 타입 선택"
-                :error-messages="errors"
-                :items="items"
-                solo
-                flat
-                class="reservationtype"
-              ></v-select>
-            </validation-provider>
-
-            <validation-provider
-              v-slot="{ errors }"
-              rules="required"
-            >
-              <v-row class="input-label">
                 <p>검사 일시</p>
                 <p class="require-label">*</p>
               </v-row>
@@ -169,7 +150,7 @@ export default {
       const data = {
         'userId': this.u_id,
         'resName': this.u_name,
-        'type': this.u_type,
+        'type': 'Language',
         'resPhone': this.u_telephone,
         'date': this.u_date
       };

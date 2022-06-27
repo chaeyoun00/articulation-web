@@ -3,13 +3,13 @@
     <v-layout class="back-form">
       <v-btn 
         text
-        @click="ToTest()"
+        @click="toTest()"
       ><v-icon size="50px" color="#7498FF">arrow_back_ios</v-icon>
       </v-btn>
     </v-layout>
 
     <v-layout justify-center column class="patient-card">
-      <v-card class="patient-inform" style="width: 1044px">
+      <v-card class="patient-inform" style="width: 1044px; margin-bottom: 50px">
         <v-card-text>
           <table class="patient-table">
             <tr class="patient-table-header">
@@ -48,6 +48,15 @@
         </v-card-text>
       </v-card>
 
+      <v-select
+        solo
+        flat
+        class="date-select"
+        :label="latest"
+        :items="date"
+        @change="handleChange"
+      >
+      </v-select>
     </v-layout>
 
     <v-divider></v-divider>
@@ -87,7 +96,7 @@
       <v-btn
         depressed
         class="submit-btn"
-        @click="ToTest()"
+        @click="toTest()"
       >확인</v-btn>
     </v-layout>
   </v-container>
@@ -109,21 +118,25 @@ export default {
     num: [],
     qtype: [],
     comAnswers: [],
+    date: [],
+    latest:''
   }),
   mounted () {
     this.initialize()
   },
   methods: {
-    ToTest() {
+    toTest() {
       Object.assign(this.$data, this.$options.data())
       this.$router.push('/language')
     },
     async initialize () {
       await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
       .then(response => {
-        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        this.resId = response.data.data.e_id;
-        console.log(this.resId)
+        this.resId = response.data.data[response.data.data.length - 1].e_id;
+        for (let i = 0; i < response.data.data.length; i++) {
+          this.date.push(response.data.data[i].e_date);
+        }
+        this.latest = this.date[this.date.length - 1]
       })
       .catch(error => {
         console.log(error.response)
@@ -144,8 +157,67 @@ export default {
         this.comAnswers = response.data.data[0].lg_answer.split(',').splice(1)
       })
       .catch(error => {
-        alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
-        this.$router.go(-1)
+        this.comAnswers = [];
+      })
+
+      await axios.get('/api/questions/noimage?type=SCT-COM')
+      .then(response => {
+        this.questions = response.data.data
+        //console.log(this.questions)
+
+        let j = 0
+        this.count = 0;
+        this.score = 0;
+        for (let i = 0; i < this.questions.length; i++) {
+          this.questions[i].q_body = this.questions[i].q_body.replace(/,/g, " ")
+          this.questions[i].q_data = String.fromCharCode(...this.questions[i].q_data.data)
+          this.qtype[i] = JSON.parse(this.questions[i].q_data)["type_of_question"]
+          if (this.qtype[i] === "ex") {
+            this.num[i] = "P" + JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
+            this.questions[i].answers = this.comAnswers[j]
+            if (JSON.parse(this.questions[i].q_data)["answer"] === this.comAnswers[j]) {
+              this.questions[i].score = "1";
+            }
+            else {
+              this.questions[i].score = "0"
+            }
+            j += 1
+          }
+          else if (this.qtype[i] === "qt") {
+            this.count += 1;
+            this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
+            this.questions[i].answers = this.comAnswers[j]
+            if (JSON.parse(this.questions[i].q_data)["answer"] === this.comAnswers[j]) {
+              this.questions[i].score = "1";
+              this.score += 1
+            }
+            else {
+              this.questions[i].score = "0"
+            }
+            j += 1
+          }
+        }
+
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+    },
+    async handleChange(event) {
+      await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient + '&date=' + event)
+      .then(response => {
+        this.resId = response.data.data[0].e_id;
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+      await axios.get('/api/languageSummary?type=SCT-COM&userId=' + this.user[0].u_id + '&resId=' + this.resId)
+      .then(response => {
+        this.comAnswers = response.data.data[0].lg_answer.split(',').splice(1)
+      })
+      .catch(error => {
+        this.comAnswers = [];
       })
 
       await axios.get('/api/questions/noimage?type=SCT-COM')
@@ -256,5 +328,12 @@ td.com-table-end2 {
   text-align: center;
   height: 68px;
   border-radius: 0px 0px 21px 0px;
+}
+
+.date-select.theme--light.v-text-field--solo > .v-input__control > .v-input__slot {
+  width: 453px;
+  height: 49px;
+  border: 2px solid #E2E2E2;
+  border-radius: 8px;
 }
 </style>

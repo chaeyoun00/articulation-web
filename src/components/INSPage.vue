@@ -3,13 +3,13 @@
     <v-layout class="back-form">
       <v-btn 
         text
-        @click="ToTest()"
+        @click="toTest()"
       ><v-icon size="50px" color="#7498FF">arrow_back_ios</v-icon>
       </v-btn>
     </v-layout>
 
     <v-layout justify-center column class="patient-card">
-      <v-card class="patient-inform" style="width: 1044px">
+      <v-card class="patient-inform" style="width: 1044px; margin-bottom: 50px">
         <v-card-text>
           <table class="patient-table">
             <tr class="patient-table-header">
@@ -48,6 +48,15 @@
         </v-card-text>
       </v-card>
 
+      <v-select
+        solo
+        flat
+        class="date-select"
+        :label="latest"
+        :items="date"
+        @change="handleChange"
+      >
+      </v-select>
     </v-layout>
 
     <v-divider></v-divider>
@@ -163,7 +172,7 @@
       <v-btn
         depressed
         class="submit-btn"
-        @click="ToTest()"
+        @click="toTest()"
       >확인</v-btn>
     </v-layout>
   </v-container>
@@ -189,12 +198,14 @@ export default {
     score: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     first: [],
     repeat: [],
+    date: [],
+    latest:''
   }),
   mounted () {
     this.initialize()
   },
   methods: {
-    ToTest() {
+    toTest() {
       Object.assign(this.$data, this.$options.data())
       this.$router.push('/language')
     },
@@ -202,7 +213,11 @@ export default {
       await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        this.resId = response.data.data.e_id;
+        this.resId = response.data.data[response.data.data.length - 1].e_id;
+        for (let i = 0; i < response.data.data.length; i++) {
+          this.date.push(response.data.data[i].e_date);
+        }
+        this.latest = this.date[this.date.length - 1]
         //console.log(this.resId)
       })
       .catch(error => {
@@ -211,8 +226,6 @@ export default {
 
       await axios.get('/api/examUsers?id=' + this.$route.query.patient)
       .then(response => {
-        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        //console.log(response.data.data)
         this.user = response.data.data
       })
       .catch(error => {
@@ -231,8 +244,7 @@ export default {
         //console.log(this.insAnswers)
       })
       .catch(error => {
-        alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
-        this.$router.go(-1)
+        this.insAnswers = [];
       })
 
       await axios.get('/api/questions/noimage?type=SCT-INS')
@@ -280,6 +292,7 @@ export default {
         
         this.firstscore = 0
         this.totalscore = 0
+        this.score= [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         array.push(response.data.data[0].a_question_id)
         for (let i = 1; i < response.data.data.length; i++) {
           var top = array[array.length - 1]
@@ -329,7 +342,117 @@ export default {
         //console.log(this.first)
       })
       .catch(error => {
-        //console.log(error.response)
+        // console.log(error.response)
+      })
+    },
+    async handleChange(event) {
+      await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient + '&date=' + event)
+      .then(response => {
+        this.resId = response.data.data[0].e_id;
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+      await axios.get('/api/languageSummary?type=SCT-INS&userId=' + this.user[0].u_id + '&resId=' + this.resId)
+      .then(response => {
+        this.insAnswers = response.data.data[0].lg_answer.split(',').splice(1)
+      })
+      .catch(error => {
+        this.insAnswers = [];
+      })
+
+      await axios.get('/api/questions/noimage?type=SCT-INS')
+      .then(response => {
+        this.questions = response.data.data
+
+        this.count = 0
+        for (let i = 0; i < this.questions.length; i++) {
+          this.questions[i].q_body = this.questions[i].q_body.replace(/,/g, " ")
+          this.questions[i].q_data = String.fromCharCode(...this.questions[i].q_data.data)
+          this.qtype[i] = JSON.parse(this.questions[i].q_data)["type_of_question"]
+          if (this.qtype[i] === "word") {
+            this.questions.splice(i, 1);
+            i -= 1;
+            continue;
+          }
+
+          this.questions[i].questiontype = String.fromCharCode(...[this.questions[i].q_data3.data[3]])
+          if (this.qtype[i] === "ex") {
+            this.num[i] = "P" + JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
+          }
+          else if (this.qtype[i] === "qt") {
+            this.count += 1
+            this.num[i] = JSON.parse(this.questions[i].q_data)["no"].replace(/(^0+)/, "");
+          }
+          if (JSON.parse(this.questions[i].q_data)["answer"] === this.insAnswers[i]) {
+            this.questions[i].score = "1";
+          }
+          else {
+            this.questions[i].score = "0"
+          }
+        }
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+      await axios.get('/api/answerPapers?type=SCT-INS&userId=' + this.user[0].u_id + '&examId=' + this.resId)
+      .then(response => {
+        let j = 0;
+        let array = [];
+        
+        this.first = [];
+        this.repeat = [];
+        this.firstscore = 0
+        this.totalscore = 0
+        this.score= [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        array.push(response.data.data[0].a_question_id)
+        for (let i = 1; i < response.data.data.length; i++) {
+          var top = array[array.length - 1]
+          if (top !== response.data.data[i].a_question_id) {
+            if (this.questions[j].score === "1") {
+              this.first.push("1")
+              if (this.qtype[j] === "qt") {
+                this.score[this.questions[j].questiontype * 2 - 2] += 1
+                this.firstscore += 1
+                this.totalscore += 1
+              }
+            }
+            else this.first.push("0")
+            this.repeat.push("")
+            j += 1
+
+            array.push(response.data.data[i].a_question_id)
+            if (i === response.data.data.length - 1) {
+              if (this.questions[j].score === "1") {
+              this.first.push("1")
+              if (this.qtype[j] === "qt") {
+                this.score[this.questions[j].questiontype * 2 - 2] += 1
+                this.firstscore += 1
+                this.totalscore += 1
+              }
+            }
+              else this.first.push("0")
+              this.repeat.push("")
+            }
+          }
+          else {
+            if (this.questions[j].score === "1") {
+              this.repeat.push("1")
+              if (this.qtype[j] === "qt") {
+                this.score[this.questions[j].questiontype * 2 - 1] += 1
+                this.totalscore += 1
+              }
+            }
+            else this.repeat.push("0")
+            this.first.push("")
+            j += 1
+          }
+        }        
+      })
+      .catch(error => {
+        //console.log(error)
       })
     }
   }
@@ -464,5 +587,12 @@ div.ins-radio {
   border: 1px solid #707070;
   border-radius: 50%;
   background-color: #707070;
+}
+
+.date-select.theme--light.v-text-field--solo > .v-input__control > .v-input__slot {
+  width: 453px;
+  height: 49px;
+  border: 2px solid #E2E2E2;
+  border-radius: 8px;
 }
 </style>

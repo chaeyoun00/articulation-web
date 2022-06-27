@@ -74,24 +74,6 @@
               ></v-text-field>
             </validation-provider>
 
-            <validation-provider
-              v-slot="{ errors }"
-              rules="required"
-            >
-              <v-row class="input-label">
-                <p>검사 타입</p>
-                <p class="require-label">*</p>
-              </v-row>
-              <v-select
-                v-model="reservation[0].e_type"
-                label="검사 타입 선택"
-                :error-messages="errors"
-                :items="items"
-                solo
-                flat
-                class="reservationtype"
-              ></v-select>
-            </validation-provider>
 
             <validation-provider
               v-slot="{ errors }"
@@ -175,7 +157,7 @@ export default {
         'id': this.reservation[0].e_id,
         'userId': this.reservation[0].e_user_id,
         'resName': this.reservation[0].e_res_name,
-        'type': this.reservation[0].e_type,
+        'type': 'Language',
         'resPhone': this.reservation[0].e_res_phone,
         'date': this.reservation[0].e_date
       };

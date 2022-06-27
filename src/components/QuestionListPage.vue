@@ -3,7 +3,7 @@
     <v-layout class="back-form">
       <v-btn 
         text
-        @click="ToTest()"
+        @click="toTest()"
       ><v-icon size="50px" color="#7498FF">arrow_back_ios</v-icon>
       </v-btn>
     </v-layout>
@@ -46,7 +46,7 @@ export default {
     this.initialize()
   },
   methods: {
-    ToTest() {
+    toTest() {
       Object.assign(this.$data, this.$options.data())
       this.$router.push('/paper')
     },

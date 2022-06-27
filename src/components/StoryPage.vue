@@ -3,13 +3,13 @@
     <v-layout class="back-form">
       <v-btn 
         text
-        @click="ToTest()"
+        @click="toTest()"
       ><v-icon size="50px" color="#7498FF">arrow_back_ios</v-icon>
       </v-btn>
     </v-layout>
 
     <v-layout justify-center column class="patient-card">
-      <v-card class="patient-inform">
+      <v-card class="patient-inform" style="width: 1044px; margin-bottom: 50px">
         <v-card-text>
           <table class="patient-table">
             <tr class="patient-table-header">
@@ -48,6 +48,15 @@
         </v-card-text>
       </v-card>
 
+      <v-select
+        solo
+        flat
+        class="date-select"
+        :label="latest"
+        :items="date"
+        @change="handleChange"
+      >
+      </v-select>
     </v-layout>
 
     <v-divider></v-divider>
@@ -91,7 +100,7 @@
       <v-btn
         depressed
         class="submit-btn"
-        @click="Save(), ToTest()"
+        @click="save(), toTest()"
       >저장</v-btn>
     </v-layout>
   </v-container>
@@ -109,12 +118,15 @@ export default {
     image: [],
     questions: [],
     storyAnswer: [],
+    date: [],
+    latest:'',
+    idList: [],
   }),
   mounted () {
     this.initialize()
   },
   methods: {
-    ToTest() {
+    toTest() {
       Object.assign(this.$data, this.$options.data())
       this.$router.push('/language')
     },
@@ -122,8 +134,11 @@ export default {
       await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        this.resId = response.data.data.e_id;
-        //console.log(this.resId)
+        this.resId = response.data.data[response.data.data.length - 1].e_id;
+        for (let i = 0; i < response.data.data.length; i++) {
+          this.date.push(response.data.data[i].e_date);
+        }
+        this.latest = this.date[this.date.length - 1]
       })
       .catch(error => {
         console.log(error.response)
@@ -131,8 +146,6 @@ export default {
 
       await axios.get('/api/examUsers?id=' + this.$route.query.patient)
       .then(response => {
-        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        //console.log(response.data.data)
         this.user = response.data.data
       })
       .catch(error => {
@@ -141,8 +154,6 @@ export default {
 
       await axios.get('/api/questions/noimage?type=Story_Telling')
       .then(response => {
-        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        //console.log(response.data.data)
         this.questions = response.data.data
         //console.log(String.fromCharCode(...this.questions[0].q_data.data).split("\"")[11])
       })
@@ -160,7 +171,7 @@ export default {
           var blobUrl = URL.createObjectURL(blob);
           audio = document.getElementById(this.questions[i].q_id)
           audio.src = blobUrl;
-          //console.log(audio)
+          this.idList.push(this.questions[i].q_id)
         }
         //console.log(this.audioURL)
       })
@@ -170,16 +181,14 @@ export default {
 
       await axios.get('/api/languageSummary?type=Story_Telling&userId=' + this.user[0].u_id + '&resId=' + this.resId)
       .then(response => {
-        console.log(response.data.data)
         this.storyAnswer = response.data.data;
         this.image = this.storyAnswer[0].lg_answer.slice(1, -1).split(',')
       })
       .catch(error => {
-        alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
-        this.$router.go(-1)
       })    
     },
-    Save() {
+    save() {
+      
       const data = {
         'id': this.storyAnswer[0].lg_summery_id,
         'answers': '[' + this.image + ']'
@@ -202,6 +211,57 @@ export default {
       .catch(function (error) {
         console.log(error);
       });
+    },
+    async handleChange(event) {
+      await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient + '&date=' + event)
+      .then(response => {
+        this.resId = response.data.data[0].e_id;
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+      await axios.get('/api/questions/noimage?type=Story_Telling')
+      .then(response => {
+        this.questions = response.data.data
+        //console.log(String.fromCharCode(...this.questions[0].q_data.data).split("\"")[11])
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/answerPapers?type=Story_Telling&examId=' + this.resId)
+      .then(response => {
+        var uint8;
+        var audio;
+        for (let j = 0; j < this.idList.length; j++) {
+          audio = document.getElementById(this.idList[j])
+          audio.src = '';
+        }
+        this.idList = [];
+
+        for (let i = 0; i < response.data.data.length; i++) {
+          uint8 = new Uint8Array(response.data.data[i].a_data.data);
+          var blob = new Blob([uint8], { type: 'audio' });
+          var blobUrl = URL.createObjectURL(blob);
+          audio = document.getElementById(this.questions[i].q_id)
+          audio.src = blobUrl;
+          this.idList.push(this.questions[i].q_id)
+        }
+        //console.log(this.audioURL)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+      await axios.get('/api/languageSummary?type=Story_Telling&userId=' + this.user[0].u_id + '&resId=' + this.resId)
+      .then(response => {
+        this.storyAnswer = response.data.data;
+        this.image = this.storyAnswer[0].lg_answer.slice(1, -1).split(',')
+      })
+      .catch(error => {
+        this.image = [];
+      })    
     }
   }
 }
@@ -274,5 +334,12 @@ audio {
 
 audio::-webkit-media-controls-panel { 
   background-color: #E8E8E8; 
+}
+
+.date-select.theme--light.v-text-field--solo > .v-input__control > .v-input__slot {
+  width: 453px;
+  height: 49px;
+  border: 2px solid #E2E2E2;
+  border-radius: 8px;
 }
 </style>

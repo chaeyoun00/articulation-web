@@ -3,13 +3,13 @@
     <v-layout class="back-form">
       <v-btn 
         text
-        @click="ToTest()"
+        @click="toTest()"
       ><v-icon size="50px" color="#7498FF">arrow_back_ios</v-icon>
       </v-btn>
     </v-layout>
 
     <v-layout justify-center column class="patient-card">
-      <v-card class="patient-inform">
+      <v-card class="patient-inform" style="width: 1044px; margin-bottom: 50px">
         <v-card-text>
           <table class="patient-table">
             <tr class="patient-table-header">
@@ -48,6 +48,15 @@
         </v-card-text>
       </v-card>
 
+      <v-select
+        solo
+        flat
+        class="date-select"
+        :label="latest"
+        :items="date"
+        @change="handleChange"
+      >
+      </v-select>
     </v-layout>
 
     <v-divider></v-divider>
@@ -119,7 +128,7 @@
       <v-btn
         depressed
         class="submit-btn"
-        @click="ToTest()"
+        @click="toTest()"
       >확인</v-btn>
     </v-layout>
   </v-container>
@@ -144,21 +153,25 @@ export default {
     check: [],
     scores: [0, 0, 0, 0, 0, 0],
     score: [0, 0, 0, 0, 0, 0],
+    date: [],
+    latest:''
   }),
   mounted () {
     this.initialize()
   },
   methods: {
-    ToTest() {
+    toTest() {
       Object.assign(this.$data, this.$options.data())
       this.$router.push('/language')
     },
     async initialize () {
       await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
       .then(response => {
-        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        this.resId = response.data.data.e_id;
-        //console.log(this.resId)
+        this.resId = response.data.data[response.data.data.length - 1].e_id;
+        for (let i = 0; i < response.data.data.length; i++) {
+          this.date.push(response.data.data[i].e_date);
+        }
+        this.latest = this.date[this.date.length - 1]
       })
       .catch(error => {
         console.log(error.response)
@@ -166,8 +179,6 @@ export default {
 
       await axios.get('/api/examUsers?id=' + this.$route.query.patient)
       .then(response => {
-        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        //console.log(response.data.data)
         this.user = response.data.data
       })
       .catch(error => {
@@ -182,7 +193,7 @@ export default {
         // console.log(this.cmptAnswer)
       })
       .catch(error => {
-        console.log(error.response)
+        this.cmptAnswer = [];
       })
 
       await axios.get('/api/questions/noimage?type=CMPT')
@@ -226,6 +237,74 @@ export default {
         console.log(error.response)
       })
 
+    },
+    async handleChange(event) {
+      await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient + '&date=' + event)
+      .then(response => {
+        this.resId = response.data.data[0].e_id;
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+      await axios.get('/api/answerPapers?type=CMPT&examId=' + this.resId)
+      .then(response => {
+        for (let i = 0; i < response.data.data.length; i++) {
+          this.cmptAnswer[i] = response.data.data[i].a_answer.replace("  ", " ")
+        }
+      })
+      .catch(error => {
+        this.cmptAnswer = [];
+      })
+
+      await axios.get('/api/questions/noimage?type=CMPT')
+      .then(response => {
+        console.log(response.data.data)
+        this.questions = response.data.data
+
+        let sentence;
+        this.totalquestion = 0;
+        this.totalscore = 0;
+        this.score = [0, 0, 0, 0, 0, 0]
+        if (this.cmptAnswer.length > 0) {
+          for (let i = 0; i < this.questions.length; i++) {
+            sentence = iconv.decode(this.questions[i].q_data.data, "UTF-8")
+            if (JSON.parse(sentence)["type_of_question"] === "word") {
+              this.questions.splice(i, 1);
+              i -= 1;
+              continue;
+            }
+
+            this.answers[i] = JSON.parse(sentence)["answer"].replace(/,/g, " ")
+            if (this.answers[i] == this.cmptAnswer[i]) {
+              this.check[i] = "1"
+            }
+            else this.check[i] = "0"
+
+            this.questions[i].questiontype = String.fromCharCode(...[this.questions[i].q_data3.data[3]])
+            if (JSON.parse(sentence)["type_of_question"] === "ex") {
+              this.num[i] = "P" + JSON.parse(sentence)["no"].replace(/(^0+)/, "");
+            }
+            else {
+              this.num[i] = JSON.parse(sentence)["no"].replace(/(^0+)/, "");
+              this.totalquestion += 1
+
+              if (this.check[i] === "1") {
+                this.score[this.questions[i].questiontype - 1] += 1;
+                this.totalscore += 1;
+              }
+            }
+          }
+        }
+        else {
+          this.check = [];
+          this.score = [];
+        }
+        
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
     }
   }
 }
@@ -327,4 +406,10 @@ td.cmpt-table-end1 {
   height: 60px;
 }
 
+.date-select.theme--light.v-text-field--solo > .v-input__control > .v-input__slot {
+  width: 453px;
+  height: 49px;
+  border: 2px solid #E2E2E2;
+  border-radius: 8px;
+}
 </style>

@@ -3,7 +3,7 @@
     <v-layout class="back-form">
       <v-btn 
         text
-        @click="ToTest()"
+        @click="toTest()"
       ><v-icon size="50px" color="#7498FF">arrow_back_ios</v-icon>
       </v-btn>
     </v-layout>
@@ -117,7 +117,7 @@
       <v-btn
         depressed
         class="submit-btn"
-        @click="Send(), ToTest()"
+        @click="Send(), toTest()"
       >완료</v-btn>
     </v-layout>
   </v-container>
@@ -140,7 +140,7 @@ export default {
     this.initialize()
   },
   methods: {
-    ToTest() {      
+    toTest() {      
       //this.$router.push('/main')
       this.$router.push('/cognitive')
     },

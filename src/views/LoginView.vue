@@ -82,7 +82,7 @@ export default {
       const vm = this;
       await axios(config)
       .then(function (response) {
-        console.log(response.data.data)
+        //console.log(response.data.data)
         if (response.data.data.length > 0) {
           axios(configLogin)
           .then(function (response) {

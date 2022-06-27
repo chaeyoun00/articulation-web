@@ -3,7 +3,7 @@
     <v-layout class="back-form">
       <v-btn 
         text
-        @click="ToTest()"
+        @click="toTest()"
       ><v-icon size="50px" color="#7498FF">arrow_back_ios</v-icon>
       </v-btn>
     </v-layout>
@@ -114,7 +114,7 @@
       <v-btn
         depressed
         class="submit-btn"
-        @click="Save(), ToTest()"
+        @click="save(), toTest()"
       >저장</v-btn>
     </v-layout>
   </v-container>
@@ -239,11 +239,11 @@ export default {
       document.getElementById('score4').innerText = this.score[3]
       document.getElementById('score5').innerText = this.score[0] + this.score[1] + this.score[2] + this.score[3]
     },
-    ToTest() {
+    toTest() {
       Object.assign(this.$data, this.$options.data())
       this.$router.push('/language')
     },
-    Save() {
+    save() {
       for (let i = 1; i <= this.questions.length; i++) {
         if (document.getElementById(i) === null) {
           this.picked[i] = "-1"

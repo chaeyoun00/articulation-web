@@ -3,7 +3,7 @@
     <v-layout class="back-form">
       <v-btn 
         text
-        @click="ToTest()"
+        @click="toTest()"
       ><v-icon size="50px" color="#7498FF">arrow_back_ios</v-icon>
       </v-btn>
     </v-layout>
@@ -99,7 +99,7 @@
       <v-btn
         depressed
         class="submit-btn"
-        @click="Save(), ToTest()"
+        @click="save(), toTest()"
       >저장</v-btn>
     </v-layout>
   </v-container>
@@ -123,7 +123,7 @@ export default {
     this.initialize()
   },
   methods: {
-    ToTest() {
+    toTest() {
       this.$router.push('/cognitive')
     },
     async initialize () {
@@ -151,7 +151,7 @@ export default {
         console.log(error.response)
       })
     },
-    Save () {
+    save () {
       const answer = [this.yes, this.no]
 
       if (this.flag === 1) {
