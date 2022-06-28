@@ -86,7 +86,11 @@ export default {
   },
   methods: {
     async initialize () {
-      await axios.get('/api/questions/noimage')
+      const config = {
+        method: 'get',
+        url: 'http://101.79.81.183:3000/api/questions/noimage'
+      }
+      await axios(config)
       .then(response => {
         for (let i = 0; i < response.data.data.length; i++) {
           if (response.data.data[i].q_type === this.types[0]) {
@@ -167,23 +171,6 @@ export default {
       .catch(err => {
         console.log(err)
       })
-      // for (let i = 0; i < this.types.length; i++) {
-      //   await axios.get('/api/questions/noimage?type=' + this.types[i])
-      //   .then(response => {
-      //     this.count[i] = response.data.data.length
-      //     this.valid[i] = 0
-      //     for (let j = 0; j < response.data.data.length; j++) {
-      //       if (response.data.data[j].isValid === 1) {
-      //         this.valid[i] += 1
-      //       }
-      //     }
-      //   })
-      //   .catch(error => {
-      //     console.log(error.response)
-      //   })
-      // }
-
-      // this.list = this.count
     },
     ToList(i) {
       this.$router.push({

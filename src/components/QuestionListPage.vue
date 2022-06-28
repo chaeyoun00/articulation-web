@@ -51,7 +51,11 @@ export default {
       this.$router.push('/paper')
     },
     async initialize() {
-      await axios.get('/api/questions/noimage?type=' + this.$route.query.data)
+      const config = {
+        method: 'get',
+        url: 'http://101.79.81.183:3000/api/questions/noimage?type=' + this.$route.query.data
+      }
+      await axios(config)
       .then(response => {
         this.lists = response.data.data
         for (let i = 0; i < this.lists.length; i++) {

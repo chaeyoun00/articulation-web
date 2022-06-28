@@ -155,7 +155,11 @@ export default {
         'date': this.u_date
       };
 
-      await axios.get('/api/examUsers?id=' + this.u_id)
+      const config = {
+        method: 'get',
+        url: 'http://101.79.81.183:3000/api/examUsers?id=' + this.u_id
+      }
+      await axios(config)
       .then(response => {
         this.users = response.data.data
         console.log(this.users)
@@ -163,8 +167,12 @@ export default {
       .catch(error => {
         console.log(error)
       })
-
-      await axios.get('/api/examReservations?userId=' + this.u_id + '&isValid=1')
+      
+      const config1 = {
+        method: 'get',
+        url: 'http://101.79.81.183:3000/api/examReservations?userId=' + this.u_id + '&isValid=1'
+      }
+      await axios(config1)
       .then(response => {
         if (response.data.data.length > 0 || this.users.length === 0) {
           alert("등록되지 않은 환자 또는 이미 예약된 환자입니다.")

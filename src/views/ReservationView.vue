@@ -160,16 +160,14 @@ export default {
   },
   methods: {
     initialize () {
-      axios.get('/api/examReservations')
+      const config = {
+        method: 'get',
+        url: 'http://101.79.81.183:3000/api/examReservations'
+      }
+      axios(config)
       .then(response => {
         //console.log(JSON.stringify(response.data));
         this.items = response.data.data.reverse()
-        // let j = 0;
-        // for (let i = response.data.data.length - 1; i >= 0; i--){
-        //   this.items[j] = response.data.data[i];
-        //   j++;
-        // }
-        //console.log(this.items)
       })
       .catch(error => {
         console.log(error.response)
@@ -184,7 +182,7 @@ export default {
     Delete(item) {
       var url = 'http://49.50.172.137:3000/api/examReservations?id=' + item.e_id
       
-      var config = {
+      const config = {
         method: 'delete',
         url: url,
         headers: {

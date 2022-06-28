@@ -160,7 +160,11 @@ export default {
         this.$router.push('/questionadd');
     },
     initialize () {
-      axios.get('/api/questions/noimage')
+      const config = {
+        method: 'get',
+        url: 'http://101.79.81.183:3000/api/questions/noimage'
+      }
+      axios(config)
       .then(response => {
         //console.log(JSON.stringify(response.data.data));
         //console.log(response.data.data)

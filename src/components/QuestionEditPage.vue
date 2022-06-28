@@ -149,7 +149,11 @@ export default {
   },
   methods: {
     initialize () {
-      axios.get('/api/questions?id=' + this.$route.query.data)
+      const config = {
+        method: 'get',
+        url: 'http://101.79.81.183:3000/api/questions?id=' + this.$route.query.data
+      }
+      axios(config)
       .then(response => {
         console.log(response.data.data[0])
         this.test = response.data.data[0].q_type

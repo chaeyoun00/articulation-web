@@ -83,7 +83,11 @@ export default {
   },
   methods: {
     initialize () {
-      axios.get('/api/examUsers')
+      const config = {
+        method: 'get',
+        url: 'http://101.79.81.183:3000/api/examUsers'
+      }
+      axios(config)
       .then(response => {
         //console.log(JSON.stringify(response.data));
         // this.items.push(response.data.data)

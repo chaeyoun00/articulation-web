@@ -219,7 +219,11 @@ export default {
       this.$router.push('/cognitive')
     },
     async initialize () {
-      await axios.get('/api/examUsers?id=' + this.$route.query.patient)
+      const config = {
+        method: 'get',
+        url: 'http://101.79.81.183:3000/api/examUsers?id=' + this.$route.query.patient
+      }
+      await axios(config)
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         //console.log(response.data.data)
@@ -231,7 +235,11 @@ export default {
 
       this.resId = this.$route.query.resId;
 
-      await axios.get('/api/recognitionSummary?type=IADL&resId=' + this.resId)
+      const config1 = {
+        method: 'get',
+        url: 'http://101.79.81.183:3000/api/recognitionSummary?type=IADL&resId=' + this.resId
+      }
+      await axios(config)
       .then(response => {
         if (response.data.data.length > 0) {
           this.picked = response.data.data[0].rs_answer.slice(1, -1).split(',')
