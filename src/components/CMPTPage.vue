@@ -212,10 +212,15 @@ export default {
           }
 
           this.answers[i] = JSON.parse(sentence)["answer"].replace(/,/g, " ")
-          if (this.answers[i] == this.cmptAnswer[i]) {
-            this.check[i] = "1"
+          if (this.cmptAnswer.length > 0) {
+              if (this.answers[i] == this.cmptAnswer[i]) {
+              this.check[i] = "1"
+            }
+            else this.check[i] = "0"
           }
-          else this.check[i] = "0"
+          else {
+            this.check[i] = ""
+          }
 
           this.questions[i].questiontype = String.fromCharCode(...[this.questions[i].q_data3.data[3]])
           if (JSON.parse(sentence)["type_of_question"] === "ex") {
@@ -249,9 +254,13 @@ export default {
 
       await axios.get('/api/answerPapers?type=CMPT&examId=' + this.resId)
       .then(response => {
-        for (let i = 0; i < response.data.data.length; i++) {
-          this.cmptAnswer[i] = response.data.data[i].a_answer.replace("  ", " ")
+        if (response.data.data.length > 0) {
+            for (let i = 0; i < response.data.data.length; i++) {
+            this.cmptAnswer[i] = response.data.data[i].a_answer.replace("  ", " ")
+          }
         }
+        else this.cmptAnswer = [];
+        
       })
       .catch(error => {
         this.cmptAnswer = [];
@@ -259,46 +268,45 @@ export default {
 
       await axios.get('/api/questions/noimage?type=CMPT')
       .then(response => {
-        console.log(response.data.data)
         this.questions = response.data.data
 
         let sentence;
         this.totalquestion = 0;
         this.totalscore = 0;
         this.score = [0, 0, 0, 0, 0, 0]
-        if (this.cmptAnswer.length > 0) {
-          for (let i = 0; i < this.questions.length; i++) {
-            sentence = iconv.decode(this.questions[i].q_data.data, "UTF-8")
-            if (JSON.parse(sentence)["type_of_question"] === "word") {
-              this.questions.splice(i, 1);
-              i -= 1;
-              continue;
-            }
+        console.log(this.cmptAnswer)
+        for (let i = 0; i < this.questions.length; i++) {
+          sentence = iconv.decode(this.questions[i].q_data.data, "UTF-8")
+          if (JSON.parse(sentence)["type_of_question"] === "word") {
+            this.questions.splice(i, 1);
+            i -= 1;
+            continue;
+          }
 
-            this.answers[i] = JSON.parse(sentence)["answer"].replace(/,/g, " ")
-            if (this.answers[i] == this.cmptAnswer[i]) {
+          this.answers[i] = JSON.parse(sentence)["answer"].replace(/,/g, " ")
+          if (this.cmptAnswer.length > 0) {
+              if (this.answers[i] == this.cmptAnswer[i]) {
               this.check[i] = "1"
             }
             else this.check[i] = "0"
+          }
+          else {
+            this.check[i] = ""
+          }
 
-            this.questions[i].questiontype = String.fromCharCode(...[this.questions[i].q_data3.data[3]])
-            if (JSON.parse(sentence)["type_of_question"] === "ex") {
-              this.num[i] = "P" + JSON.parse(sentence)["no"].replace(/(^0+)/, "");
-            }
-            else {
-              this.num[i] = JSON.parse(sentence)["no"].replace(/(^0+)/, "");
-              this.totalquestion += 1
+          this.questions[i].questiontype = String.fromCharCode(...[this.questions[i].q_data3.data[3]])
+          if (JSON.parse(sentence)["type_of_question"] === "ex") {
+            this.num[i] = "P" + JSON.parse(sentence)["no"].replace(/(^0+)/, "");
+          }
+          else {
+            this.num[i] = JSON.parse(sentence)["no"].replace(/(^0+)/, "");
+            this.totalquestion += 1
 
-              if (this.check[i] === "1") {
-                this.score[this.questions[i].questiontype - 1] += 1;
-                this.totalscore += 1;
-              }
+            if (this.check[i] === "1") {
+              this.score[this.questions[i].questiontype - 1] += 1;
+              this.totalscore += 1;
             }
           }
-        }
-        else {
-          this.check = [];
-          this.score = [];
         }
         
       })

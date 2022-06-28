@@ -76,9 +76,9 @@ var axios = require('axios');
 
 export default {
   data: () => ({
-    count: [],
-    list: [],
-    valid: [],
+    count: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    list: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    valid: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     types: ['SCT-AP', 'SCT-INS', 'SCT-COM', 'Story_Telling', 'Explain_Picture', 'Explain_Procedure', 'COWAT', 'ANT', 'SPT-priming', 'SPT-completion', 'CMPT'],
   }),
   mounted () {
@@ -86,23 +86,104 @@ export default {
   },
   methods: {
     async initialize () {
-      for (let i = 0; i < this.types.length; i++) {
-        await axios.get('/api/questions/noimage?type=' + this.types[i])
-        .then(response => {
-          this.count[i] = response.data.data.length
-          this.valid[i] = 0
-          for (let j = 0; j < response.data.data.length; j++) {
-            if (response.data.data[j].isValid === 1) {
-              this.valid[i] += 1
+      await axios.get('/api/questions/noimage')
+      .then(response => {
+        for (let i = 0; i < response.data.data.length; i++) {
+          if (response.data.data[i].q_type === this.types[0]) {
+            this.count[0] += 1;
+            if (response.data.data[i].isValid === 1) {
+              this.valid[0] += 1
             }
           }
-        })
-        .catch(error => {
-          console.log(error.response)
-        })
-      }
+          else if (response.data.data[i].q_type === this.types[1]) {
+            this.count[1] += 1;
+            if (response.data.data[i].isValid === 1) {
+              this.valid[1] += 1
+            }
+          }
+          else if (response.data.data[i].q_type === this.types[2]) {
+            this.count[2] += 1;
+            if (response.data.data[i].isValid === 1) {
+              this.valid[2] += 1
+            }
+          }
+          else if (response.data.data[i].q_type === this.types[3]) {
+            this.count[3] += 1;
+            if (response.data.data[i].isValid === 1) {
+              this.valid[3] += 1
+            }
+          }
+          else if (response.data.data[i].q_type === this.types[4]) {
+            this.count[4] += 1;
+            if (response.data.data[i].isValid === 1) {
+              this.valid[4] += 1
+            }
+          }
+          else if (response.data.data[i].q_type === this.types[5]) {
+            this.count[5] += 1;
+            if (response.data.data[i].isValid === 1) {
+              this.valid[5] += 1
+            }
+          }
+          else if (response.data.data[i].q_type === this.types[6]) {
+            this.count[6] += 1;
+            if (response.data.data[i].isValid === 1) {
+              this.valid[6] += 1
+            }
+          }
+          else if (response.data.data[i].q_type === this.types[7]) {
+            this.count[7] += 1;
+            if (response.data.data[i].isValid === 1) {
+              this.valid[7] += 1
+            }
+          }
+          else if (response.data.data[i].q_type === this.types[8]) {
+            this.count[8] += 1;
+            if (response.data.data[i].isValid === 1) {
+              this.valid[8] += 1
+            }
+          }
+          else if (response.data.data[i].q_type === this.types[9]) {
+            this.count[9] += 1;
+            if (response.data.data[i].isValid === 1) {
+              this.valid[9] += 1
+            }
+          }
+          else if (response.data.data[i].q_type === this.types[10]) {
+            this.count[10] += 1;
+            if (response.data.data[i].isValid === 1) {
+              this.valid[10] += 1
+            }
+          }
+          else if (response.data.data[i].q_type === this.types[11]) {
+            this.count[11] += 1;
+            if (response.data.data[i].isValid === 1) {
+              this.valid[11] += 1
+            }
+          }
+        }
+        this.list = this.count
+      })
+      .catch(err => {
+        console.log(err)
+      })
+      // for (let i = 0; i < this.types.length; i++) {
+      //   await axios.get('/api/questions/noimage?type=' + this.types[i])
+      //   .then(response => {
+      //     this.count[i] = response.data.data.length
+      //     this.valid[i] = 0
+      //     for (let j = 0; j < response.data.data.length; j++) {
+      //       if (response.data.data[j].isValid === 1) {
+      //         this.valid[i] += 1
+      //       }
+      //     }
+      //   })
+      //   .catch(error => {
+      //     console.log(error.response)
+      //   })
+      // }
 
-      this.list = this.count
+      // this.list = this.count
     },
     ToList(i) {
       this.$router.push({

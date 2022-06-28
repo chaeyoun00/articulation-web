@@ -58,37 +58,70 @@
             </g>
             </svg>
             </v-btn>
-            <v-btn @click="Delete(item)" text style="margin-top: 16px;width: 31px">
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-              viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
-            <g id="그룹_1990" transform="translate(-1633.733 -137)">
-              <path id="패스_1947_00000137850632916346278610000016535117037519291058_" class="st0" d="M1762.4,159.5h254.7
-                c58.6,0,106.1,69.7,106.1,155.7v155.7c0,86-47.5,155.7-106.1,155.7h-254.7c-58.6,0-106.1-69.7-106.1-155.7V315.2
-                C1656.2,229.2,1703.7,159.5,1762.4,159.5z"/>
-            </g>
-            <g id="그룹_1987" transform="translate(7.036 6.82)">
-              <g>
-                <defs>
-                  <rect id="SVGID_1_" x="114.3" y="111.4" width="269.4" height="275.6"/>
-                </defs>
-                <clipPath id="SVGID_00000044153524365137194240000000463002274277508538_">
-                  <use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
-                </clipPath>
-                
-                  <g id="그룹_1986" transform="translate(0)" style="clip-path:url(#SVGID_00000044153524365137194240000000463002274277508538_);">
-                  <path id="패스_1967" class="st1" d="M367.7,168h-40.8v-41.6c-0.3-8.6-7.6-15.3-16.2-15H186.8c-8.6-0.3-15.9,6.4-16.2,15V168
-                    h-40.4c-8.4-0.3-15.5,6.3-15.9,14.7c0.3,8.4,7.4,15,15.9,14.7h16.4v171.4c0,10,8.2,18.1,18.2,18.2h169c10,0,18.1-8.2,18.2-18.2
-                    V197.4h15.9c8.4,0.3,15.5-6.3,15.9-14.7C383.3,174.3,376.2,167.7,367.7,168C367.8,168,367.8,168,367.7,168L367.7,168z
-                    M201.4,141.4c0.2-4.3,3.8-7.7,8.1-7.5h78.9c4.3-0.2,7.9,3.2,8.1,7.5v26.7h-95.1L201.4,141.4z M205.7,345.8
-                    c0,6.6-5.3,11.9-11.9,11.9s-11.9-5.3-11.9-11.9V213.8c0-6.6,5.3-11.9,11.9-11.9c6.6,0,11.9,5.3,11.9,11.9l0,0V345.8z
-                    M260.7,345.8c0,6.6-5.3,11.9-11.9,11.9s-11.9-5.3-11.9-11.9V213.8c0-6.6,5.3-11.9,11.9-11.9s11.9,5.3,11.9,11.9V345.8z
-                    M315.6,345.8c0,6.6-5.3,11.9-11.9,11.9c-6.6,0-11.9-5.3-11.9-11.9V213.8c0-6.6,5.3-11.9,11.9-11.9c6.6,0,11.9,5.3,11.9,11.9
-                    V345.8z"/>
+            <v-dialog
+              v-model="dialog"
+              persistent
+              max-width="290"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn v-bind="attrs" v-on="on" text style="margin-top: 16px;width: 31px">
+                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                  viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                <g id="그룹_1990" transform="translate(-1633.733 -137)">
+                  <path id="패스_1947_00000137850632916346278610000016535117037519291058_" class="st0" d="M1762.4,159.5h254.7
+                    c58.6,0,106.1,69.7,106.1,155.7v155.7c0,86-47.5,155.7-106.1,155.7h-254.7c-58.6,0-106.1-69.7-106.1-155.7V315.2
+                    C1656.2,229.2,1703.7,159.5,1762.4,159.5z"/>
                 </g>
-              </g>
-            </g>
-            </svg>
-            </v-btn>
+                <g id="그룹_1987" transform="translate(7.036 6.82)">
+                  <g>
+                    <defs>
+                      <rect id="SVGID_1_" x="114.3" y="111.4" width="269.4" height="275.6"/>
+                    </defs>
+                    <clipPath id="SVGID_00000044153524365137194240000000463002274277508538_">
+                      <use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+                    </clipPath>
+                    
+                      <g id="그룹_1986" transform="translate(0)" style="clip-path:url(#SVGID_00000044153524365137194240000000463002274277508538_);">
+                      <path id="패스_1967" class="st1" d="M367.7,168h-40.8v-41.6c-0.3-8.6-7.6-15.3-16.2-15H186.8c-8.6-0.3-15.9,6.4-16.2,15V168
+                        h-40.4c-8.4-0.3-15.5,6.3-15.9,14.7c0.3,8.4,7.4,15,15.9,14.7h16.4v171.4c0,10,8.2,18.1,18.2,18.2h169c10,0,18.1-8.2,18.2-18.2
+                        V197.4h15.9c8.4,0.3,15.5-6.3,15.9-14.7C383.3,174.3,376.2,167.7,367.7,168C367.8,168,367.8,168,367.7,168L367.7,168z
+                        M201.4,141.4c0.2-4.3,3.8-7.7,8.1-7.5h78.9c4.3-0.2,7.9,3.2,8.1,7.5v26.7h-95.1L201.4,141.4z M205.7,345.8
+                        c0,6.6-5.3,11.9-11.9,11.9s-11.9-5.3-11.9-11.9V213.8c0-6.6,5.3-11.9,11.9-11.9c6.6,0,11.9,5.3,11.9,11.9l0,0V345.8z
+                        M260.7,345.8c0,6.6-5.3,11.9-11.9,11.9s-11.9-5.3-11.9-11.9V213.8c0-6.6,5.3-11.9,11.9-11.9s11.9,5.3,11.9,11.9V345.8z
+                        M315.6,345.8c0,6.6-5.3,11.9-11.9,11.9c-6.6,0-11.9-5.3-11.9-11.9V213.8c0-6.6,5.3-11.9,11.9-11.9c6.6,0,11.9,5.3,11.9,11.9
+                        V345.8z"/>
+                    </g>
+                  </g>
+                </g>
+                </svg>
+                </v-btn>
+              </template>
+              <v-card style="width: 300px; height: 174px; font-family: 'Noto Sans KR Medium';">
+                <v-card-title>
+                  예약 삭제
+                </v-card-title>
+                <v-card-text>정말로 삭제하시겠습니까?</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="#678FFF"
+                    text
+                    @click="Delete(item), dialog = false"
+                  >
+                    삭제
+                  </v-btn>
+                  <v-btn
+                    color="#678FFF"
+                    text
+                    @click="dialog = false"
+                  >
+                    취소
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+
+            </v-dialog>
+            
           </template>
           
         </v-data-table>
@@ -120,6 +153,7 @@ export default {
       { text: '수정/삭제', value: 'setting', sortable: false, align: 'center', width: 130 }
     ],
     items: [],
+    dialog: false,
   }),
   mounted () {
     this.initialize()

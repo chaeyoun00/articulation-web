@@ -105,12 +105,45 @@
               >
                 mdi-pencil
               </v-icon>
-              <v-icon
-                small
-                @click="Delete(item)"
+              <v-dialog
+                v-model="dialog"
+                persistent
+                max-width="290"
               >
-                mdi-delete
-              </v-icon>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    small
+                    class="mr-2"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    mdi-delete
+                  </v-icon>
+                </template>
+                <v-card style="width: 300px; height: 174px; font-family: 'Noto Sans KR Medium';">
+                  <v-card-title>
+                    환자 삭제
+                  </v-card-title>
+                  <v-card-text>정말로 삭제하시겠습니까?</v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="#678FFF"
+                      text
+                      @click="Delete(item), dialog = false"
+                    >
+                      삭제
+                    </v-btn>
+                    <v-btn
+                      color="#678FFF"
+                      text
+                      @click="dialog = false"
+                    >
+                      취소
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
             </template>
           </v-data-table>
         </v-layout>
@@ -155,6 +188,7 @@ export default {
     items: [],
     page: 1,
     pageCount: 0,
+    dialog: false,
   }),
   mounted () {
     this.initialize()
@@ -202,7 +236,6 @@ export default {
       .catch(function (error) {
         console.log(error);
       });
-
     },
     Edit(item) {
       this.$router.push({

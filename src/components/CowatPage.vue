@@ -9,7 +9,7 @@
     </v-layout>
 
     <v-layout justify-center column class="patient-card">
-      <v-card class="patient-inform">
+      <v-card class="patient-inform" style="width: 1044px; margin-bottom: 50px">
         <v-card-text>
           <table class="patient-table">
             <tr class="patient-table-header">
@@ -48,7 +48,15 @@
         </v-card-text>
       </v-card>
 
-      
+      <v-select
+        solo
+        flat
+        class="date-select"
+        :label="latest"
+        :items="date"
+        @change="handleChange"
+      >
+      </v-select>
     </v-layout>
 
     <v-divider></v-divider>
@@ -157,6 +165,7 @@
         depressed
         class="submit-btn"
         @click="save(), toTest()"
+        :disabled="validated == 1"
       >저장</v-btn>
     </v-layout>
   </v-container>
@@ -180,6 +189,10 @@ export default {
     text5: [],
     cowatAnswer: [],
     answers: [],
+    date: [],
+    latest:'',
+    idList: [],
+    validated: '',
   }),
   mounted () {
     this.initialize()
@@ -192,9 +205,11 @@ export default {
     async initialize () {
        await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
       .then(response => {
-        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        this.resId = response.data.data.e_id;
-        //console.log(this.resId)
+        this.resId = response.data.data[response.data.data.length - 1].e_id;
+        for (let i = 0; i < response.data.data.length; i++) {
+          this.date.push(response.data.data[i].e_date);
+        }
+        this.latest = this.date[this.date.length - 1]
       })
       .catch(error => {
         console.log(error.response)
@@ -202,8 +217,6 @@ export default {
 
       await axios.get('/api/examUsers?id=' + this.$route.query.patient)
       .then(response => {
-        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        //console.log(response.data.data)
         this.user = response.data.data
       })
       .catch(error => {
@@ -220,6 +233,7 @@ export default {
           var blobUrl = URL.createObjectURL(blob);
           audio = document.getElementById(i)
           audio.src = blobUrl;
+          this.idList.push(i)
         }
       })
       .catch(error => {
@@ -246,10 +260,10 @@ export default {
           this.text5 = this.answers[5].split(',')
           this.count[5] = this.text5.length
         }
+        this.validated = 0;
       })
       .catch(error => {
-        alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
-        this.$router.go(-1)
+        this.validated = 1;
       })
 
       document.getElementById('score0').innerText = this.count[0]
@@ -335,6 +349,79 @@ export default {
         else this.count[5] += 1
         document.getElementById('score5').innerText = this.count[5]
       }
+    },
+    async handleChange(event) {
+      this.text0 = [];
+      this.text1 = [];
+      this.text2 = [];
+      this.text3 = [];
+      this.text4 = [];
+      this.text5 = [];
+      this.count = [0, 0, 0, 0, 0, 0];
+
+      await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient + '&date=' + event)
+      .then(response => {
+        this.resId = response.data.data[0].e_id;
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+      await axios.get('/api/answerPapers?type=COWAT&examId=' + this.resId)
+      .then(response => {
+        var uint8;
+        var audio;
+        for (let j = 0; j < this.idList.length; j++) {
+          audio = document.getElementById(this.idList[j])
+          audio.src = '';
+        }
+        this.idList = [];
+
+        for (let i = 0; i < response.data.data.length; i++) {
+          uint8 = new Uint8Array(response.data.data[i].a_data.data);
+          var blob = new Blob([uint8], { type: 'audio' });
+          var blobUrl = URL.createObjectURL(blob);
+          audio = document.getElementById(i)
+          audio.src = blobUrl;
+          this.idList.push(i)
+        }
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+
+      await axios.get('/api/languageSummary?type=COWAT&userId=' + this.user[0].u_id + '&resId=' + this.resId)
+      .then(response => {
+        this.cowatAnswer = response.data.data
+        
+        if (this.cowatAnswer[0].lg_answer !== "") {
+          this.answers = this.cowatAnswer[0].lg_answer.slice(1, -1).split('|')
+
+          this.text0 = this.answers[0].split(',')
+          this.count[0] = this.text0.length
+          this.text1 = this.answers[1].split(',')
+          this.count[1] = this.text1.length
+          this.text2 = this.answers[2].split(',')
+          this.count[2] = this.text2.length
+          this.text3 = this.answers[3].split(',')
+          this.count[3] = this.text3.length
+          this.text4 = this.answers[4].split(',')
+          this.count[4] = this.text4.length
+          this.text5 = this.answers[5].split(',')
+          this.count[5] = this.text5.length
+        }
+        this.validated = 0;
+      })
+      .catch(error => {
+        this.validated = 1;
+      })
+
+      document.getElementById('score0').innerText = this.count[0]
+      document.getElementById('score1').innerText = this.count[1]
+      document.getElementById('score2').innerText = this.count[2]
+      document.getElementById('score3').innerText = this.count[3]
+      document.getElementById('score4').innerText = this.count[4]
+      document.getElementById('score5').innerText = this.count[5]
     }
   }
 }
@@ -474,5 +561,12 @@ td.cowat-table-header3 {
 
 .cowat-audio::-webkit-media-controls-current-time-display{
   display: none;
+}
+
+.date-select.theme--light.v-text-field--solo > .v-input__control > .v-input__slot {
+  width: 453px;
+  height: 49px;
+  border: 2px solid #E2E2E2;
+  border-radius: 8px;
 }
 </style>

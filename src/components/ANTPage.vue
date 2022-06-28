@@ -9,7 +9,7 @@
     </v-layout>
 
     <v-layout justify-center column class="patient-card">
-      <v-card class="patient-inform" style="width: 1044px">
+      <v-card class="patient-inform" style="width: 1044px; margin-bottom: 50px">
         <v-card-text>
           <table class="patient-table">
             <tr class="patient-table-header">
@@ -47,7 +47,16 @@
           </table>
         </v-card-text>
       </v-card>
-
+      
+      <v-select
+        solo
+        flat
+        class="date-select"
+        :label="latest"
+        :items="date"
+        @change="handleChange"
+      >
+      </v-select>
     </v-layout>
 
     <v-divider></v-divider>
@@ -115,6 +124,7 @@
         depressed
         class="submit-btn"
         @click="save(), toTest()"
+        :disabled="validated == 1"
       >저장</v-btn>
     </v-layout>
   </v-container>
@@ -136,6 +146,10 @@ export default {
     antAnswer: [],
     score: [0, 0, 0, 0],
     scores: [0, 0, 0, 0],
+    date: [],
+    latest:'',
+    idList: [],
+    validated: '',
   }),
   mounted () {
     this.initialize()
@@ -144,9 +158,11 @@ export default {
     async initialize () {
       await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
       .then(response => {
-        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        this.resId = response.data.data.e_id;
-        //console.log(this.resId)
+        this.resId = response.data.data[response.data.data.length - 1].e_id;
+        for (let i = 0; i < response.data.data.length; i++) {
+          this.date.push(response.data.data[i].e_date);
+        }
+        this.latest = this.date[this.date.length - 1]
       })
       .catch(error => {
         console.log(error.response)
@@ -154,8 +170,6 @@ export default {
 
       await axios.get('/api/examUsers?id=' + this.$route.query.patient)
       .then(response => {
-        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        //console.log(response.data.data)
         this.user = response.data.data
         //console.log(this.user)
       })
@@ -203,10 +217,8 @@ export default {
           var blobUrl = URL.createObjectURL(blob);
           audio = document.getElementById(response.data.data[i].a_question_id)
           audio.src = blobUrl;
-          //console.log(audio)
+          this.idList.push(response.data.data[i].a_question_id)
         }
-
-        //console.log(this.audioURL)
       })
       .catch(error => {
         //console.log(error.response)
@@ -217,7 +229,6 @@ export default {
         this.antAnswer = response.data.data;
         //console.log(this.antAnswer[0].lg_answer)
         this.picked = this.antAnswer[0].lg_answer.slice(1, -1).split(',')
-        console.log(this.picked)
         for (let i = 1; i < this.picked.length; i++) {
           if (this.picked[i] === "1") {
             document.getElementById(i).checked = true;
@@ -227,10 +238,10 @@ export default {
             document.getElementById(i).checked = false;
           }
         }
+        this.validated = 0;
       })
       .catch(error => {
-        alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
-        this.$router.go(-1)
+        this.validated = 1;
       })
 
       document.getElementById('score1').innerText = this.score[0]
@@ -310,6 +321,73 @@ export default {
         }
         document.getElementById('score5').innerText = this.score[0] + this.score[1] + this.score[2] + this.score[3]
       }
+    },
+    async handleChange(event) {
+      await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient + '&date=' + event)
+      .then(response => {
+        this.resId = response.data.data[0].e_id;
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+      await axios.get('/api/answerPapers?type=ANT&examId=' + this.resId)
+      .then(response => {
+        var uint8;
+        var audio;
+        for (let j = 0; j < this.idList.length; j++) {
+          audio = document.getElementById(this.idList[j])
+          audio.src = '';
+        }
+        this.idList = [];
+
+        for (let i = 0; i < response.data.data.length; i++) {
+          uint8 = new Uint8Array(response.data.data[i].a_data.data);
+          var blob = new Blob([uint8], { type: 'audio' });
+          var blobUrl = URL.createObjectURL(blob);
+          audio = document.getElementById(response.data.data[i].a_question_id)
+          audio.src = blobUrl;
+          this.idList.push(response.data.data[i].a_question_id)
+        }
+      })
+      .catch(error => {
+      })
+
+      await axios.get('/api/languageSummary?type=ANT&userId=' + this.user[0].u_id + '&resId=' + this.resId)
+      .then(response => {
+        this.antAnswer = response.data.data;
+
+        this.score = [0, 0, 0, 0];
+        console.log(this.picked)
+        for (let i = 0; i < this.picked.length; i++) {
+          if (this.picked[i] === "1") {
+            document.getElementById(i).checked = false;
+          }
+        }
+        
+        this.picked = this.antAnswer[0].lg_answer.slice(1, -1).split(',')
+        console.log(this.picked)
+        for (let i = 1; i < this.picked.length; i++) {
+          if (this.picked[i] === "1") {
+            document.getElementById(i).checked = true;
+            this.score[this.questions[i - 1].questiontype - 1] += 1
+          }
+          else if (this.picked[i] === "0") {
+            document.getElementById(i).checked = false;
+          }
+        }
+        this.validated = 0;
+      })
+      .catch(error => {
+        this.validated = 1;
+        
+      })
+
+      document.getElementById('score1').innerText = this.score[0]
+      document.getElementById('score2').innerText = this.score[1]
+      document.getElementById('score3').innerText = this.score[2]
+      document.getElementById('score4').innerText = this.score[3]
+      document.getElementById('score5').innerText = this.score[0] + this.score[1] + this.score[2] + this.score[3]
     }
   }
 }
@@ -442,4 +520,10 @@ audio {
   background-color: #ffffff; 
 }
 
+.date-select.theme--light.v-text-field--solo > .v-input__control > .v-input__slot {
+  width: 453px;
+  height: 49px;
+  border: 2px solid #E2E2E2;
+  border-radius: 8px;
+}
 </style>

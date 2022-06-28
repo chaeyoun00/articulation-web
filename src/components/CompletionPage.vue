@@ -9,7 +9,7 @@
     </v-layout>
 
     <v-layout justify-center column class="patient-card">
-      <v-card class="patient-inform">
+      <v-card class="patient-inform" style="width: 1044px; margin-bottom: 50px">
         <v-card-text>
           <table class="patient-table">
             <tr class="patient-table-header">
@@ -47,7 +47,16 @@
           </table>
         </v-card-text>
       </v-card>
-
+      
+      <v-select
+        solo
+        flat
+        class="date-select"
+        :label="latest"
+        :items="date"
+        @change="handleChange"
+      >
+      </v-select>
     </v-layout>
 
     <v-divider></v-divider>
@@ -100,6 +109,7 @@
         depressed
         class="submit-btn"
         @click="save(), toTest()"
+        :disabled="validated == 1"
       >저장</v-btn>
     </v-layout>
   </v-container>
@@ -122,6 +132,10 @@ export default {
     text: [],
     answers: [],
     completionAnswer: [],
+    date: [],
+    latest:'',
+    idList: [],
+    validated: '',
   }),
   mounted () {
     this.initialize()
@@ -134,9 +148,11 @@ export default {
     async initialize () {
       await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
       .then(response => {
-        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        this.resId = response.data.data.e_id;
-        //console.log(this.resId)
+        this.resId = response.data.data[response.data.data.length - 1].e_id;
+        for (let i = 0; i < response.data.data.length; i++) {
+          this.date.push(response.data.data[i].e_date);
+        }
+        this.latest = this.date[this.date.length - 1]
       })
       .catch(error => {
         console.log(error.response)
@@ -144,8 +160,6 @@ export default {
       
       await axios.get('/api/examUsers?id=' + this.$route.query.patient)
       .then(response => {
-        //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-        //console.log(response.data.data)
         this.user = response.data.data
       })
       .catch(error => {
@@ -197,6 +211,7 @@ export default {
           var blobUrl = URL.createObjectURL(blob);
           audio = document.getElementById(response.data.data[index[i]].a_question_id)
           audio.src = blobUrl;
+          this.idList.push(response.data.data[index[i]].a_question_id)
         }
       })
       .catch(error => {
@@ -206,11 +221,11 @@ export default {
       await axios.get('/api/languageSummary?type=SPT-completion&userId=' + this.user[0].u_id + '&resId=' + this.resId)
       .then(response => {
         this.completionAnswer = response.data.data;
-        this.text = response.data.data[0].lg_answer.slice(1, -1).split(',')
+        this.text = response.data.data[0].lg_answer.slice(1, -1).split(',');
+        this.validated = 0;
       })
       .catch(error => {
-        alert("해당 검사를 하지 않은 환자입니다. 다시 확인해주세요.")
-        this.$router.go(-1)
+        this.validated = 1;
       })   
     },
     save() {
@@ -242,7 +257,72 @@ export default {
       .catch(function (error) {
         console.log(error);
       });
-    }
+    },
+     async handleChange(event) {
+      await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient + '&date=' + event)
+      .then(response => {
+        this.resId = response.data.data[0].e_id;
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+      await axios.get('/api/answerPapers?type=SPT-completion&examId=' + this.resId)
+      .then(response => {
+        console.log(response.data.data)
+        let array = [];
+        let index = [];
+        array.push(response.data.data[0].a_question_id)
+        index.push(0)
+        for (let i = 0; i < response.data.data.length; i++) {
+          var top = array[array.length - 1]
+          if (top === response.data.data[i].a_question_id) {
+            array.pop()
+            index.pop()
+          }
+          array.push(response.data.data[i].a_question_id)
+          index.push(i)
+        }
+        
+        var uint8;
+        var audio;
+
+        for (let j = 0; j < this.idList.length; j++) {
+          audio = document.getElementById(this.idList[j])
+          audio.src = '';
+        }
+        this.idList = [];
+
+        for (let i = 0; i < index.length; i++) {
+          uint8 = new Uint8Array(response.data.data[index[i]].a_data.data);
+          var blob = new Blob([uint8], { type: 'audio' });
+          var blobUrl = URL.createObjectURL(blob);
+          audio = document.getElementById(response.data.data[index[i]].a_question_id)
+          audio.src = blobUrl;
+          this.idList.push(response.data.data[index[i]].a_question_id)
+        }
+        //console.log(this.audioURL)
+      })
+      .catch(error => {
+         var audio;
+        for (let j = 0; j < this.idList.length; j++) {
+          audio = document.getElementById(this.idList[j])
+          audio.src = '';
+        }
+        this.idList = [];
+      })
+
+      await axios.get('/api/languageSummary?type=SPT-completion&userId=' + this.user[0].u_id + '&resId=' + this.resId)
+      .then(response => {
+        this.primingAnswer = response.data.data;
+        this.text = response.data.data[0].lg_answer.slice(1, -1).split(',')
+        this.validated = 0;
+      })
+      .catch(error => {
+        this.text = [];
+        this.validated = 1;
+      })  
+     }
   }
 }
 </script>
@@ -305,5 +385,12 @@ tr.completion-table-body {
   background-color: #FAFAFA;
   padding-left: 0px;
   padding-right: 0px;
+}
+
+.date-select.theme--light.v-text-field--solo > .v-input__control > .v-input__slot {
+  width: 453px;
+  height: 49px;
+  border: 2px solid #E2E2E2;
+  border-radius: 8px;
 }
 </style>

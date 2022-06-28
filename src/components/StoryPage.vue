@@ -101,6 +101,7 @@
         depressed
         class="submit-btn"
         @click="save(), toTest()"
+        :disabled="validated == 1"
       >저장</v-btn>
     </v-layout>
   </v-container>
@@ -121,15 +122,12 @@ export default {
     date: [],
     latest:'',
     idList: [],
+    validated: '',
   }),
   mounted () {
     this.initialize()
   },
   methods: {
-    toTest() {
-      Object.assign(this.$data, this.$options.data())
-      this.$router.push('/language')
-    },
     async initialize () {
       await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
       .then(response => {
@@ -183,12 +181,13 @@ export default {
       .then(response => {
         this.storyAnswer = response.data.data;
         this.image = this.storyAnswer[0].lg_answer.slice(1, -1).split(',')
+        this.validated = 0;
       })
       .catch(error => {
+        this.validated = 1;
       })    
     },
     save() {
-      
       const data = {
         'id': this.storyAnswer[0].lg_summery_id,
         'answers': '[' + this.image + ']'
@@ -206,11 +205,15 @@ export default {
 
       axios(config)
       .then(function (response) {
-        console.log(JSON.stringify(response.data));
+        //console.log(JSON.stringify(response.data));
       })
       .catch(function (error) {
         console.log(error);
       });
+    },
+    toTest() {
+      Object.assign(this.$data, this.$options.data())
+      this.$router.push('/language')
     },
     async handleChange(event) {
       await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient + '&date=' + event)
@@ -257,10 +260,12 @@ export default {
       await axios.get('/api/languageSummary?type=Story_Telling&userId=' + this.user[0].u_id + '&resId=' + this.resId)
       .then(response => {
         this.storyAnswer = response.data.data;
-        this.image = this.storyAnswer[0].lg_answer.slice(1, -1).split(',')
+        this.image = this.storyAnswer[0].lg_answer.slice(1, -1).split(',');
+        this.validated = 0;
       })
       .catch(error => {
         this.image = [];
+        this.validated = 1;
       })    
     }
   }

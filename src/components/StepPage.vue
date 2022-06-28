@@ -90,6 +90,7 @@
         depressed
         class="submit-btn"
         @click="save(), toTest()"
+        :disabled="validated == 1"
       >저장</v-btn>
     </v-layout>
   </v-container>
@@ -109,6 +110,7 @@ export default {
     date: [],
     latest:'',
     idList: [],
+    validated: '',
   }),
   mounted () {
     this.initialize()
@@ -161,9 +163,11 @@ export default {
       .then(response => {
         this.stepAnswer = response.data.data;
         this.image = this.stepAnswer[0].lg_answer.slice(1, -1).split(',')
+        this.validated = 0;
       })
       .catch(error => {
         this.image = [];
+        this.validated = 1;
       })     
     },
     save() {
@@ -226,9 +230,11 @@ export default {
       .then(response => {
         this.picAnswer = response.data.data;
         this.image = this.picAnswer[0].lg_answer.slice(1, -1).split(',')
+        this.validated = 0;
       })
       .catch(error => {
         this.image = [];
+        this.validated = 1;
       })  
      }    
   }
