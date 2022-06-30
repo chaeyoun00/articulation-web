@@ -88,7 +88,7 @@ export default {
     async initialize () {
       const config = {
         method: 'get',
-        url: 'http://101.79.81.183:3000/api/questions/noimage'
+        url: this.$API_SERVER +'/api/questions/noimage'
       }
       await axios(config)
       .then(response => {
@@ -183,9 +183,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .paper-layout {
-  padding-top: 223px;
+  padding-top: 195px;
 }
 
 .st0{fill:#E3E3E3;}

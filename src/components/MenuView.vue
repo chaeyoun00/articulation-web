@@ -1,6 +1,6 @@
 <template>
-    <v-card height="100%" width="520px" elevation="5">
-    <v-navigation-drawer width="520px" permanent>
+    <v-card height="100%" width="430px" elevation="5">
+    <v-navigation-drawer width="430px" permanent>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h6 mt-6 mb-10 ml-2">

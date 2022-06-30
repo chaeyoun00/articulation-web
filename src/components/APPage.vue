@@ -210,8 +210,12 @@ export default {
       Object.assign(this.$data, this.$options.data())
       this.$router.push('/language')
     },
-    async initialize () {
-      await axios.get('/api/examReservations/recent?userId=' + this.$route.query.patient)
+    async initialize() {
+      const configRecent = {
+        method: 'get',
+        url: this.$API_SERVER +'/api/examReservations/recent?userId=' + this.$route.query.patient
+      }
+      await axios(configRecent)
       .then(response => {
         //console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
         console.log(response.data.data)
