@@ -53,7 +53,7 @@ export default {
     async initialize() {
       const config = {
         method: 'get',
-        url: 'http://101.79.81.183:3000/api/questions/noimage?type=' + this.$route.query.data
+        url: this.$API_SERVER +'/api/questions/noimage?type=' + this.$route.query.data
       }
       await axios(config)
       .then(response => {

@@ -99,23 +99,27 @@
 						</template>
 
 						<template v-slot:[`item.setting`]="{ item }">
-							<v-icon small class="mr-2" @click="Edit(item)">
-								mdi-pencil
-							</v-icon>
+							<v-btn
+							@click="Edit(item)"
+							text
+							style="margin-top: 16px; width: 31px"
+						>
+							<img :src="editIcon" style="width: 30px;"/>
+						</v-btn>
 							<v-dialog
 								v-model="dialog"
 								persistent
 								max-width="290"
 							>
 								<template v-slot:activator="{ on, attrs }">
-									<v-icon
-										small
-										class="mr-2"
-										v-bind="attrs"
-										v-on="on"
-									>
-										mdi-delete
-									</v-icon>
+									<v-btn
+									v-bind="attrs"
+									v-on="on"
+									text
+									style="margin-top: 16px; width: 31px"
+								>
+									<img :src="deleteIcon" style="width: 30px;"/>
+								</v-btn>
 								</template>
 								<v-card
 									style="
@@ -172,6 +176,8 @@
 				.toISOString()
 				.substr(0, 10),
 			menu2: false,
+			editIcon: require('../assets/edit_icon.svg'),
+			deleteIcon: require('../assets/delete_icon.svg'),
 			search: '',
 			searchitems: ['이름', '번호'],
 			numitems: ['5개씩', '10개씩', '15개씩'],

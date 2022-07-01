@@ -15,6 +15,7 @@ Vue.use(VuetifyDialog, {
 	},
 });
 
+//global Parameter
 Vue.prototype.$API_SERVER = 'http://49.50.172.137:3000';
 
 new Vue({

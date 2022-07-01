@@ -191,7 +191,7 @@ export default {
       
       var config = {
         method: 'post',
-        url: 'http://49.50.172.137:3000/api/questions',
+        url: this.$API_SERVER +'/api/questions',
         headers: { 
           'memberId': localStorage.getItem("Id"),
           // 'Content-Type': 'multipart/form-data']         

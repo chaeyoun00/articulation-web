@@ -2,7 +2,7 @@
 	<v-container fill-height>
 		<v-layout align-center>
 			<v-card class="mx-auto login-card">
-				<v-form class="login-form">
+				<v-form class="login-form" @submit.prevent="Login()">
 					<v-card-text class="login-card-text">
 						<v-text-field
 							class="login-text"
@@ -27,7 +27,6 @@
 							<v-btn
 								type="submit"
 								class="login-btn"
-								@click="Login()"
 								>로그인</v-btn
 							>
 						</v-card-actions>

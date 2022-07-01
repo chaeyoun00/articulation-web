@@ -221,7 +221,7 @@ export default {
     async initialize () {
       const config = {
         method: 'get',
-        url: 'http://101.79.81.183:3000/api/examUsers?id=' + this.$route.query.patient
+        url: this.$API_SERVER +'http://101.79.81.183:3000/api/examUsers?id=' + this.$route.query.patient
       }
       await axios(config)
       .then(response => {
@@ -235,11 +235,11 @@ export default {
 
       this.resId = this.$route.query.resId;
 
-      const config1 = {
+      const configRecognition = {
         method: 'get',
-        url: 'http://101.79.81.183:3000/api/recognitionSummary?type=IADL&resId=' + this.resId
+        url: this.$API_SERVER +'/api/recognitionSummary?type=IADL&resId=' + this.resId
       }
-      await axios(config)
+      await axios(configRecognition)
       .then(response => {
         if (response.data.data.length > 0) {
           this.picked = response.data.data[0].rs_answer.slice(1, -1).split(',')
@@ -271,7 +271,7 @@ export default {
 
         var config = {
           method: 'put',
-          url: 'http://49.50.172.137:3000/api/recognitionSummary',
+          url: this.$API_SERVER +'/api/recognitionSummary',
           headers: {
             'memberId': localStorage.getItem("Id"),
             //'Content-Type': 'application/x-www-form-urlencoded'
@@ -290,7 +290,7 @@ export default {
 
         var config = {
           method: 'post',
-          url: 'http://49.50.172.137:3000/api/recognitionSummary',
+          url: this.$API_SERVER +'/api/recognitionSummary',
           headers: {
             'memberId': localStorage.getItem("Id"),
             //'Content-Type': 'application/x-www-form-urlencoded'
