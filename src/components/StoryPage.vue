@@ -2,7 +2,7 @@
 	<v-container>
 		<v-layout class="back-form">
 			<v-btn text @click="toTest()"
-				><v-icon size="50px" color="#7498FF">arrow_back_ios</v-icon>
+				><img :src="backIcon" width="45px" />
 			</v-btn>
 		</v-layout>
 
@@ -157,6 +157,7 @@
 			latest: '',
 			idList: [],
 			validated: '',
+			backIcon: require('../assets/back_icon.svg'),
 		}),
 		mounted() {
 			this.initialize();

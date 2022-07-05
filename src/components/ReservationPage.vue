@@ -2,7 +2,7 @@
 	<v-container>
 		<v-layout>
 			<v-btn text @click="ToMain()" class="mt-12 ml-5"
-				><v-icon size="50px" color="#7498FF">arrow_back_ios</v-icon>
+				><img :src="backIcon" width="45px" />
 			</v-btn>
 		</v-layout>
 
@@ -132,6 +132,7 @@
 			u_date: '',
 			reservation: [],
 			users: [],
+			backIcon: require('../assets/back_icon.svg')
 		}),
 		mounted() {
 			this.initialize();

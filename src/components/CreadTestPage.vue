@@ -2,7 +2,7 @@
 	<v-container>
 		<v-layout class="back-form">
 			<v-btn text @click="toTest()"
-				><v-icon size="50px" color="#7498FF">arrow_back_ios</v-icon>
+				><img :src="backIcon" width="45px"/>
 			</v-btn>
 		</v-layout>
 
@@ -303,7 +303,7 @@
 							<input
 								type="text"
 								id="textarea"
-								placeholder="0"
+								placeholder=""
 								v-model="scores[16]"
 							/>
 							<label for="textarea">/ 100</label>
@@ -696,10 +696,12 @@
 			scores: [],
 			flag: 0,
 			id: '',
+			backIcon: require('../assets/back_icon.svg')
 		}),
 		mounted() {
 			this.initialize();
 		},
+		
 		methods: {
 			toTest() {
 				this.$router.push('/cognitive');
@@ -709,13 +711,13 @@
 					method: 'get',
 					url:
 						this.$API_SERVER +
-						'/api/examReservations/recent?userId=' +
+						'/api/examUsers?id=' +
 						this.$route.query.patient,
 				};
 				await axios(configRecent)
 					.then((response) => {
 						//console.log(response.data.data[0].rs_answer.slice(1, -1).split(','))
-						//console.log(response.data.data)
+						console.log(response.data.data)
 						this.user = response.data.data;
 					})
 					.catch((error) => {
@@ -985,7 +987,7 @@
 
 	.cread-score1 input[type='text'] {
 		text-align: center;
-		width: 27px;
+		width: 50px;
 	}
 
 	.cread-score1 input[type='text']:focus {

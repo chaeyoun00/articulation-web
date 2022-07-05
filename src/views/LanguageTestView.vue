@@ -1,125 +1,137 @@
 <template>
-	<v-container class="outline_lang">
+	<v-container
+		class="outline_lang"
+		fill-height
+		style="flex-direction: column; overflow-x: auto"
+	>
 		<v-layout justify-center column>
-			<p>이해과제</p>
-			<v-row class="test" style="padding-bottom: 30px">
-				<input
-					type="radio"
-					id="AP"
-					name="test"
-					value="ap"
-					v-model="test"
-				/>
-				<label for="AP" style="width: 91px">SCT-AP</label>
-				<input
-					type="radio"
-					id="INS"
-					name="test"
-					value="ins"
-					v-model="test"
-				/>
-				<label for="INS" style="width: 94px">SCT-INS</label>
-				<input
-					type="radio"
-					id="COM"
-					name="test"
-					value="com"
-					v-model="test"
-				/>
-				<label for="COM" style="width: 104px">SCT-COM</label>
-			</v-row>
+			<v-flex>
+				<p>이해과제</p>
+				<v-row class="test" style="padding-bottom: 30px">
+					<input
+						type="radio"
+						id="AP"
+						name="test"
+						value="ap"
+						v-model="test"
+					/>
+					<label for="AP" style="width: 91px">SCT-AP</label>
+					<input
+						type="radio"
+						id="INS"
+						name="test"
+						value="ins"
+						v-model="test"
+					/>
+					<label for="INS" style="width: 94px">SCT-INS</label>
+					<input
+						type="radio"
+						id="COM"
+						name="test"
+						value="com"
+						v-model="test"
+					/>
+					<label for="COM" style="width: 104px">SCT-COM</label>
+				</v-row>
 
-			<p>표현과제</p>
-			<v-row class="test" style="padding-bottom: 50px">
-				<input
-					type="radio"
-					id="Story"
-					name="test"
-					value="story"
-					v-model="test"
-				/>
-				<label for="Story" style="width: 121px">Story Telling</label>
-				<input
-					type="radio"
-					id="Image"
-					name="test"
-					value="image"
-					v-model="test"
-				/>
-				<label for="Image" style="width: 120px">그림 설명하기</label>
-				<input
-					type="radio"
-					id="Step"
-					name="test"
-					value="step"
-					v-model="test"
-				/>
-				<label for="Step" style="width: 120px">절차 설명하기</label>
-				<input
-					type="radio"
-					id="COWAT"
-					name="test"
-					value="cowat"
-					v-model="test"
-				/>
-				<label for="COWAT" style="width: 85px">COWAT</label>
-				<input
-					type="radio"
-					id="ANT"
-					name="test"
-					value="ant"
-					v-model="test"
-				/>
-				<label for="ANT" style="width: 59px">ANT</label>
-				<input
-					type="radio"
-					id="priming"
-					name="test"
-					value="priming"
-					v-model="test"
-				/>
-				<label for="priming" style="width: 121px">SPT-priming</label>
-				<input
-					type="radio"
-					id="completion"
-					name="test"
-					value="completion"
-					v-model="test"
-				/>
-				<label for="completion" style="width: 146px"
-					>SPT-completion</label
+				<p>표현과제</p>
+				<v-row class="test" style="padding-bottom: 50px">
+					<input
+						type="radio"
+						id="Story"
+						name="test"
+						value="story"
+						v-model="test"
+					/>
+					<label for="Story" style="width: 121px"
+						>Story Telling</label
+					>
+					<input
+						type="radio"
+						id="Image"
+						name="test"
+						value="image"
+						v-model="test"
+					/>
+					<label for="Image" style="width: 120px"
+						>그림 설명하기</label
+					>
+					<input
+						type="radio"
+						id="Step"
+						name="test"
+						value="step"
+						v-model="test"
+					/>
+					<label for="Step" style="width: 120px">절차 설명하기</label>
+					<input
+						type="radio"
+						id="COWAT"
+						name="test"
+						value="cowat"
+						v-model="test"
+					/>
+					<label for="COWAT" style="width: 85px">COWAT</label>
+					<input
+						type="radio"
+						id="ANT"
+						name="test"
+						value="ant"
+						v-model="test"
+					/>
+					<label for="ANT" style="width: 59px">ANT</label>
+					<input
+						type="radio"
+						id="priming"
+						name="test"
+						value="priming"
+						v-model="test"
+					/>
+					<label for="priming" style="width: 121px"
+						>SPT-priming</label
+					>
+					<input
+						type="radio"
+						id="completion"
+						name="test"
+						value="completion"
+						v-model="test"
+					/>
+					<label for="completion" style="width: 146px"
+						>SPT-completion</label
+					>
+					<input
+						type="radio"
+						id="CMPT"
+						name="test"
+						value="cmpt"
+						v-model="test"
+					/>
+					<label for="CMPT" style="width: 70px">CMPT</label>
+				</v-row>
+
+				<v-data-table
+					:headers="headers"
+					:items="items"
+					hide-default-footer
+					@click:row="handleClick"
 				>
-				<input
-					type="radio"
-					id="CMPT"
-					name="test"
-					value="cmpt"
-					v-model="test"
-				/>
-				<label for="CMPT" style="width: 70px">CMPT</label>
-			</v-row>
-
-			<v-data-table
-				:headers="headers"
-				:items="items"
-				hide-default-footer
-				@click:row="handleClick"
-			>
-				<template slot="items" slot-scope="props">
-					<td>{{ props.item.u_name }}</td>
-					<td>{{ props.item.u_sex }}</td>
-					<td>{{ props.item.u_birth }}</td>
-					<td>{{ props.item.u_telephone }}</td>
-					<td>{{ props.item.u_chart_number }}</td>
-					<td>{{ props.item.u_enter_path }}</td>
-					<td>{{ props.item.u_cog_test }}</td>
-					<td>{{ props.item.u_kbase_test }}</td>
-					<td>{{ props.item.u_listen_test }}</td>
-					<td>{{ props.item.u_lang_test }}</td>
-					<td>{{ props.item.u_study_year }}</td>
-					<td>{{ props.item.u_blank }}</td>
-				</template>
-			</v-data-table>
+					<template slot="items" slot-scope="props">
+						<td>{{ props.item.u_name }}</td>
+						<td>{{ props.item.u_sex }}</td>
+						<td>{{ props.item.u_birth }}</td>
+						<td>{{ props.item.u_telephone }}</td>
+						<td>{{ props.item.u_chart_number }}</td>
+						<td>{{ props.item.u_enter_path }}</td>
+						<td>{{ props.item.u_cog_test }}</td>
+						<td>{{ props.item.u_kbase_test }}</td>
+						<td>{{ props.item.u_listen_test }}</td>
+						<td>{{ props.item.u_lang_test }}</td>
+						<td>{{ props.item.u_study_year }}</td>
+						<td>{{ props.item.u_blank }}</td>
+					</template>
+				</v-data-table>
+			</v-flex>
 		</v-layout>
 	</v-container>
 </template>

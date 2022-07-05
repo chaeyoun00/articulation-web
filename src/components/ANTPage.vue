@@ -2,7 +2,7 @@
 	<v-container>
 		<v-layout class="back-form">
 			<v-btn text @click="toTest()"
-				><v-icon size="50px" color="#7498FF">arrow_back_ios</v-icon>
+				><img :src="backIcon" width="45px" />
 			</v-btn>
 		</v-layout>
 
@@ -65,6 +65,16 @@
 		<v-layout justify-center column class="ant-form2">
 			<p class="test-title">ANT</p>
 			<table class="ant-table">
+				<colgroup>
+					<col width="10%" />
+					<col width="15%" />
+					<col width="15%" />
+					<col width="10%" />
+					<col width="10%" />
+					<col width="10%" />
+					<col width="10%" />
+					<col width="20%" />
+				</colgroup>
 				<thead>
 					<tr>
 						<td
@@ -120,12 +130,10 @@
 							style="background-color: #fafafa"
 							>{{ questions[i - 1].q_body }}</td
 						>
-						<td
-							v-if="questions[i - 1].questiontype === '1'"
-							style="padding-left: 12px; padding-bottom: 8px"
-						>
-							<div class="ant-check"
+						<td v-if="questions[i - 1].questiontype === '1'">
+							<div class="ant-check" style="width: 100%"
 								><input
+									style="display: none"
 									type="checkbox"
 									:id="i"
 									@change="calculate(i)" /><label
@@ -133,12 +141,10 @@
 								></label
 							></div> </td
 						><td v-else class="ant-table-blank"></td>
-						<td
-							v-if="questions[i - 1].questiontype === '2'"
-							style="padding-left: 12px; padding-bottom: 8px"
-						>
-							<div class="ant-check"
+						<td v-if="questions[i - 1].questiontype === '2'">
+							<div class="ant-check" style="width: 100%"
 								><input
+									style="display: none"
 									type="checkbox"
 									:id="i"
 									@change="calculate(i)" /><label
@@ -146,12 +152,10 @@
 								></label
 							></div> </td
 						><td v-else class="ant-table-blank"></td>
-						<td
-							v-if="questions[i - 1].questiontype === '3'"
-							style="padding-left: 26px; padding-bottom: 8px"
-						>
-							<div class="ant-check"
+						<td v-if="questions[i - 1].questiontype === '3'">
+							<div class="ant-check" style="width: 100%"
 								><input
+									style="display: none"
 									type="checkbox"
 									:id="i"
 									@change="calculate(i)" /><label
@@ -159,12 +163,10 @@
 								></label
 							></div> </td
 						><td v-else class="ant-table-blank"></td>
-						<td
-							v-if="questions[i - 1].questiontype === '4'"
-							style="padding-left: 26px; padding-bottom: 8px"
-						>
-							<div class="ant-check"
+						<td v-if="questions[i - 1].questiontype === '4'">
+							<div class="ant-check" style="width: 100%"
 								><input
+									style="display: none"
 									type="checkbox"
 									:id="i"
 									@change="calculate(i)" /><label
@@ -257,6 +259,7 @@
 			latest: '',
 			idList: [],
 			validated: '',
+			backIcon: require('../assets/back_icon.svg'),
 		}),
 		mounted() {
 			this.initialize();
@@ -722,7 +725,9 @@
 		width: 36px;
 		border-radius: 50%;
 		cursor: pointer;
-		position: absolute;
+		position: relative;
+		display: block;
+		left: 32px;
 	}
 
 	.ant-check input[type='checkbox']:checked + label {
@@ -732,6 +737,9 @@
 
 	.ant-check input[type='checkbox']:checked + label:after {
 		opacity: 1;
+	}
+	.ant-check {
+		height: 36px;
 	}
 
 	audio {

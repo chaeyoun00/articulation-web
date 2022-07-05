@@ -1,5 +1,5 @@
 <template>
-	<v-container fill-height>
+	<v-container fill-height style="flex-direction: column; overflow-x: auto">
 		<v-layout column>
 			<v-flex>
 				<v-layout class="questionadd">
@@ -46,7 +46,7 @@
 								text
 								style="margin-top: 16px; width: 31px"
 							>
-								<img :src="editIcon" style="width: 30px;"/>
+								<img :src="editIcon" style="width: 30px" />
 							</v-btn>
 							<v-dialog
 								v-model="dialog"
@@ -60,7 +60,10 @@
 										text
 										style="margin-top: 16px; width: 31px"
 									>
-										<img :src="deleteIcon" style="width: 30px;"/>
+										<img
+											:src="deleteIcon"
+											style="width: 30px"
+										/>
 									</v-btn>
 								</template>
 								<v-card
@@ -99,6 +102,7 @@
 					</v-data-table>
 				</v-layout>
 				<v-pagination
+					style="margin-top: 15px;"
 					v-model="page"
 					:length="pageCount"
 					:total-visible="10"
@@ -236,7 +240,7 @@
 
 	.v-data-table-header {
 		background-color: #e8e8e8;
-		height: 68px;
+		height: 58px;
 	}
 
 	.theme--light.v-data-table
@@ -268,14 +272,13 @@
 	}
 
 	.questionadd {
-		margin-top: 186px;
-		margin-left: 177px;
+		margin-top: 50px;
 	}
 
 	.v-data-table > .v-data-table__wrapper > table > tbody > tr > td,
 	.v-data-table > .v-data-table__wrapper > table > thead > tr > td,
 	.v-data-table > .v-data-table__wrapper > table > tfoot > tr > td {
 		font-size: 0.875rem;
-		height: 67px;
+		height: 58px;
 	}
 </style>

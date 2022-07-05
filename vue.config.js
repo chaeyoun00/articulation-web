@@ -40,6 +40,7 @@ module.exports = {
             arch: ['x64'],
           },
         ],
+        icon: 'public/favicon.ico',
         publisherName: 'Lighten Tech.',
       },
       nsis: {

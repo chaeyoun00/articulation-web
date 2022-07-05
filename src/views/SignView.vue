@@ -2,7 +2,7 @@
 	<v-container>
 		<v-layout class="signup-form">
 			<v-btn text @click="ToMain()"
-				><v-icon size="50px" color="#7498FF">arrow_back_ios</v-icon>
+				><img :src="backIcon" width="45px" />
 			</v-btn>
 		</v-layout>
 		<v-layout justify-center>
@@ -122,6 +122,7 @@
 			pw: '',
 			pw_re: '',
 			name: '',
+			backIcon: require('../assets/back_icon.svg')
 		}),
 		methods: {
 			ToMain() {

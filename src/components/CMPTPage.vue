@@ -2,7 +2,7 @@
 	<v-container>
 		<v-layout class="back-form">
 			<v-btn text @click="toTest()"
-				><v-icon size="50px" color="#7498FF">arrow_back_ios</v-icon>
+				><img :src="backIcon" width="45px" />
 			</v-btn>
 		</v-layout>
 
@@ -224,6 +224,7 @@
 			score: [0, 0, 0, 0, 0, 0],
 			date: [],
 			latest: '',
+			backIcon: require('../assets/back_icon.svg')
 		}),
 		mounted() {
 			this.initialize();
@@ -271,11 +272,12 @@
 						console.log(error.response);
 					});
 
-        const configAnswer = {
+				const configAnswer = {
 					method: 'get',
 					url:
 						this.$API_SERVER +
-						'/api/answerPapers?type=CMPT&examId=' + this.resId
+						'/api/answerPapers?type=CMPT&examId=' +
+						this.resId,
 				};
 				await axios(configAnswer)
 					.then((response) => {
@@ -363,8 +365,8 @@
 						console.log(error.response);
 					});
 			},
-      async handleChange(event) {
-        const configRecent = {
+			async handleChange(event) {
+				const configRecent = {
 					method: 'get',
 					url:
 						this.$API_SERVER +
@@ -380,11 +382,12 @@
 					.catch((error) => {
 						console.log(error);
 					});
-        const configPaper = {
+				const configPaper = {
 					method: 'get',
 					url:
 						this.$API_SERVER +
-						'/api/answerPapers?type=CMPT&examId=' + this.resId
+						'/api/answerPapers?type=CMPT&examId=' +
+						this.resId,
 				};
 
 				await axios(configPaper)
@@ -403,12 +406,11 @@
 					})
 					.catch((error) => {
 						this.cmptAnswer = [];
-          });
+					});
 
-        const configNoImage = {
+				const configNoImage = {
 					method: 'get',
-					url:
-						this.$API_SERVER + '/api/questions/noimage?type=CMPT',
+					url: this.$API_SERVER + '/api/questions/noimage?type=CMPT',
 				};
 
 				await axios(configNoImage)

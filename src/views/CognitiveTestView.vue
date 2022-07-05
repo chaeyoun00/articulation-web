@@ -1,68 +1,74 @@
 <template>
-	<v-container class="outline_cog">
+	<v-container
+		class="outline_cog"
+		fill-height
+		style="flex-direction: column; overflow-x: auto"
+	>
 		<v-layout justify-center column>
-			<v-row class="test" style="padding-bottom: 70px">
-				<input
-					type="radio"
-					id="CERAD"
-					name="test"
-					value="cread"
-					v-model="test"
-				/>
-				<label for="CERAD" style="width: 131px">CERAD-K (NP)</label>
-				<input
-					type="radio"
-					id="IADL"
-					name="test"
-					value="iadl"
-					v-model="test"
-				/>
-				<label for="IADL" style="width: 340px"
-					>IADL (Instrumental Activities of Daily Living)</label
-				>
-				<input
-					type="radio"
-					id="Geriatric"
-					name="test"
-					value="geriatric"
-					v-model="test"
-				/>
-				<label for="Geriatric" style="width: 252px"
-					>GDS (Geriatric Depression Scale)</label
-				>
-				<input
-					type="radio"
-					id="Global"
-					name="test"
-					value="global"
-					v-model="test"
-				/>
-				<label for="Global" style="width: 252px"
-					>GDS (Global Deterioration Scale)</label
-				>
-			</v-row>
+			<v-flex>
+				<v-row class="test" style="padding-bottom: 70px">
+					<input
+						type="radio"
+						id="CERAD"
+						name="test"
+						value="cread"
+						v-model="test"
+					/>
+					<label for="CERAD" style="width: 131px">CERAD-K (NP)</label>
+					<input
+						type="radio"
+						id="IADL"
+						name="test"
+						value="iadl"
+						v-model="test"
+					/>
+					<label for="IADL" style="width: 340px"
+						>IADL (Instrumental Activities of Daily Living)</label
+					>
+					<input
+						type="radio"
+						id="Geriatric"
+						name="test"
+						value="geriatric"
+						v-model="test"
+					/>
+					<label for="Geriatric" style="width: 252px"
+						>GDS (Geriatric Depression Scale)</label
+					>
+					<input
+						type="radio"
+						id="Global"
+						name="test"
+						value="global"
+						v-model="test"
+					/>
+					<label for="Global" style="width: 252px"
+						>GDS (Global Deterioration Scale)</label
+					>
+				</v-row>
 
-			<v-data-table
-				:headers="headers"
-				:items="items"
-				hide-default-footer
-				@click:row="handleClick"
-			>
-				<template slot="items" slot-scope="props">
-					<td>{{ props.item.u_name }}</td>
-					<td>{{ props.item.u_sex }}</td>
-					<td>{{ props.item.u_birth }}</td>
-					<td>{{ props.item.u_telephone }}</td>
-					<td>{{ props.item.u_chart_number }}</td>
-					<td>{{ props.item.u_enter_path }}</td>
-					<td>{{ props.item.u_cog_test }}</td>
-					<td>{{ props.item.u_kbase_test }}</td>
-					<td>{{ props.item.u_listen_test }}</td>
-					<td>{{ props.item.u_lang_test }}</td>
-					<td>{{ props.item.u_study_year }}</td>
-					<td>{{ props.item.u_blank }}</td>
-				</template>
-			</v-data-table>
+				<v-data-table
+					:headers="headers"
+					:items="items"
+					hide-default-footer
+					@click:row="handleClick"
+				>
+					<template slot="items" slot-scope="props">
+						<td>{{ props.item.u_name }}</td>
+						<td>{{ props.item.u_sex }}</td>
+						<td>{{ props.item.u_birth }}</td>
+						<td>{{ props.item.u_telephone }}</td>
+						<td>{{ props.item.u_chart_number }}</td>
+						<td>{{ props.item.u_enter_path }}</td>
+						<td>{{ props.item.u_cog_test }}</td>
+						<td>{{ props.item.u_kbase_test }}</td>
+						<td>{{ props.item.u_listen_test }}</td>
+						<td>{{ props.item.u_lang_test }}</td>
+						<td>{{ props.item.u_study_year }}</td>
+						<td>{{ props.item.u_blank }}</td>
+					</template>
+				</v-data-table>
+			</v-flex>
 		</v-layout>
 	</v-container>
 </template>

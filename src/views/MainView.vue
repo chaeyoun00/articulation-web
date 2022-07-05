@@ -1,5 +1,9 @@
 <template>
-	<v-container fill-height class="main" style="flex-direction: column">
+	<v-container
+		fill-height
+		class="main"
+		style="flex-direction: column; overflow-x: auto"
+	>
 		<v-layout column>
 			<v-flex>
 				<v-layout justify-center>
@@ -37,31 +41,6 @@
 						class="mt-n3 numselect"
 						style="margin-left: 30px"
 					></v-select>
-
-					<!-- <v-menu
-            v-model="menu2"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            transition="scale-transition"
-            offset-y
-            min-width="auto"
-          >
-            <template v-slot:activator="{ on, attrs }" >
-              <v-text-field
-                v-model="date"
-                prepend-icon="mdi-calendar"
-                readonly
-                v-bind="attrs"
-                v-on="on"
-                class="mt-n4 date"
-              ></v-text-field>
-            </template>
-            <v-date-picker
-              v-model="date"
-              @input="menu2 = false"
-              no-title
-            ></v-date-picker>
-          </v-menu> -->
 				</v-layout>
 
 				<v-layout justify-center class="tablelayout">
@@ -100,12 +79,12 @@
 
 						<template v-slot:[`item.setting`]="{ item }">
 							<v-btn
-							@click="Edit(item)"
-							text
-							style="margin-top: 16px; width: 31px"
-						>
-							<img :src="editIcon" style="width: 30px;"/>
-						</v-btn>
+								@click="Edit(item)"
+								text
+								style="margin-top: 16px; width: 31px"
+							>
+								<img :src="editIcon" style="width: 30px" />
+							</v-btn>
 							<v-dialog
 								v-model="dialog"
 								persistent
@@ -113,13 +92,16 @@
 							>
 								<template v-slot:activator="{ on, attrs }">
 									<v-btn
-									v-bind="attrs"
-									v-on="on"
-									text
-									style="margin-top: 16px; width: 31px"
-								>
-									<img :src="deleteIcon" style="width: 30px;"/>
-								</v-btn>
+										v-bind="attrs"
+										v-on="on"
+										text
+										style="margin-top: 16px; width: 31px"
+									>
+										<img
+											:src="deleteIcon"
+											style="width: 30px"
+										/>
+									</v-btn>
 								</template>
 								<v-card
 									style="
@@ -276,6 +258,7 @@
 			pageCount: 0,
 			dialog: false,
 		}),
+		
 		mounted() {
 			this.initialize();
 		},

@@ -2,7 +2,7 @@
 	<v-container>
 		<v-layout>
 			<v-btn text @click="ToMain()" class="mt-12 ml-5"
-				><v-icon size="50px" color="#7498FF">arrow_back_ios</v-icon>
+				><img :src="backIcon" width="45px" />
 			</v-btn>
 		</v-layout>
 
@@ -296,6 +296,7 @@
 					u_id: '',
 				},
 			],
+			backIcon: require('../assets/back_icon.svg')
 		}),
 		mounted() {
 			this.initialize();
@@ -348,7 +349,7 @@
 
 				var config = {
 					method: 'put',
-					url: this.$API_SERVER +'/api/examUsers',
+					url: this.$API_SERVER + '/api/examUsers',
 					headers: {
 						memberId: localStorage.getItem('Id'),
 						//'Content-Type': 'application/x-www-form-urlencoded'

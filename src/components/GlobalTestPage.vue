@@ -4,7 +4,7 @@
       <v-btn 
         text
         @click="toTest()"
-      ><v-icon size="50px" color="#7498FF">arrow_back_ios</v-icon>
+      ><img :src="backIcon" width="45px"/>
       </v-btn>
     </v-layout>
 
@@ -135,6 +135,7 @@ export default {
     picked: '',
     flag: 0,
     id: '',
+    backIcon: require('../assets/back_icon.svg')
   }),
   mounted () {
     this.initialize()
@@ -147,7 +148,7 @@ export default {
     async initialize () {
       const config = {
         method: 'get',
-        url: this.$API_SERVER +'/api//examUsers?id=' + this.$route.query.patient
+        url: this.$API_SERVER +'/api/examUsers?id=' + this.$route.query.patient
       }
       await axios(config)
       .then(response => {
